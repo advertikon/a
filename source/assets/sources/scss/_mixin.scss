@@ -1,0 +1,110 @@
+/**
+ *  Clearfix
+ *
+ *  Usage: append to container, that contains floated elements - @include clearfix;
+ */
+@mixin clearfix {
+  &:after {
+    content: "";
+    display: block;
+    clear: both;
+    width: 100%;
+    height: 0;
+  }
+}
+
+/**
+ *  Placeholder color
+ *
+ *  Usage: append to form, that contains input/textarea elements to change placeholder color - @include placeholder(color);
+ */
+
+
+@mixin placeholder($value) {
+  ::-webkit-input-placeholder{
+    color: $value;
+  }
+  ::-moz-placeholder{
+    color: $value;
+  }
+  :-ms-input-placeholder{
+    color: $value;
+  }
+  :-moz-placeholder{
+    color: $value;
+  }
+}
+
+@function str-replace($string, $search, $replace: "") {
+  $index: str-index($string, $search);
+
+  @if $index {
+    @return str-slice($string, 1, $index - 1) + $replace + str-replace(str-slice($string, $index + str-length($search)), $search, $replace);
+  }
+
+  @return $string;
+}
+
+ /**
+ *  Font-face
+ *
+ *  Usage: append anywhere - @include font-face('font name', 'path to font file', woff ttf svg eot);
+ *   woff ttf svg eot - necessary extensions (at least one is required)
+ */
+
+@mixin font-face($name, $path, $exts: woff ttf svg eot) {
+  $src: null;
+
+  $extmods: (
+    eot: "?",
+    svg: "#" + str-replace($name, " ", "_")
+  );
+
+  $formats: (
+    otf: "opentype",
+    ttf: "truetype"
+  );
+
+  @each $ext in $exts {
+    $extmod: if(map-has-key($extmods, $ext), $ext + map-get($extmods, $ext), $ext);
+    $format: if(map-has-key($formats, $ext), map-get($formats, $ext), $ext);
+    $src: append($src, url(quote($path + $name + "." + $extmod)) format(quote($format)), comma);
+  }
+  
+  @font-face {
+    font-family: quote($name);
+    src: $src;    
+  }
+  
+}
+
+ /**
+ *  Link colors
+ *
+ *  Usage: append to link - @include link-colors('normal state color', 'hover state color', 'active state color', 'visited state color', 'focus state color');
+ *  hover, active, visited and focus states are optional
+ */
+
+@mixin link-colors($normal, $hover: false, $active: false, $visited: false, $focus: false) {
+  color: $normal;
+  @if $visited {
+    &:visited {
+      color: $visited; 
+    } 
+  }
+  @if $focus {
+    &:focus {
+      color: $focus; 
+    } 
+  }
+  @if $hover {
+    &:hover {
+      color: $hover; 
+    } 
+  }
+  @if $active {
+    &:active {
+      color: $active; 
+    } 
+  } 
+}

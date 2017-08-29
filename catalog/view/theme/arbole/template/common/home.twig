@@ -1,0 +1,136 @@
+{{header}}
+
+<div class="video-wrapper">
+  <div class="video-cont">
+  	<video poster="{{ image( 'arbole/video.jpg' ) }}" autoplay controls>
+       <source src="https://www.w3schools.com/html/mov_bbb.mp4"></video> 
+    </video>
+
+  </div>
+  <div class="video-text">
+    <div class="video-title">
+      <h1>{{ c( 'hp_v_header1' )|e }}</h1>
+      <p>{{ c( 'hp_v_header2' )|e }}</p>
+    </div>
+    <a href="constructor_step_1.php" class="btn">{{ c( 'hp_v_button' )|e }}</a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="max-width">
+    <div class="section-title right">
+      <h2>{{ c( 'hp_hiw_header' )|e }}</h2>
+    </div>
+  </div>
+  <div class="max-width">
+    <div class="how-wrapper">
+    {% for i in c( 'hp_hiw_steps', [] ) %}
+      <a href="#" class="how-step">
+        <div class="img"><img src="{{ image( i.image ) }}"></div>
+        <div class="step-number"><span>{{ loop.index }}</span></div>
+        <p>{{ i.text }}</p>
+      </a>
+    {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="max-width">
+    <div class="section-title gallery-title">
+      <h2>{{ c( 'hp_g_header' ) }}</h2>
+      <div class="gallery-controls">
+        <div class="gallery-prev"><span></span></div>
+        <div class="gallery-next"><span></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="gallery-wrapper">
+    <div class="swiper-container">
+      <div class="swiper-wrapper">
+        {% for i in categories %}
+        <div class="swiper-slide">
+          <h3>{{ i.name }}</h3>
+          <div class="img"><img src="{{ image( i.image ) }}"></div>
+          <a href="{{ u( 'category/category', { 'path': i.id }) }}" class="btn">{{ c( 'hp_g_button' ) }}</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="max-width">
+    <div class="section-title right">
+      <h2>{{ c( 'hp_a_header' ) }}</h2>
+    </div>
+  </div>
+  <div class="max-width">
+    <div class="how-article-wrapper">
+      <div class="bg"></div>
+      <div class="col col-1">
+        <img src="{{ image( c( 'hp_a_image1' ) ) }}">
+        <h3>{{ c( 'hp_a_header_text' ) }}</h3>
+        <p>{{ c( 'hp_a_text' ) }}</p>
+      </div>
+      <div class="col col-2">
+        <img src="{{ image( c( 'hp_a_image2' ) ) }}">
+        <a href="about.php" class="read-more">{{ c( 'hp_a_button' ) }}<span></span></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="max-width">
+    <div class="section-title">
+      <h2>{{ c( 'hp_r_header' ) }}</h2>
+    </div>
+  </div>
+  <div class="max-width">
+    <div class="review-wrapper">
+      <div class="review-slider">
+        <div class="review-slider-source hidden">
+            {% for i in c( 'hp_review' ) %}
+          <div class="review-slide">
+            <img src="{{ image( i.image1 ) }}">
+            <img src="{{ image( i.image2 ) }}">
+          </div>
+          {% endfor %}
+        </div>
+        <div class="col col-1">
+          <img class="bg" src="{{ image( 'arbole/logo-icon-2.svg' ) }}">
+          <div class="review-slider-text">
+            {% for i in c( 'hp_review' ) %}
+            <div class="text {{ loop.index == 1 ? ' active ' }}">
+              <p><strong>{{ i.header }}</strong></p>
+              <p>{{ i.text|nl2br }}</p>
+            </div>
+            {% endfor %}
+          </div>
+          <div class="review-slider-controls">
+            <div class="review-slider-prev"><span></span></div>
+            <div class="review-slider-next"><span></span></div>
+          </div>
+        </div>
+        <div class="col col-2">
+          <div class="review-slider-imgs">
+            <div class="img-wrap">
+              <div class="img"></div>
+            </div>
+            <div class="img-wrap">
+              <div class="img"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="more-links">
+        <a href="constructor_step_1.php" class="more to-constructor"><span></span><strong>Constructor</strong>Create you own jewellery!</a>
+        <a href="gallery.php" class="more"><span></span><strong>Gallery</strong>Find jewellery in our store!</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}

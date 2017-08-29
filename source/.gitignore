@@ -1,0 +1,9 @@
+.idea/
+node_modules/
+vendor/
+assets/build/css/*
+assets/build/fonts/*
+assets/build/icons/*
+assets/build/img/*
+assets/build/js/*
+assets/build/svg/*

@@ -1,0 +1,101 @@
+	  
+		<div class="footer">
+			<div class="max-width">
+				<div class="footer-inner">
+					<div class="contact-info">
+						<p>
+							<a href="mailto:{{ config( 'config_email' ) }}">{{ config( 'config_email' ) }}</a>
+							{{ c( 'footer_text' )|html_decode }}
+						</p>
+						<div class="footer-menu">
+							<ul>
+								{% for i in c( 'footer_links' ) %}
+								<li class="active"><a href="{{ i.url }}">{{ i.name|html_decode }}</a></li>
+								{% endfor %}
+							</ul>
+							<div class="social">
+								<a href="#" target="_blank" class="in"></a>
+								<a href="#" target="_blank" class="fb"></a>
+							</div>
+						</div>
+						<p class="copy"><a href="http://www.ego-wba.co.il/" target="_blank">Designed by EGO</a><br/>Copywrite ARBOLE&nbsp;&nbsp;2017</p>
+					</div>
+					<div class="contact-form">
+						<h3>{{ c( 'footer_cf_header' )|html_decode }}</h3>
+						<form id="inquiry-form" method="post" action="{{ u( 'information/contact/inquiry' ) }}">
+							<div class="field field-name">
+								<input type="text" placeholder="Your name" name="name"/>
+								<p class="error-text">*error</p>
+							</div>
+							<div class="field field-phone">
+								<input type="text" placeholder="Phone" name="telephone"/>
+								<p class="error-text">*error</p>
+							</div>
+							<div class="field field-email">
+								<input type="text" placeholder="E-mail" name="email"/>
+								<p class="error-text">*error</p>
+							</div>
+							<div class="field field-message">
+								<input type="text" placeholder="Message" name="enquiry"/>
+								<p class="error-text">*error</p>
+							</div>
+							<button><span></span>{{ c( 'footer_cf_button' )|html_decode }}</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+		$( "#inquiry-form" ).on( "submit", function( e ){
+			var me = $( this );
+
+			me.find( ".field" ).removeClass( "error" );
+
+			e.preventDefault();
+			$.post( me.attr( "action" ).replace( /&amp;/g, "&" ), me.serialize() )
+			.always( function pAlways() {
+
+			} )
+
+			.done( function pDone( respStr ) {
+				var resp = null;
+
+				// If response is empty or doesn't contain JSON string
+				if ( respStr ) {
+					resp = ADK.checkResponse( respStr );
+
+					if ( null === resp ) {
+						return;
+					}
+
+					if ( resp.success ) {
+						alert( 'You inquiry has been successfully sent' );
+
+					} else if ( resp.error ) {
+						$.each( resp.error, function( n, v ) {
+							me
+								.find( '[name="' + n + '"]' )
+									.closest( ".field" )
+									.addClass( "error" )
+										.find( ".error-text" )
+										.html( v );
+						} );
+
+					} else {
+						ADK.n.alert( ADK.locale.networkError );
+					}
+
+				} else {
+					ADK.n.alert( ADK.locale.serverError );
+				}
+			} )
+
+			.fail( function pFail() {
+				ADK.n.alert( ADK.locale.networkError );
+			} );
+
+		} );
+
+		</script>
+	</body>
+</html>

@@ -1,0 +1,185 @@
+<!doctype html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>{{ title }}</title>
+		<base href="{{ base }}" />
+		{% if description %}
+		<meta name="description" content="{{ description }}" />
+		{% endif %}
+		{% if keywords %}
+		<meta name="keywords" content="{{ keywords }}" />
+		{% endif %}
+		<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/jquery-ui.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+		<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+		<link type="text/css" rel="stylesheet" media="screen" href="catalog/view/theme/arbole/stylesheet/main.min.css" />
+		<link href="catalog/view/theme/arbole/stylesheet/advertikon/advertikon.css" rel="stylesheet" type="text/css" />
+		{% for style in styles %}
+		<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+		{% endfor %}
+		{% for script in scripts %}
+		<script src="{{ script }}" type="text/javascript"></script>
+		{% endfor %}
+		<script src="catalog/view/javascript/common.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/fabric.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/customiseControls.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/functions.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/jquery.panzoom.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/jquery.scrollbar.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/main.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/swiper.jquery.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/swiper.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/utils.min.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/advertikon/advertikon.js" type="text/javascript"></script>
+		{% for link in links %}
+		<link href="{{ link.href }}" rel="{{ link.rel }}" {{ link.type ? "type=\"#{link.type}\"" }} {{ link.style ? "type=\"#{link.style}\"" }}/>
+		{% endfor %}
+		{% for analytic in analytics %}
+		{{ analytic }}
+		{% endfor %}
+		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+		<!-- Chrome, Firefox OS and Opera -->
+		<meta name="theme-color" content="#4285f4">
+		<!-- Windows Phone -->
+		<meta name="msapplication-navbutton-color" content="#4285f4">
+		<!-- iOS Safari -->
+		<meta name="apple-mobile-web-app-status-bar-style" content="#4285f4">
+		<meta name="format-detection" content="telephone=no" />
+	</head>
+	<body class="">
+		<div class="popup" id="size-guide">
+			<div class="popup-outer">
+				<div class="popup-inner">
+					<div class="popup-body">
+						<div class="size-guide-popup">
+							<div class="close"></div>
+							<div class="title">{{ __('Size Guide')|e }}</div>
+							<p>{{ __( 'Also you can use this site:' )|e }} <a href="http://findmyringsize.com/" target="_blank">findmyringsize.com</a></p>
+							<table>
+								<tr>
+									<th colspan="2">{{__( 'INSIDE DIAMETER' )|e }}</th>
+									<th colspan="2">{{ __( 'INSIDE CIRCUMFERENCE' )|e }}</th>
+									<th colspan="4">{{ __( 'SIZES' )|e }}</th>
+								</tr>
+								<tr>
+									<td>inches</th>
+									<td>mm</td>
+									<td>inches</th>
+									<td>mm</td>
+									<td>US & Canada</td>
+									<td>Uk, Ireland & Australia</td>
+									<td>Japan</td>
+									<td>US & Canada</td>
+								</tr>
+								{% for i in 1..20 %}
+								<tr>
+									<td>0,459</th>
+									<td>11,64</td>
+									<td>1,459</th>
+									<td>23,64</td>
+									<td>0</td>
+									<td>-</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								{% endfor %}
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="header">
+			<a href="/" class="logo">
+				<i><img src="{{logo}}"/></i>
+				<span><img src="{{logo_text}}"/></span>
+			</a>
+			<div class="menu-wrapper">
+				<ul>
+					<li class="active"><a href="constructor_step_1.php">{{ __( 'design your own' )|e }}</a></li>
+					<li><a href="gallery.php">{{ __( 'gallery store' )|e }}</a></li>
+					<li><a href="about.php">{{ __( 'About Us' )|e }}</a></li>
+					<li><a href="faq.php">{{ __( 'faq' )|e }}</a></li>
+					<li class="mobile-link"><a href="account_details.php">{{ __( 'My account' )|e }}</a></li>
+					<li class="mobile-link search-link"><a href="#">{{ __( 'Search' )|e }}</a></li>
+				</ul>
+				{{ currency }}
+				<div class="login-toggler">
+		          <!-- <a href="log_in.php">LOGIN</a> -->
+		          <a href="account_details.php"><img src="{{ image('arbole/user2.png') }}"/><span>Hi, </span>Oleksii</a>
+		        </div>
+			</div>
+			<div class="menu-toggler"><img src="{{ image('arbole/ham.png') }}"/>
+				<img src="{{ image('arbole/cross.png') }}"/>
+			</div>
+		</div>
+		<div class="search-wrapper">
+			<div class="close"></div>
+			<div class="title">{{ __( 'Start searching' )|e }}</div>
+			<form>
+				<div class="field">
+					<input type="text" placeholder="Find jewellery"/>
+					<button><img src="{{ image( 'arbole/search.png' ) }}"/></button>
+				</div>
+			</form>
+		</div>
+		<div class="filters-mobile">
+			<div class="close"></div>
+			<div class="title">{{ __( 'FILTERS' )|e }}</div>
+			<form>
+				<div class="filters-mobile-block">
+					<div class="user-designs-toggler">
+						<input type="checkbox" name="show-designs" checked id="show-designs"><label for="show-designs">{{ __( 'Users Designs' ) }}</label>
+					</div>
+				</div>
+				<div class="filters-mobile-block">
+					<label>{{ __( 'Jewelry type' )|e }}</label>
+					<select>
+						<option>All</option>
+						<option>Rings</option>
+						<option>Bracelets</option>
+					</select>
+				</div>
+				<div class="filters-mobile-block">
+					<label>Material</label>
+					<select>
+						<option>All</option>
+						<option>Gold</option>
+						<option>Wood</option>
+					</select>
+				</div>
+				<button>{{ __( 'Apply filters' )|e }}</button>
+			</form>
+		</div>
+		<div class="cart-sidebar">
+			<div class="cart-sidebar-inner">
+				<div class="checkout-block">
+					<div class="checkout-body">
+						<div class="title">{{ __( 'your cart is empty' )|e }}</div>
+						<div class="subtitle">{{ __( 'Find awesome jewelery on ARBOLE’!' )|e }} </div>
+						<div class="btns">
+							<button class="light" onclick="window.location = 'gallery.php'">continue shopping</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="right-sidebar">
+			<ul class="user-menu">
+				<li class="cart-toggler"><a href="checkout.php"><img src="{{ image('arbole/cart.png') }}"/><span>33</span></a></li>
+				<li class="favorites-toggler"><a href="my_favorites.php"><img src="{{ image( 'arbole/heart.png' ) }}"/></a></li>
+				<li class="search-toggler"><a href="#"><img src="{{ image( 'arbole/search.png' ) }}"/><img src="{{ image( 'arbole/cross.png' ) }}"/></a></li>
+			</ul>
+		</div>
+
+

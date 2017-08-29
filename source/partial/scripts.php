@@ -1,0 +1,12 @@
+<script type="text/javascript" src="assets/build/js/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="assets/build/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="assets/build/js/jquery.ui.touch-punch.min.js"></script>
+<script type="text/javascript" src="assets/build/js/swiper.min.js"></script>
+<script type="text/javascript" src="assets/build/js/swiper.jquery.min.js"></script>
+<script type="text/javascript" src="assets/build/js/jquery.scrollbar.min.js"></script>
+<script type="text/javascript" src="assets/build/js/functions.min.js"></script>
+<script type="text/javascript" src="assets/build/js/fabric.min.js"></script>
+<script type="text/javascript" src="assets/build/js/utils.min.js"></script>
+<script type="text/javascript" src="assets/build/js/customiseControls.min.js"></script>
+<script type="text/javascript" src="assets/build/js/jquery.panzoom.min.js"></script>
+<script type="text/javascript" src="assets/build/js/main.min.js"></script>

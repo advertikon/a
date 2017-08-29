@@ -1,0 +1,22 @@
+<form id="form-currency" action={{action }} class="currency-toggler" method="post">
+	{% if current is not empty %}
+	<a href="#" class="current">
+		{{ current.symbol_left ?: '' }}
+		{{ current.code|upper }}
+		{{ current.symbol_right ?: '' }}
+	</a>
+	{% endif %}
+	<div class="dropdown">
+	{% if currencies is not empty %}
+		{% for c in currencies %}
+		<a href="#" class="currency-select" {{ c.active ? ' class="active" ' }} name="{{ c.code }}">
+			{{ c.symbol_left ?: '' }}
+			{{ c.code|upper }}
+			{{ c.symbol_right ?: '' }}
+		</a>
+		{% endfor %}
+	{% endif %}
+	</div>
+	<input type="hidden" name="code" value="" />
+	<input type="hidden" name="redirect" value="{{ redirect }}" />
+</form>
