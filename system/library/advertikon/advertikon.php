@@ -6,7 +6,8 @@
  * @version 2.3.8    
  */
 
-namespace Advertikon {
+
+namespace Advertikon  {
 
 class Advertikon {
 
@@ -65,7 +66,13 @@ class Advertikon {
 	public function __construct() {
 		global $adk_registry;
 
-		$this->registry = $adk_registry;
+		if ( ! is_null( $adk_registry ) ) {
+			$this->registry = $adk_registry;
+
+		} else {
+			$this->registry = new Placeholder();
+		}
+
 		$this->full_name = ( $this->type ? $this->type . '/' : '' ) . $this->code;
 
 		if ( $this->full_name ) {

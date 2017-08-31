@@ -32,8 +32,8 @@ system/storage/download/*
 !system/storage/download/index.html
 
 # Upload Files
-system/storage*
-!system/storageindex.html
+#system/storage*
+#!system/storageindex.html
 
 # Flags 
 # remove sharp char if you want to add flags to gitignore
