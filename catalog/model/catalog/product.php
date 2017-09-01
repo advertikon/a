@@ -536,4 +536,21 @@ class ModelCatalogProduct extends Model {
 			return 0;
 		}
 	}
+
+	public function get_material() {
+		$option_id = 0;
+		$ret = [];
+
+		if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
+			$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'material' );
+		}
+
+		$q = $this->db->query( "SELECT ovd.name, ov.option_value_id FROM " . DB_PREFIX . "product_option_value pov JOIN " . DB_PREFIX . "option_value ov USING(option_value_id) JOIN " . DB_PREFIX . "option_value_description ovd USING(option_value_id) WHERE ovd.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND ov.option_id = " . $option_id );
+
+		if ( $q && $q->num_rows ) {
+			$ret = $q->rows;
+		}
+
+		return $ret;
+	}
 }

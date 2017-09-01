@@ -19,6 +19,7 @@ class ControllerExtensionThemeArbole extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		$this->load->model('setting/setting');
+		$this->load->model( 'catalog/option' );
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting( $this->my_code, $this->request->post, $this->request->get['store_id']);
@@ -327,6 +328,24 @@ class ControllerExtensionThemeArbole extends Controller {
 			'element' => $this->a->r( [
 				'type'  => 'text',
 				'value' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$options = [];
+
+		foreach( $this->model_catalog_option->getOptions() as $o ) {
+			$options[ $o['option_id'] ] = $o['name'];
+		}
+
+		$name = 'material';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Material option' ),
+			'element' => $this->a->r( [
+				'type'   => 'select',
+				'value'  => $options,
+				'active' => $this->a->get_value_from_post( $name ),
 				'class'  => 'form-control',
 				'name'   => $name,
 			] ),

@@ -52,7 +52,7 @@
         <div class="swiper-slide">
           <h3>{{ i.name }}</h3>
           <div class="img"><img src="{{ image( i.image ) }}"></div>
-          <a href="{{ u( 'category/category', { 'path': i.id }) }}" class="btn">{{ c( 'hp_g_button' ) }}</a>
+          <a href="{{ u( 'product/category', { 'path': i.id }) }}" class="btn">{{ c( 'hp_g_button' ) }}</a>
         </div>
         {% endfor %}
       </div>
