@@ -19,6 +19,20 @@ class Pagination extends \Model {
 	protected $filter_init = false;
 	protected $sort_init = false;
 
+	/**
+	 * Class constructor
+	 * @param array $data Initializing data:
+	 *   'filter':
+	 *             key (filter alias to appear in query, eg 'model'): 
+	 *                - 'name'     - DB filter entry, eg 'p.model'
+	 *                - 'default'  - default value
+	 *                - 'operator' - DB compare operator, eg '>='
+	 * 	 'sort':
+	 *           key (sort alias to be appear in query, eg 'price_high'):
+	 *                - 'name' - DB filter entry, eg special, p.price DESC
+	 *                       - 
+	 * @return void
+	 */
 	public function __construct( $data = [] ) {
 		global $adk_registry;
 
@@ -38,24 +52,44 @@ class Pagination extends \Model {
 		}
 	}
 
+	/**
+	 * Sets filters
+	 * @param array $filter 
+	 * @return void
+	 */
 	public function set_filter( $filter ) {
 		if ( is_array( $filter ) ) {
 			$this->filter = $filter;
 		}
 	}
 
+	/**
+	 * Adds filter to existing set
+	 * @param array $filter 
+	 * @return void
+	 */
 	public function add_filter( $filter ) {
 		if ( is_array( $filter ) ) {
 			$this->filter = array_merge( $this->filter, $filter );
 		}
 	}
 
+	/**
+	 * Sets sort rules
+	 * @param array $sort 
+	 * @return void
+	 */
 	public function set_sort( $sort ) {
 		if ( is_array( $sort ) ) {
 			$this->sort = $sort;
 		}
 	}
 
+	/**
+	 * Sets query (without WHERE and ORDER BY clauses)
+	 * @param string $query 
+	 * @return void
+	 */
 	public function set_query( $query ) {
 		if ( is_string( $query ) ) {
 			$count = 0;
@@ -67,6 +101,10 @@ class Pagination extends \Model {
 		}
 	}
 
+	/**
+	 * Runs query
+	 * @return array Query result
+	 */
 	public function run() {
 		if ( $this->query ) {
 			$this->data = $this->db->query( $this->query . $this->get_filter() . $this->get_sort() . $this->get_limit() );
@@ -84,6 +122,10 @@ class Pagination extends \Model {
 		return array();
 	}
 
+	/**
+	 * Creates WHERE clause for query
+	 * @return string
+	 */
 	protected function get_filter() {
 		$f = array();
 		$this->init_filter();
@@ -105,6 +147,10 @@ class Pagination extends \Model {
 		return '';
 	}
 
+	/**
+	 * Initializes filters
+	 * @return void
+	 */
 	protected function init_filter() {
 		if ( $this->filter_init ) return;
 
@@ -120,9 +166,15 @@ class Pagination extends \Model {
 			}
 		}
 
+		unset( $data );
+
 		$this->filter_init = true;
 	}
 
+	/**
+	 * Initializes sort parameters
+	 * @return void
+	 */
 	protected function init_sort() {
 		if ( $this->sort_init ) return;
 		$default = [];
@@ -147,6 +199,10 @@ class Pagination extends \Model {
 		$this->sort_init = true;
 	}
 
+	/**
+	 * Returns ORDER BY clause of query
+	 * @return string
+	 */
 	protected function get_sort() {
 		$f = array();
 		$this->init_sort();
@@ -162,6 +218,10 @@ class Pagination extends \Model {
 		return '';
 	}
 
+	/**
+	 * Returns LIMIT clause for query
+	 * @return string
+	 */
 	protected function get_limit() {
 		if ( is_null( $this->page ) ) {
 			if ( isset( $this->reguest->get['page'] ) ) {
@@ -179,24 +239,38 @@ class Pagination extends \Model {
 		return ' LIMIT ' . ( ( $this->page - 1 ) * $this->item_per_page ) . ', ' . $this->item_per_page;
 	}
 
+	/**
+	 * Sanitizes comparison operators
+	 * @param string $o 
+	 * @return string
+	 */
 	protected function get_operator( $o ) {
 		if ( in_array( $o, [ '>', '<', '<=', '>=', '<>', 'LIKE', 'IN', ] ) ) return $o;
 
 		return '=';
 	}
 
+	/**
+	 * Returns URL with query string, containing filtering and sorting parameters
+	 * @param string|null $alias Parameter (alias) to be set/unset
+	 * @param string|null $value Parameter value, if NULL alias will be unset
+	 * @return type
+	 */
 	public function url( $alias = null, $value = null ) {
 		$this->init_filter();
 		$this->init_sort();
 		$query = [ 'page' => $this->page ];
 
 		foreach( $this->filter as $item_alias => $item ) {
+
+			// Show only active filters without default ones
 			if ( !isset( $this->request->get[ $item_alias ] ) ) continue;
+
 			$query[ $item_alias ] = $item['value'];
 		}
 
 		foreach( $this->sort as $item_alias => $item ) {
-			if ( !isset( $this->request->get[ $item_alias ] ) ) continue;
+			if ( !isset( $this->request->get['sort'] ) || $this->request->get['sort'] !== $item_alias ) continue;
 			$query['sort'] = $item_alias;
 		}
 
@@ -211,9 +285,14 @@ class Pagination extends \Model {
 
 		$route = isset( $this->request->get['route'] ) ? $this->request->get['route'] : '';
 
-		return $this->url->link( $route, $query, 'SSL' );
+		return preg_replace( '/&amp;/', '&', $this->url->link( $route, $query, 'SSL' ) );
 	}
 
+	/**
+	 * Returns filter value in case filer is active (applied)
+	 * @param string $alias 
+	 * @return string
+	 */
 	public function get_filter_value( $alias ) {
 		$ret = '';
 		$this->init_filter();
@@ -225,6 +304,11 @@ class Pagination extends \Model {
 		return $ret;
 	}
 
+	/**
+	 * Determines if sort option is active (applied)
+	 * @param string $alias 
+	 * @return boolean
+	 */
 	public function is_sort( $alias ) {
 		$ret = false;
 		$this->init_sort();

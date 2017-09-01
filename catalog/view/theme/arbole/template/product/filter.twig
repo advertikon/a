@@ -1,0 +1,91 @@
+<div class="filters-mobile">
+	<div class="close"></div>
+	<div class="title">{{ __( 'FILTERS' )|e }}</div>
+	<form id="filter-form">
+		<div class="filters-mobile-block">
+			<div class="user-designs-toggler">
+				{{ custom_switch1 }}
+				<!-- <label for="show-designs">{{ __( 'Users\' Designs' ) }}</label> -->
+			</div>
+		</div>
+		<div class="filters-mobile-block">
+			<label>{{ __( 'Jewelry type' )|e }}</label>
+			<select name="path">
+				{% for i in categories %}
+					<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+				{% endfor %}
+			</select>
+		</div>
+		<div class="filters-mobile-block">
+			<label>Material</label>
+			<select name="material">
+			{% for i in material %}
+				<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+			{% endfor %}
+			</select>
+		</div>
+		<button>{{ __( 'Apply filters' )|e }}</button>
+	</form>
+</div>
+<script>
+( function() {
+	var
+		query = {},
+		search = '';
+
+	function parse( element ) {
+		var q = '';
+
+		if ( $( element ).attr( "type" ) === "checkbox" ) {
+			if ( $( element ).is( ":checked" ) ) {
+				q = $( element ).attr( "data-on" ).substr( $( element ).val().indexOf( "?" ) + 1 );
+
+			} else {
+				q = $( element ).attr( "data-off" ).substr( $( element ).val().indexOf( "?" ) + 1 );
+			}
+
+		} else {
+			q = $( element ).val().substr( $( element ).val().indexOf( "?" ) + 1 );
+		}
+
+		$.each( q.split( "&" ), function() {
+			var p = this.split( "=" );
+
+			if ( !query[ p[ 0 ] ] || element.name === p[ 0 ] ) {
+				query[ p[ 0 ] ] = p[ 1 ];
+			}
+		} );
+	}
+
+	$( "#filter-form" ).on( "submit", function( e ) {
+		var
+			queryParts = [],
+			s = '';
+
+		e.preventDefault();
+
+		for( var i in query ) {
+			queryParts.push( i + "=" + query[ i ] );
+		}
+
+		s = queryParts.join( "&" );
+
+		if ( s ) {
+			window.location.search = "?" + s;
+			
+		} else {
+			window.location.reload();
+		}
+
+	} );
+
+	$( "#filter-form select, #filter-form input" ).on( "change", function() {
+		$( "#filter-form" ).find( "input, select" ).not( this ).each( function() {
+			parse( this );
+		} );
+
+		parse( this );
+	} );
+	
+} )();
+</script>
