@@ -20,6 +20,7 @@ class ControllerExtensionThemeArbole extends Controller {
 
 		$this->load->model('setting/setting');
 		$this->load->model( 'catalog/option' );
+		$this->load->model( 'catalog/attribute' );
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->model_setting_setting->editSetting( $this->my_code, $this->request->post, $this->request->get['store_id']);
@@ -333,15 +334,33 @@ class ControllerExtensionThemeArbole extends Controller {
 			] ),
 		] );
 
+		$attributes = [];
+
+		foreach( $this->model_catalog_attribute->getAttributes() as $o ) {
+			$attributes[ $o['attribute_id'] ] = $o['name'];
+		}
+
+		$name = 'material';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Material attribute' ),
+			'element' => $this->a->r( [
+				'type'   => 'select',
+				'value'  => $attributes,
+				'active' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
 		$options = [];
 
 		foreach( $this->model_catalog_option->getOptions() as $o ) {
 			$options[ $o['option_id'] ] = $o['name'];
 		}
 
-		$name = 'material';
+		$name = 'your_size';
 		$data[ $name ] = $this->a->r()->render_form_group( [
-			'label' => $this->a->__( 'Material option' ),
+			'label' => $this->a->__( '"Your size" option' ),
 			'element' => $this->a->r( [
 				'type'   => 'select',
 				'value'  => $options,

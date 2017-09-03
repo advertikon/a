@@ -41,6 +41,7 @@
 		<script src="catalog/view/javascript/arbole/swiper.min.js" type="text/javascript"></script>
 		<script src="catalog/view/javascript/arbole/utils.min.js" type="text/javascript"></script>
 		<script src="catalog/view/javascript/advertikon/advertikon.js" type="text/javascript"></script>
+		<script src="catalog/view/javascript/arbole/script.js" type="text/javascript"></script>
 		{% for link in links %}
 		<link href="{{ link.href }}" rel="{{ link.rel }}" {{ link.type ? "type=\"#{link.type}\"" }} {{ link.style ? "type=\"#{link.style}\"" }}/>
 		{% endfor %}
@@ -115,8 +116,11 @@
 				</ul>
 				{{ currency }}
 				<div class="login-toggler">
-		          <!-- <a href="log_in.php">LOGIN</a> -->
-		          <a href="account_details.php"><img src="{{ image('arbole/user2.png') }}"/><span>Hi, </span>Oleksii</a>
+		          {% if customer_name %}
+		          <a href="account_details.php"><img src="{{ image('arbole/user2.png') }}"/><span>Hi, </span>{{ customer_name }}</a>
+		          {% else %}
+		          <a href="{{ u( 'account/login' ) }}">{{ __( 'LOGIN' ) }}</a>
+		          {% endif %}
 		        </div>
 			</div>
 			<div class="menu-toggler"><img src="{{ image('arbole/ham.png') }}"/>
@@ -148,10 +152,11 @@
 		</div>
 		<div class="right-sidebar">
 			<ul class="user-menu">
-				<li class="cart-toggler"><a href="checkout.php"><img src="{{ image('arbole/cart.png') }}"/><span>33</span></a></li>
+				<li class="cart-toggler"><a href="checkout.php"><img src="{{ image('arbole/cart.png') }}"/><span id="cart-quantity">{{ cart_quantity }}</span></a></li>
 				<li class="favorites-toggler"><a href="my_favorites.php"><img src="{{ image( 'arbole/heart.png' ) }}"/></a></li>
 				<li class="search-toggler"><a href="#"><img src="{{ image( 'arbole/search.png' ) }}"/><img src="{{ image( 'arbole/cross.png' ) }}"/></a></li>
 			</ul>
 		</div>
+		<div><div id="content"></div></div>
 
 

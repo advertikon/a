@@ -46,6 +46,12 @@ set_error_handler(function($code, $message, $file, $line) use($log, $config) {
 		$log->write('PHP ' . $error . ':  ' . $message . ' in ' . $file . ' on line ' . $line);
 	}
 
+	if ( TEST ) {
+		echo '<pre>';
+		debug_print_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+		echo '</pre>';
+	}
+
 	return true;
 });
 

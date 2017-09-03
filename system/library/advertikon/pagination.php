@@ -9,12 +9,14 @@
 namespace Advertikon;
 
 class Pagination extends \Model {
-	protected $query = null;
-	protected $filter = array();
-	protected $sort = array();
+	public $total_page = 0;
 	public $total = 0;
 	public $page = null;
 	public $item_per_page = 20;
+
+	protected $query = null;
+	protected $filter = array();
+	protected $sort = array();
 	protected $data = [];
 	protected $filter_init = false;
 	protected $sort_init = false;
@@ -113,6 +115,7 @@ class Pagination extends \Model {
 
 				if ( $total && $total->num_rows > 0 ) {
 					$this->total = $total->row['total'];
+					$this->total_page = ceil( $this->total / $this->item_per_page );
 				}
 
 				return $this->data->rows;
@@ -129,6 +132,7 @@ class Pagination extends \Model {
 	protected function get_filter() {
 		$f = array();
 		$this->init_filter();
+		$q = new Query();
 
 		foreach( $this->filter as $alias => $data ) {
 			$operator = '=';
@@ -137,7 +141,7 @@ class Pagination extends \Model {
 				$operator = $this->get_operator( $data['operator'] );
 			}
 
-			$f[] = $this->db->escape( $data['name'] ) . $operator . $this->db->escape( $data['value'] );
+			$f[] = $this->db->escape( $data['name'] ) . $operator . $q->escape_db( $data['value'] );
 		}
 
 		if ( $f ) {
@@ -224,7 +228,7 @@ class Pagination extends \Model {
 	 */
 	protected function get_limit() {
 		if ( is_null( $this->page ) ) {
-			if ( isset( $this->reguest->get['page'] ) ) {
+			if ( isset( $this->request->get['page'] ) ) {
 				$this->page = (int)$this->request->get['page'];
 
 			} else {

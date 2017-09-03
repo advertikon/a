@@ -52,38 +52,29 @@
 								</div>
 							</div>
 							<div class="user-designs-toggler">
-								<!-- <input type="checkbox" name="show-designs" checked id="show-designs"><label for="show-designs">{{ __( 'Users Designs' ) }}</label> -->
 								{{ custom_switch }}
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="product-list">
-					<?php for ($i=0; $i < 20; $i++):?>
+					{% for product in products %}
 					<div class="product-item">
-						<a href="my_favorites.php" class="to-favorites"></a>
-						<a href="gallery_item.php" class="img">
-							<img src="<?php includeImg('product-small.png'); ?>">
+						<a href="" class="to-favorites" data-id="{{ product.product_id }}"></a>
+						<a href="{{ u( 'product/product', {'product_id': product.product_id, 'path': category_id }) }}" class="img">
+							<img src="{{ product.thumb }}">
 							<div class="img-action">
-								<span data-popup="quick-view">quick view</span>
-								<span>shop now</span>
+								<span data-popup="quick-view-{{ loop.index }}">{{ __( 'quick view' ) }}</span>
+								<span>{{ __( 'shop now' ) }}</span>
 							</div>
 						</a>
-						<a href="gallery_item.php" class="product-name">Model name</a>
-						<div class="product-price"><span>100 $</span></div>
+						<a href="gallery_item.php" class="product-name">{{ product.name }}</a>
+						<div class="product-price"><span>{{ product.special ?: product.price }}</span></div>
 					</div>
-					<?php endfor; ?>
+					{{ include( 'arbole/template/product/quick_view.twig' ) }}
+					{% endfor %}
 				</div>
-				<div class="pager">
-					<ul>
-						<li class="prev"><a href="#"><span></span></a></li>
-						<li class="current"><a href="#">1</a></li>
-						<li><a href="#">2</a></li>
-						<li><a href="#">3</a></li>
-						<li><a href="#">4</a></li>
-						<li class="next"><a href="#"><span></span></a></li>
-					</ul>
-				</div>
+				{{ pagination }}
 			</div>
 		</div>
 	</div>

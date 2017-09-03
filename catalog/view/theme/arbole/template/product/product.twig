@@ -1,0 +1,124 @@
+{{ header }}
+
+<div class="container-inner">
+	<div class="section wide">
+		<div class="max-width">
+			<div class="breadcrumbs">
+				<ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+					{% for i in breadcrumbs %}
+					<li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+						<a href="{{ i.href }}" itemprop="item"><span itemprop="name">{{ i.text }}</span></a>
+						<meta itemprop="position" content="{{ loop.index }}" />
+					</li>
+					{% endfor %}
+				</ol>
+			</div>
+			<div class="gallery-item-wrapper">
+				<div class="swiper-container">
+					<a href="my_favorites.php" class="to-favorites"></a>
+					<div class="swiper-wrapper">
+						<div class="swiper-slide">
+							<div class="img">
+								<img src="{{ popup }}">
+							</div>
+						</div>
+						{% for i in images %}
+						<div class="swiper-slide">
+							<div class="img">
+								<img src="{{ i.popup }}">
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="swiper-pagination"></div>
+				</div>
+				<div class="product-info">
+					<div class="product-name">{{ name }}</div>
+					<div class="product-description">{{ description }}</div>
+					<div class="product-price"><label>{{ __( 'Price' ) }}:</label><span>{{ special ?: price }}</span></div>
+					<div class="product-options">
+						<div class="option">
+							<label>{{ your_size.name }}:</label>
+							<div class="field">
+								<input type="text" value="{{ your_size.value }}" class="decimal"/>
+								<span>mm</span>
+								<a href="#" class="size-guide" data-popup="size-guide">{{ __( 'size guide' ) }}</a>
+							</div>
+						</div>
+						<div class="option">
+							<label>{{ __( 'Quantity' ) }}:</label>
+							<div class="field field-counter">
+								<div class="minus">-</div>
+									<input type="text" value="1" maxlength="2" class="decimal"/>
+								<div class="plus">+</div>
+							</div>
+						</div>
+					</div>
+					<a href="#" class="add-to-cart">{{ __( 'add to cart' ) }}</a>
+					<a href="constructor_step_4.php" class="more"><span></span>{{ __( 'edit in constructor' ) }}</a>
+				</div>
+			</div>
+			{% if products is not empty %}
+			<div class="gallery-other-wrapper" data-size="5" data-size-1="4" data-size-2="3" data-size-3="2">
+				<div class="title">{{ __( 'You may also like' ) }}
+					<div class="gallery-controls">
+						<div class="swiper-prev"><span></span></div>
+						<div class="swiper-next"><span></span></div>
+					</div>
+				</div>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						{% for product in products %}
+						<div class="swiper-slide">
+							<div class="product-item">
+								<a href="{{ product.href }}" class="to-favorites" data-id="{{ product.product_id }}"></a>
+								<a href="gallery_item.php" class="img">
+									<img src="{{ product.thumb }}">
+									<div class="img-action">
+										<span data-popup="quick-view-{{ loop.index }}">{{ __( 'quick view' ) }}</span>
+										<span>shop</span> 
+									</div>
+								</a>
+								<a href="gallery_item.php" class="product-name">{{ product.name }}</a>
+								<div class="product-price"><span>{{ special ?: price }}</span></div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+			{% endif %}
+			<div class="gallery-other-wrapper" data-size="6" data-size-1="5" data-size-2="4" data-size-3="2">
+				<div class="title">Recently viewed 
+					<div class="gallery-controls">
+						<div class="swiper-prev"><span></span></div>
+						<div class="swiper-next"><span></span></div>
+					</div>
+				</div>
+				<div class="swiper-container">
+					<div class="swiper-wrapper">
+						<?php for ($i=0; $i < 8; $i++):?>
+						<div class="swiper-slide">
+							<div class="product-item">
+								<a href="my_favorites.php" class="to-favorites"></a>
+								<a href="gallery_item.php" class="img">
+									<img src="<?php includeImg('product-small.png'); ?>">
+									<div class="img-action">
+										<span data-popup="quick-view">quick view</span>
+									</div>
+								</a>
+							</div>
+						</div>
+						<?php endfor; ?>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% for product in products %}
+{{ include( 'arbole/template/product/quick_view.twig' ) }}
+{% endfor %}
+
+{{ footer }}

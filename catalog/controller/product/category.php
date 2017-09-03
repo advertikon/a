@@ -107,12 +107,11 @@ class ControllerProductCategory extends Controller {
 					'default' => (int)$this->config->get('config_store_id'),
 				],
 				'material' => [
-					'name'    => 'pov.option_value_id',
+					'name'    => 'pa.text',
 					'default' => false,
 				],
 				'custom' => [
 					'name'    => 'p.custom',
-					'default' => 1,
 				],
 			],
 			'sort' => [
@@ -123,11 +122,19 @@ class ControllerProductCategory extends Controller {
 					'name'    => 'special, p.price DESC',
 					'default' => true,
 				],
+				'name_low' => [
+					'name'  => 'pd.name ASC',
+				],
+				'name_high' => [
+					'name'  => 'pd.name DESC',
+				],
 			],
 		] );
 
+		$product_attribute = (int)Advertikon\Arbole\Advertikon::instance()->config( 'material' );
+
 		$pagination->set_query(
-			"SELECT
+			"SELECT DISTINCT
 				p.*,
 				pd.name,
 				pd.description,
@@ -142,7 +149,13 @@ class ControllerProductCategory extends Controller {
 			LEFT JOIN " . DB_PREFIX . "product_to_store p2s
 				ON (p.product_id = p2s.product_id)
 			LEFT JOIN " . DB_PREFIX . "product_option_value pov
-				ON(p.product_id = pov.product_id)"
+				ON(p.product_id = pov.product_id)
+			LEFT JOIN " . DB_PREFIX . "product_attribute pa 
+				ON(
+					p.product_id=pa.product_id AND
+					pa.language_id = " . (int)$this->config->get('config_language_id') . " AND
+					pa.attribute_id = {$product_attribute}
+				)"
 		);
 
 		$data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
@@ -167,30 +180,40 @@ class ControllerProductCategory extends Controller {
 
 		foreach( $this->model_catalog_product->get_material() as $result ) {
 			$data['material'][] = array(
-				'name'   => $result['name'],
-				'href'   => $pagination->url( 'material', $result['option_value_id'] ),
-				'active' => $result['option_value_id'] == $pagination->get_filter_value( 'material' ),
+				'name'   => $result['text'],
+				'href'   => $pagination->url( 'material', $result['text'] ),
+				'active' => $result['text'] == $pagination->get_filter_value( 'material' ),
 			);
 		}
 
 		$data['sort'] = [
 			[
-				'name'   => ADK()->__( 'Price: low to high' ),
+				'name'   => ADK()->__( 'Price: high to low' ),
 				'href'   => $pagination->url( 'sort', 'price_high' ),
 				'active' => $pagination->is_sort( 'price_high' )
 			],
 			[
-				'name'   => ADK()->__( 'Price: high to low' ),
+				'name'   => ADK()->__( 'Price: low to high' ),
 				'href'   => $pagination->url( 'sort', 'price_low' ),
 				'active' => $pagination->is_sort( 'price_low' )
+			],
+			[
+				'name'   => ADK()->__( 'Name: A to Z' ),
+				'href'   => $pagination->url( 'sort', 'name_low' ),
+				'active' => $pagination->is_sort( 'name_low' )
+			],
+			[
+				'name'   => ADK()->__( 'Name: Z to A' ),
+				'href'   => $pagination->url( 'sort', 'name_high' ),
+				'active' => $pagination->is_sort( 'name_hight' )
 			],
 		];
 
 		$data['custom_switch'] = ADK()->r( [
 			'type'        => 'checkbox',
 			'value'       => $pagination->url( 'custom', '1' ),
-			'custom_data' => ( $pagination->get_filter_value( 'custom' ) ? 'checked="true"' : '' ) .
-							' data-on="' . $pagination->url( 'custom', 1 )  . '"' .
+			'custom_data' => ( '' === $pagination->get_filter_value( 'custom' ) ? 'checked="true"' : '' ) .
+							' data-on="' . $pagination->url( 'custom', null )  . '"' .
 							'data-off="' . $pagination->url( 'custom', 0 ) . '"',
 			'id'          => 'show-designs',
 			'label'       => ADK()->__( 'Users\' designs' ),
@@ -213,6 +236,7 @@ class ControllerProductCategory extends Controller {
 		$results = $pagination->run();;
 		$product_total = $pagination->total;
 		$page = $pagination->page;
+		$option_your_size = ADK( 'Advertikon\\Arbole' )->config( 'your_size' );
 
 		foreach ($results as $result) {
 			if ($result['image']) {
@@ -246,6 +270,17 @@ class ControllerProductCategory extends Controller {
 				$rating = false;
 			}
 
+			$your_size = [];
+
+			$product_options = $this->model_catalog_product->getProductOptions( $result['product_id'] );
+
+			foreach( $product_options as $option ) {
+				if ( $option_your_size == $option['option_id'] ) {
+					$your_size = $option;
+					break;
+				}
+			}
+
 			$data['products'][] = array(
 				'product_id'  => $result['product_id'],
 				'thumb'       => $image,
@@ -256,11 +291,16 @@ class ControllerProductCategory extends Controller {
 				'tax'         => $tax,
 				'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
 				'rating'      => $result['rating'],
-				'href'        => $this->url->link('product/product', '&product_id=' . $result['product_id'] )
+				'href'        => $this->url->link('product/product', '&product_id=' . $result['product_id'] ),
+				'images'      => $this->model_catalog_product->getProductImages( $result['product_id' ] ),
+				'your_size'   => $your_size,
 			);
 		}
 
-		$data['continue'] = $this->url->link('common/home');
+		$data['you_size'] = $this->model_catalog_product->get_you_size_option();
+		$data['continue'] = $this->url->link('common/home' );
+		$data['pagination'] = $this->load->controller( 'common/pagination', [ $pagination, ] );
+		$data['category_id'] = $category_id;
 
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['column_right'] = $this->load->controller('common/column_right');
@@ -270,53 +310,5 @@ class ControllerProductCategory extends Controller {
 		$data['header'] = $this->load->controller('common/header');
 
 		$this->response->setOutput($this->load->view('product/category', $data));
-
-		// } else {
-		// 	$url = '';
-
-		// 	if (isset($this->request->get['path'])) {
-		// 		$url .= '&path=' . $this->request->get['path'];
-		// 	}
-
-		// 	if (isset($this->request->get['filter'])) {
-		// 		$url .= '&filter=' . $this->request->get['filter'];
-		// 	}
-
-		// 	if (isset($this->request->get['sort'])) {
-		// 		$url .= '&sort=' . $this->request->get['sort'];
-		// 	}
-
-		// 	if (isset($this->request->get['order'])) {
-		// 		$url .= '&order=' . $this->request->get['order'];
-		// 	}
-
-		// 	if (isset($this->request->get['page'])) {
-		// 		$url .= '&page=' . $this->request->get['page'];
-		// 	}
-
-		// 	if (isset($this->request->get['limit'])) {
-		// 		$url .= '&limit=' . $this->request->get['limit'];
-		// 	}
-
-		// 	$data['breadcrumbs'][] = array(
-		// 		'text' => $this->language->get('text_error'),
-		// 		'href' => $this->url->link('product/category', $url)
-		// 	);
-
-		// 	$this->document->setTitle($this->language->get('text_error'));
-
-		// 	$data['continue'] = $this->url->link('common/home');
-
-		// 	$this->response->addHeader($this->request->server['SERVER_PROTOCOL'] . ' 404 Not Found');
-
-		// 	$data['column_left'] = $this->load->controller('common/column_left');
-		// 	$data['column_right'] = $this->load->controller('common/column_right');
-		// 	$data['content_top'] = $this->load->controller('common/content_top');
-		// 	$data['content_bottom'] = $this->load->controller('common/content_bottom');
-		// 	$data['footer'] = $this->load->controller('common/footer');
-		// 	$data['header'] = $this->load->controller('common/header');
-
-		// 	$this->response->setOutput($this->load->view('error/not_found', $data));
-		// }
 	}
 }

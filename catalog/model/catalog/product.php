@@ -537,6 +537,23 @@ class ModelCatalogProduct extends Model {
 		}
 	}
 
+	// public function get_material() {
+	// 	$option_id = 0;
+	// 	$ret = [];
+
+	// 	if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
+	// 		$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'material' );
+	// 	}
+
+	// 	$q = $this->db->query( "SELECT ovd.name, ov.option_value_id FROM " . DB_PREFIX . "product_option_value pov JOIN " . DB_PREFIX . "option_value ov USING(option_value_id) JOIN " . DB_PREFIX . "option_value_description ovd USING(option_value_id) WHERE ovd.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND ov.option_id = '" . $option_id . "'" );
+
+	// 	if ( $q && $q->num_rows ) {
+	// 		$ret = $q->rows;
+	// 	}
+
+	// 	return $ret;
+	// }
+
 	public function get_material() {
 		$option_id = 0;
 		$ret = [];
@@ -545,10 +562,27 @@ class ModelCatalogProduct extends Model {
 			$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'material' );
 		}
 
-		$q = $this->db->query( "SELECT ovd.name, ov.option_value_id FROM " . DB_PREFIX . "product_option_value pov JOIN " . DB_PREFIX . "option_value ov USING(option_value_id) JOIN " . DB_PREFIX . "option_value_description ovd USING(option_value_id) WHERE ovd.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND ov.option_id = '" . $option_id . "'" );
+		$q = $this->db->query( "SELECT DISTINCT text, attribute_id FROM " . DB_PREFIX . "product_attribute WHERE language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND attribute_id = '" . $option_id . "'" );
 
 		if ( $q && $q->num_rows ) {
 			$ret = $q->rows;
+		}
+
+		return $ret;
+	}
+
+	public function get_you_size_option() {
+		$option_id = 0;
+		$ret = [];
+
+		if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
+			$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'your_size' );
+		}
+
+		$q = $this->db->query( "SELECT po.value, po.product_option_id, od.name FROM " . DB_PREFIX . "product_option po JOIN " .  DB_PREFIX . "option_description od USING(option_id) WHERE od.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND option_id = '" . $option_id . "'" );
+
+		if ( $q && $q->num_rows ) {
+			$ret = $q->row;
 		}
 
 		return $ret;
