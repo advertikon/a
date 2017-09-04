@@ -1,0 +1,26 @@
+{% if products is not empty %}
+<div class="checkout-block">
+	<div class="title order-items-toggler">{{ count }} ITEM(S)</div>
+	<div class="order-items">
+		{% for product in products %}
+		<div class="order-item">
+			<div class="img"><img src="{{ image( product.image ) }}"></div>
+			<div class="info">
+				<div class="product-name">{{ product.name }}</div>
+				<div class="product-options">
+					<div class="option">
+						<label>{{ __( 'Quantity' ) }}:</label>
+						<strong>{{ product.quantity }}</strong>
+					</div>                
+				</div>
+				<div class="product-price"><label>{{ __( 'Price' ) }}:</label><span>{{ product.formatted_price }}</span></div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="total">
+		<label>{{ __( 'total to pay' ) }}:</label>
+		<span>{{ total }}</span>
+	</div>
+</div>
+{% endif %}

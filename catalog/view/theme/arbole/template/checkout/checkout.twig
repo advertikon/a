@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+  <head>
+  <title>Arbole</title>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+	<!-- Chrome, Firefox OS and Opera -->
+	<meta name="theme-color" content="#4285f4">
+	<!-- Windows Phone -->
+	<meta name="msapplication-navbutton-color" content="#4285f4">
+	<!-- iOS Safari -->
+	<meta name="apple-mobile-web-app-status-bar-style" content="#4285f4">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="format-detection" content="telephone=no" />
+	<link rel="icon" type="image/x-icon" href="{{ image( 'arbole/fav.png' ) }}" />
+	<link rel="icon" style="@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)" type="image/png" href="{{ image( 'arbole/imh/fav@2x.png' ) }}" />
+	<link type="text/css" rel="stylesheet" media="screen" href="catalog/view/theme/arbole/stylesheet/main.min.css" />
+  </head>
+  <body class="checkout">
+    <div class="header">
+      <h1>{{ __( 'checkout' ) }}</h1>
+      <a href="index.php" class="logo">
+        <i><img src="{{ image( 'arbole/logo-icon.svg' ) }}"/></i>
+        <span><img src="{{ image('arbole/logo-text.svg') }}"/></span>
+      </a>
+      <div class="secured">{{ __( 'secured' ) }}</div>
+    </div>
+    <div class="checkout-wrapper">
+      <div class="max-width">
+        <div class="col">
+          <div class="checkout-block">
+            <div class="title"><span>1</span>{{ __( 'PROMO COD OR VOUCHER' ) }}</div>
+            <p>{{ __( 'Discount/promo codes cannot be used when buying gift vouchers.' ) }}</p>
+            <div class="field field-promo">
+              <input id="coupon-value" type="text" placeholder="enter"/>
+              <button id="apply-coupon"><span></span>{{ __( 'Apply' ) }}</button>
+            </div>
+          </div>
+          <div class="checkout-block">
+            <div class="title"><span>2</span>{{ __( 'E-MAIL ADDRESS' ) }}</div>
+            <div class="field">
+              <label>E-mail</label>
+              <input type="text" id="email"/>
+              <p class="error-text">*error</p>
+            </div>
+          </div>
+          <div class="checkout-block">
+            <div class="title"><span>3</span>{{ __( 'DELIVERY ADDRESS' ) }}</div>
+            <div class="form delivery-form editing">
+              <div class="edit-toggler">{{ __( 'edit' ) }}</div>
+              <div class="field">
+                <label>{{ __( 'First name' ) }}</label>
+                <input type="text" id="first_name"/>
+                <p class="error-text">*error</p>
+              </div>
+              <div class="field">
+                <label>{{ __( 'Last name' ) }}</label>
+                <input type="text" id="last_name"/>
+                <p class="error-text">*error</p>
+              </div>
+              <div class="field">
+                <label>{{ __( 'Phone' ) }}</label>
+                <input type="text" id="telephone"/>
+                <p class="error-text">*error</p>
+              </div>
+              <div class="field">
+                <label>{{ __( 'Address' ) }}</label>
+                <input type="text" id="address"/>
+                <p class="error-text">*error</p>
+              </div>
+              <div class="field">
+                <label>{{ __( 'City' ) }}</label>
+                <input type="text" id="city"/>
+                <p class="error-text">*error</p>
+              </div>
+              <div class="field">
+                <label>{{ __( 'Country' ) }}</label>
+                <input type="text" id="country"/>
+                <p class="error-text">*error</p>
+              </div>
+              <div class="field">
+                <label>{{ __( 'Postcode' ) }}</label>
+                <input type="text" id="postcode"/>
+                <p class="error-text">*error</p>
+              </div>
+              <button>{{ __( 'OK' ) }}</button>
+            </div>
+          </div>
+          <div class="checkout-block payment-method">
+            <div class="title"><span>4</span>{{ __( 'PAYMENT METHOD' ) }}</div>
+            <p>{{ __( 'You can pay by using Paypal.' ) }}</p>
+            <p><img class="paypal" src="{{ image( 'paypal.png') }}"/></p>
+            <button disabled onclick="order">{{ __( 'PLACE ORDER' ) }}</button>
+          </div>
+          <p class="terms">By placing your order you agree to our <a href="#">Terms & Conditions, privacy and returns policies</a>. You also consent to some of your data being stored by ARBOLE’, which may be used to make future shopping experiences better for you.</p>
+        </div>
+        <div class="col cart-contents">
+          {{ cart }}
+        </div>
+      </div>
+    </div>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/jquery-1.11.3.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/jquery.ui.touch-punch.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/swiper.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/swiper.jquery.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/jquery.scrollbar.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/functions.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/fabric.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/utils.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/customiseControls.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/jquery.panzoom.min.js"></script>
+	<script type="text/javascript" src="catalog/view/javascript/arbole/main.min.js"></script>
+	<script>
+	function refreshCart() {
+		$( ".cart-contents" ).load( '/index.php?route=checkout/checkout/refresh' );
+	}
+
+	function paymentAddress() {
+		$.ajax({
+		url: 'index.php?route=checkout/payment_address_save',
+		type: 'post',
+		data: {
+			firstname: $( "#first_name" ).val(),
+			lastname:  $( "#last_name" ).val(),
+			address_1: $( "#address" ).val(),
+			city:      $( "#city" ).val(),
+			telephone: $( "#telephone" ).val(),
+			postcode:  $( "#postcode" ).val(),
+			country:   $( "#country" ).val()
+		},
+		dataType: 'json',
+		beforeSend: function() {
+			
+		},
+		complete: function() {
+			
+		},
+		success: function(json) {
+			if (json['redirect']) {
+
+			} else if ( json.error ) {
+				alert( json.error );
+
+			} else {
+				if ( '{{ is_shipping }}' ) {
+					shippingAddress();
+
+				} else {
+					pay();
+				}
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+		});
+	}
+
+	function shippingAddress() {
+		$.ajax({
+		url: 'index.php?route=checkout/shipping_address_save',
+		type: 'post',
+		data: {
+			firstname: $( "#first_name" ).val(),
+			lastname:  $( "#last_name" ).val(),
+			address_1: $( "#address" ).val(),
+			city:      $( "#city" ).val(),
+			telephone: $( "#telephone" ).val(),
+			postcode:  $( "#postcode" ).val(),
+			country:   $( "#country" ).val()
+		},
+		dataType: 'json',
+		beforeSend: function() {
+			
+		},
+		complete: function() {
+			
+		},
+		success: function(json) {
+			if (json['redirect']) {
+
+			} else if ( json.error ) {
+				alert( json.error );
+
+			} else {
+				if ( '{{ is_shipping }}' ) {
+					shippingAddress();
+
+				} else {
+					pay();
+				}
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+		});
+	}
+
+	$( document ).delegate( "#apply-coupon", "click", function( e ) {
+	var
+		me = $( this );
+
+	e.preventDefault();
+
+	$.ajax({
+		url: 'index.php?route=extension/total/coupon/coupon',
+		type: 'post',
+		data: 'coupon=' + $( "#coupon-value" ).val(),
+		dataType: 'json',
+		beforeSend: function() {
+			
+		},
+		complete: function() {
+			
+		},
+		success: function(json) {
+			if (json['success']) {
+				alert( json["success"].replace(/<[^>]*?>/g, "") );
+				refreshCart();
+
+			} else if ( json.error ) {
+				alert( json.error );
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+} );
+	</script
+  </body>
+</html>

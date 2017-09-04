@@ -71,6 +71,7 @@
 						<a href="gallery_item.php" class="product-name">{{ product.name }}</a>
 						<div class="product-price"><span>{{ product.special ?: product.price }}</span></div>
 					</div>
+					{% set l_index = loop.index %}
 					{{ include( 'arbole/template/product/quick_view.twig' ) }}
 					{% endfor %}
 				</div>
@@ -88,8 +89,6 @@
 
 	$( ".filter-page" ).on( "change", function() {
 		var url = '';
-		// console.log( this, this.value );
-		// return;
 
 		if ( 'checkbox' === $( this ).attr( "type" ) ) {
 			if ( $( this ).is( ":checked" ) ) {

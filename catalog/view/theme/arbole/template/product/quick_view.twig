@@ -1,4 +1,4 @@
-<div class="popup" id="quick-view-{{ loop.index }}">
+<div class="popup" id="quick-view-{{ l_index }}">
 	<div class="popup-outer">
 		<div class="popup-inner">
 			<div class="popup-body">
@@ -27,6 +27,7 @@
 					<div class="product-info product-data" data-id="{{ product.product_id }}">
 						<div class="product-name">{{ product.name }}</div>
 						<div class="product-price"><label>Price:</label><span>{{ product.special ?: product.price }}</span></div>
+						{% if product.your_size is not empty %}
 						<div class="product-options">
 							<div class="option">
 								<label>{{ product.your_size.name }}:</label> 
@@ -45,6 +46,7 @@
 								</div>
 							</div>
 						</div>
+						{% endif %}
 						<a href="#" class="add-to-cart">{{ __( 'add to cart' ) }}</a>
 						<a href="{{ product.href }}" class="more"><span></span>{{ __( 'view details' ) }}</a>
 					</div>

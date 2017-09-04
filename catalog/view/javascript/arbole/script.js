@@ -33,14 +33,16 @@ $( document ).delegate( ".to-favorites", "click", function( e ) {
 } );
 
 $( document ).delegate( ".product-data .add-to-cart", "click", function( e ) {
-	var me = $( this );
+	var
+		me = $( this ),
+		parent = me.closest( ".product-data" );
 
 	e.preventDefault();
 
 	$.ajax({
 		url: 'index.php?route=checkout/cart/add',
 		type: 'post',
-		data: 'product_id=' + $( this ).closest( ".product-data" ).attr( "data-id" ) + '&quantity=' + $( this ).closest( ".product-data" ).find( ".product-quantity" ).val() + '&option[' + $( this ).closest( ".product-data" ).find( ".your-size" ).attr( "data-id" ) + ']=' + $( this ).closest( ".product-data" ).find( ".your-size" ).val(),
+		data: 'product_id=' + parent.attr( "data-id" ) + '&quantity=' + parent.find( ".product-quantity" ).val() + '&option[' + parent.find( ".your-size" ).attr( "data-id" ) + ']=' + parent.find( ".your-size" ).val(),
 		dataType: 'json',
 		beforeSend: function() {
 			$('#cart > button').button('loading');
