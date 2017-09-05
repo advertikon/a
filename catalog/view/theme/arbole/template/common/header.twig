@@ -107,8 +107,8 @@
 			</a>
 			<div class="menu-wrapper">
 				<ul>
-					<li class="active"><a href="constructor_step_1.php">{{ __( 'design your own' )|e }}</a></li>
-					<li><a href="gallery.php">{{ __( 'gallery store' )|e }}</a></li>
+					<li><a href="constructor_step_1.php">{{ __( 'design your own' )|e }}</a></li>
+					<li {{ is_active( 'product/category' ) ? 'class="active"' }}><a href="{{ u( 'product/category' ) }}">{{ __( 'gallery store' )|e }}</a></li>
 					<li><a href="about.php">{{ __( 'About Us' )|e }}</a></li>
 					<li><a href="faq.php">{{ __( 'faq' )|e }}</a></li>
 					<li class="mobile-link"><a href="account_details.php">{{ __( 'My account' )|e }}</a></li>
@@ -138,17 +138,7 @@
 			</form>
 		</div>
 		<div class="cart-sidebar">
-			<div class="cart-sidebar-inner">
-				<div class="checkout-block">
-					<div class="checkout-body">
-						<div class="title">{{ __( 'your cart is empty' )|e }}</div>
-						<div class="subtitle">{{ __( 'Find awesome jewelery on ARBOLE’!' )|e }} </div>
-						<div class="btns">
-							<button class="light" onclick="window.location = 'gallery.php'">continue shopping</button>
-						</div>
-					</div>
-				</div>
-			</div>
+		{{ cart }}
 		</div>
 		<div class="right-sidebar">
 			<ul class="user-menu">

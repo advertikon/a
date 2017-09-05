@@ -1,0 +1,53 @@
+{% if products is not empty %}
+<div class="cart-sidebar-inner" data-quantity="{{ quantity }}">
+	<div class="checkout-block">
+		<div class="checkout-body">
+			<div class="title">{{ __( 'you added to cart' ) }}:</div>
+			<div class="scrollbar-outer">
+				{% for product in products %}
+				<div class="order-item" data-id="{{ product.cart_id }}">
+					<div class="img"><img src="{{ product.thumb }}"></div>
+					<div class="info">
+						<div class="product-name">{{ product.name }}</div>
+						<div class="product-options">
+							<div class="option">
+								<label>{{ __( 'Quantity' ) }}:</label>
+								<div class="field field-counter">
+									<div class="minus">-</div>
+									<input id="sidebar-cart-quantity" type="text" value="{{ product.quantity }}" maxlength="2" class="decimal"/>
+									<div class="plus">+</div>
+								</div>
+							</div>
+						</div>
+						<div class="product-price"><label>{{ __( 'Price' ) }}:</label><span>{{ product.price }}</span></div>
+					</div>
+					<a href="#" class="remove"></a>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		<div class="checkout-footer">
+			<div class="total">
+				<label>{{ __( 'total' ) }}:</label>
+				<span>{{ total }}</span>
+			</div>
+			<div class="btns">
+				<button onclick="window.location = '{{ checkout }}'">{{ __( 'check out' ) }}</button>
+				<button class="light" onclick="window.location = '{{ u( 'product/catalog' ) }}'">{{ __( 'continue shopping' ) }}</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% else %}
+<div class="cart-sidebar-inner" data-quantity="0">
+	<div class="checkout-block">
+		<div class="checkout-body">
+			<div class="title">{{ __( 'your cart is empty' )|e }}</div>
+			<div class="subtitle">{{ __( 'Find awesome jewelery on ARBOLE’!' )|e }} </div>
+			<div class="btns">
+				<button class="light" onclick="window.location = '{{ u( 'product/category' ) }}'">continue shopping</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endif %}

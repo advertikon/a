@@ -3,6 +3,8 @@ class ControllerCommonCart extends Controller {
 	public function index() {
 		$this->load->language('common/cart');
 
+		$image_width = $image_height = 78;
+
 		// Totals
 		$this->load->model('setting/extension');
 
@@ -42,6 +44,10 @@ class ControllerCommonCart extends Controller {
 
 			foreach ($totals as $key => $value) {
 				$sort_order[$key] = $value['sort_order'];
+
+				if ( 'total' === $value['code'] ) {
+					$data['total'] = $this->currency->format( $value['value'], $this->session->data['currency'] );
+				}
 			}
 
 			array_multisort($sort_order, SORT_ASC, $totals);
@@ -52,11 +58,13 @@ class ControllerCommonCart extends Controller {
 		$this->load->model('tool/image');
 		$this->load->model('tool/upload');
 
+		$data['quantity'] = 0;
 		$data['products'] = array();
 
 		foreach ($this->cart->getProducts() as $product) {
 			if ($product['image']) {
-				$image = $this->model_tool_image->resize($product['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_height'));
+				$image = $this->model_tool_image->resize( $product['image'], $image_width, $image_height );
+
 			} else {
 				$image = '';
 			}
@@ -106,6 +114,8 @@ class ControllerCommonCart extends Controller {
 				'total'     => $total,
 				'href'      => $this->url->link('product/product', 'product_id=' . $product['product_id'])
 			);
+
+			$data['quantity'] += $product['quantity'];
 		}
 
 		// Gift Voucher

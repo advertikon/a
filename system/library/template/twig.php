@@ -53,6 +53,14 @@ final class Twig {
 			} );
 
 			$this->twig->addFunction( $configuration_func );
+
+			$is_active_func = new \Twig_SimpleFunction( 'is_active', function ( $str ) {
+			    if ( empty( $_GET['route'] ) ) return false;
+
+				return strpos( $_GET['route'], $str ) === 0;
+			} );
+
+			$this->twig->addFunction( $is_active_func );
 		}
 
 		$image_func = new \Twig_SimpleFunction( 'image', function ( $str ) {
