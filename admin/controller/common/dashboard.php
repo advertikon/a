@@ -21,7 +21,7 @@ class ControllerCommonDashboard extends Controller {
 		
 		// Check install directory exists
 		if (is_dir(DIR_APPLICATION . 'install')) {
-			$data['error_install'] = $this->language->get('error_install');
+			// $data['error_install'] = $this->language->get('error_install');
 		} else {
 			$data['error_install'] = '';
 		}
@@ -77,7 +77,7 @@ class ControllerCommonDashboard extends Controller {
 		}
 
 		if (DIR_STORAGE == DIR_SYSTEM . 'storage/') {
-			$data['security'] = $this->load->controller('common/security');
+			// $data['security'] = $this->load->controller('common/security');
 		} else {
 			$data['security'] = '';
 		}

@@ -163,6 +163,7 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 					unset($this->session->data['payment_method']);
 					unset($this->session->data['payment_methods']);
+					$json['success'] = true;
 				}
 			}
 		}
