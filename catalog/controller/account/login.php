@@ -49,7 +49,28 @@ class ControllerAccountLogin extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+		if ( isset( $this->request->get['fb'] ) || isset( $this->request->get['google'] ) ) {
+			require_once DIR_SYSTEM . 'library/Hybridauth/autoload.php';
+
+			if ( isset( $this->request->get['google'] ) ) {
+				$config = [
+					'callback' => $this->url->link( 'account/login' ),
+					'keys' => [ 
+				        'id'     => 'my-project-1492171037707',
+				        'secret' => 'your-google-client-secret' 
+				    ],
+
+				];
+
+				$adapter = new Hybridauth\Provider\Google($config);
+
+				$adapter->authenticate();
+				$accessToken = $adapter->getAccessToken();
+				$userProfile = $adapter->getUserProfile();
+			}
+
+
+		} else if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			// Unset guest
 			unset($this->session->data['guest']);
 

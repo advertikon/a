@@ -1,0 +1,41 @@
+<!doctype html>
+<html>
+  <head>
+  <title>Arbole</title>
+  {{ include( 'arbole/template/common/meta.twig' ) }}
+  </head>
+  <body>
+    <div class="header">
+      <a href="index.php" class="logo">
+        <i><img src="{{ image( 'arbole/logo-icon.svg' ) }}"/></i>
+        <span><img src="{{ image( 'arbole/logo-text.svg' ) }}"/></span>
+      </a>
+    </div>
+    <form class="login-wrapper">
+      <div class="col">
+        <p><strong>CONTINUE WITH E-MAIL</strong></p>
+        <div class="form">
+          <div class="field">
+            <label>E-mail</label>
+            <input type="text"/>
+            <p class="error-text">*error</p>
+          </div>
+          <div class="field">
+            <label>Password</label>
+            <input type="pasword"/>
+            <p class="error-text">*error</p>
+          </div>
+          <a href="{{ u( 'account/forgotten' ) }}" class="forgot">forgot a password?</a>
+          <button><span></span>LOG IN</button>
+        </div>
+      </div>
+      <div class="col">
+        <p><strong>CONTINUE...</strong></p>
+        <a href="{{ u( 'account/login', { 'fb': '1' } ) }}" class="fb">FACEBOOK</a>
+        <a href="{{ u( 'account/login', { 'google': 1 } ) }}" class="gp">GOOGLE</a>
+        <button class="light"><span></span>AS A GUEST</button>
+      </div>
+    </form>
+    {{ include( 'arbole/template/common/script.twig' ) }}
+  </body>
+</html>

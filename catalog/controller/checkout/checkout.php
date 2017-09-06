@@ -6,6 +6,10 @@ class ControllerCheckoutCheckout extends Controller {
 			$this->response->redirect($this->url->link('product/catalog'));
 		}
 
+		if ( !$this->customer->isLogged() && empty( $this->session->data['is_guest'] ) ) {
+			$this->response->redirect( $this->url->link( 'account/login' ) );
+		}
+
 		$data = [];
 
 		$data['cart'] = $this->cart_contents();
