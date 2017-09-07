@@ -39,8 +39,8 @@
             <div class="title"><span>2</span>{{ __( 'E-MAIL ADDRESS' ) }}</div>
             <div class="field">
               <label>E-mail</label>
-              <input type="text" id="email"/>
-              <p class="error-text">*error</p>
+              <input type="text" id="email"/ id="email">
+              <p class="error-text"></p>
             </div>
           </div>
           <div class="checkout-block">
@@ -49,47 +49,48 @@
               <div class="edit-toggler">{{ __( 'edit' ) }}</div>
               <div class="field">
                 <label>{{ __( 'First name' ) }}</label>
-                <input type="text" id="first_name"/>
-                <p class="error-text">*error</p>
+                <input type="text" id="firstname"/>
+                <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'Last name' ) }}</label>
-                <input type="text" id="last_name"/>
-                <p class="error-text">*error</p>
+                <input type="text" id="lastname"/>
+                <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'Phone' ) }}</label>
                 <input type="text" id="telephone"/>
-                <p class="error-text">*error</p>
+                <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'Address' ) }}</label>
-                <input type="text" id="address"/>
-                <p class="error-text">*error</p>
+                <input type="text" id="address_1"/>
+                <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'City' ) }}</label>
                 <input type="text" id="city"/>
-                <p class="error-text">*error</p>
+                <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'Country' ) }}</label>
                 <input type="text" id="country"/>
-                <p class="error-text">*error</p>
+                <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'Postcode' ) }}</label>
                 <input type="text" id="postcode"/>
-                <p class="error-text">*error</p>
+                <p class="error-text"></p>
               </div>
-              <button>{{ __( 'OK' ) }}</button>
+              <button id="ok-button">{{ __( 'OK' ) }}</button>
             </div>
           </div>
           <div class="checkout-block payment-method">
             <div class="title"><span>4</span>{{ __( 'PAYMENT METHOD' ) }}</div>
             <p>{{ __( 'You can pay by using Paypal.' ) }}</p>
             <p><img class="paypal" src="{{ image( 'paypal.png') }}"/></p>
-            <button disabled onclick="order">{{ __( 'PLACE ORDER' ) }}</button>
+            <button disabled id="order">{{ __( 'PLACE ORDER' ) }}</button>
+           <div id="pp"></div>
           </div>
           <p class="terms">By placing your order you agree to our <a href="#">Terms & Conditions, privacy and returns policies</a>. You also consent to some of your data being stored by ARBOLE’, which may be used to make future shopping experiences better for you.</p>
         </div>
@@ -115,12 +116,41 @@
 		$( ".cart-contents" ).load( '/index.php?route=checkout/checkout/refresh' );
 	}
 
-	function paymentAddress() {
-		var
-			data: {
-			firstname: $( "#first_name" ).val(),
-			lastname:  $( "#last_name" ).val(),
-			address_1: $( "#address" ).val(),
+	function order() {
+		var ret = null;
+
+		$( ".error-text" ).hide();
+
+		if ( {{ is_guest }} ) {
+			addressGuest( function( ret ){
+				if ( ret ) {
+					if( ret.error ) {
+						showErrors( ret.error )
+
+					} else if ( ret.redirect ) {
+						window.location.assign( window.location.host )
+
+					} else {
+						pay();
+					}
+				}
+			} );
+		} 
+	}
+
+	function showErrors( errors ) {
+		for( var i in errors ) {
+			$( "#" + i ).next().text( errors[ i ] ); console.log( $( "#" + i ).next() );
+		}
+
+		$( ".error-text" ).show();
+	}
+
+	function get_data() {
+		return {
+			firstname: $( "#firstname" ).val(),
+			lastname:  $( "#lastname" ).val(),
+			address_1: $( "#address_1" ).val(),
 			city:      $( "#city" ).val(),
 			telephone: $( "#telephone" ).val(),
 			postcode:  $( "#postcode" ).val(),
@@ -129,79 +159,105 @@
 			zone_id:    0,
 			company:   '',
 			address_2: '',
-		};
+			email:      $( "#email" ).val()
+		}
+	}
+
+	function addressGuest( cb ) {
+		var
+			data = get_data();
+
+		data.shipping_address = get_data();
 
 		$.ajax({
-		url: 'index.php?route=checkout/payment_address_save',
-		type: 'post',
-		data: data,
-		dataType: 'json',
-		beforeSend: function() {
-			
-		},
-		complete: function() {
-			
-		},
-		success: function(json) {
-			if (json['redirect']) {
+			url: 'index.php?route=checkout/guest/save',
+			type: 'post',
+			data: data,
+			dataType: 'json',
+			beforeSend: function() {
+				
+			},
+			complete: function() {
+				
+			},
+			success: function(json) {
+				cb( json );
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
 
-			} else if ( json.error ) {
-				alert( json.error );
+	function paymentAddress() {
+		var
+			data = get_data();
 
-			} else {
-				if ( true ) {
-					shippingAddress( data );
+		$.ajax({
+			url: 'index.php?route=checkout/payment_address_save',
+			type: 'post',
+			data: data,
+			dataType: 'json',
+			beforeSend: function() {
+				
+			},
+			complete: function() {
+				
+			},
+			success: function(json) {
+				if (json['redirect']) {
+
+				} else if ( json.error ) {
+					alert( json.error );
 
 				} else {
-					pay();
+					if ( true ) {
+						shippingAddress( data );
+
+					} else {
+						pay();
+					}
 				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
 		});
 	}
 
 	function shippingAddress() {
 		$.ajax({
-		url: 'index.php?route=checkout/shipping_address_save',
-		type: 'post',
-		data: {
-			firstname: $( "#first_name" ).val(),
-			lastname:  $( "#last_name" ).val(),
-			address_1: $( "#address" ).val(),
-			city:      $( "#city" ).val(),
-			telephone: $( "#telephone" ).val(),
-			postcode:  $( "#postcode" ).val(),
-			country:   $( "#country" ).val()
-		},
-		dataType: 'json',
-		beforeSend: function() {
-			
-		},
-		complete: function() {
-			
-		},
-		success: function(json) {
-			if (json['redirect']) {
+			url: 'index.php?route=checkout/shipping_address_save',
+			type: 'post',
+			data: get_data(),
+			dataType: 'json',
+			beforeSend: function() {
+				
+			},
+			complete: function() {
+				
+			},
+			success: function(json) {
+				if (json['redirect']) {
 
-			} else if ( json.error ) {
-				alert( json.error );
-
-			} else {
-				if ( '{{ is_shipping }}' ) {
-					shippingAddress();
+				} else if ( json.error ) {
+					alert( json.error );
 
 				} else {
 					pay();
 				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
 		});
+	}
+
+	function pay () {
+		$( "#pp" ).load( '/?route=checkout/pay', function() {
+			$(this).closest('.delivery-form').removeClass('editing');
+    		$('.payment-method button').removeAttr('disabled');
+		} );
 	}
 
 	$( document ).delegate( "#apply-coupon", "click", function( e ) {
@@ -235,6 +291,13 @@
 		}
 	});
 } );
+
+	$( document ).delegate( "#order", "click", order );
+
+	document.getElementById( "ok-button" ).onclick = function() { console.log('1');
+		order();
+		return false;
+	}
 	</script
   </body>
 </html>

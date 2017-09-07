@@ -1,18 +1,20 @@
 <?php
 class ControllerCheckoutCheckout extends Controller {
 	public function index() {
-		// Validate cart has products and has stock.
-		if ( !$this->cart->hasProducts() ) {
-			$this->response->redirect($this->url->link('product/catalog'));
+		if ( !$this->customer->isLogged() && !isset( $this->session->data['guest'] ) ) {
+			$this->session->data['redirect_page'] = $this->url->link( 'checkout/checkout', null, 'SSL' );
+			$this->response->redirect( $this->url->link( 'account/login', null, 'SSL' ) );
 		}
 
-		if ( !$this->customer->isLogged() && empty( $this->session->data['is_guest'] ) ) {
-			$this->response->redirect( $this->url->link( 'account/login' ) );
+		// Validate cart has products and has stock.
+		if ( !$this->cart->hasProducts() ) {
+			// $this->response->redirect($this->url->link('product/catalog'));
 		}
 
 		$data = [];
 
 		$data['cart'] = $this->cart_contents();
+		$data['is_guest'] = !isset( $this->session->data['guest'] ) ? 'false' : 'true';
 
 		// Validate minimum quantity requirements.
 		// $products = $this->cart->getProducts();

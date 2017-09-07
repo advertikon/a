@@ -11,31 +11,32 @@
         <span><img src="{{ image( 'arbole/logo-text.svg' ) }}"/></span>
       </a>
     </div>
-    <form class="login-wrapper">
+    <form class="login-wrapper" action="{{ action }}" method="post">
       <div class="col">
         <p><strong>CONTINUE WITH E-MAIL</strong></p>
         <div class="form">
           <div class="field">
             <label>E-mail</label>
-            <input type="text"/>
-            <p class="error-text">*error</p>
+            <input type="text"/ name="email" value="{{ email }}">
+            <p class="error-text">{{ error_email }}</p>
           </div>
           <div class="field">
             <label>Password</label>
-            <input type="pasword"/>
-            <p class="error-text">*error</p>
+            <input type="pasword" name="password" value="{{ password }}"/>
+            <p class="error-text">{{ error_password }}</p>
           </div>
           <a href="{{ u( 'account/forgotten' ) }}" class="forgot">forgot a password?</a>
-          <button><span></span>LOG IN</button>
+          <button type="submit"><span></span>LOG IN</button>
         </div>
       </div>
       <div class="col">
         <p><strong>CONTINUE...</strong></p>
         <a href="{{ u( 'account/login', { 'fb': '1' } ) }}" class="fb">FACEBOOK</a>
         <a href="{{ u( 'account/login', { 'google': 1 } ) }}" class="gp">GOOGLE</a>
-        <button class="light"><span></span>AS A GUEST</button>
+        <button class="light"><a href="{{ u( 'account/login', { 'guest': 1 } ) }}"><span></span>AS A GUEST</a></button>
       </div>
     </form>
     {{ include( 'arbole/template/common/script.twig' ) }}
+    <script>$( ".error-text" ).show();</script>
   </body>
 </html>

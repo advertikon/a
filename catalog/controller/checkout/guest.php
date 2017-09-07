@@ -147,7 +147,7 @@ class ControllerCheckoutGuest extends Controller {
 
 		// Validate if customer is logged in.
 		if ($this->customer->isLogged()) {
-			$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+			// $json['redirect'] = $this->url->link('checkout/checkout', '', true);
 		}
 
 		// Validate cart has products and has stock.
@@ -190,11 +190,15 @@ class ControllerCheckoutGuest extends Controller {
 
 			$country_info = $this->model_localisation_country->getCountry($this->request->post['country_id']);
 
-			if ($country_info && $country_info['postcode_required'] && (utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
+			if ((utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
 				$json['error']['postcode'] = $this->language->get('error_postcode');
 			}
 
 			if ($this->request->post['country_id'] == '') {
+				$json['error']['country'] = $this->language->get('error_country');
+			}
+
+			if ($this->request->post['country'] == '') {
 				$json['error']['country'] = $this->language->get('error_country');
 			}
 
@@ -234,7 +238,7 @@ class ControllerCheckoutGuest extends Controller {
 
 		if (!$json) {
 			$this->session->data['account'] = 'guest';
-
+			$this->session->data['guest'] = [];
 			$this->session->data['guest']['customer_group_id'] = $customer_group_id;
 			$this->session->data['guest']['firstname'] = $this->request->post['firstname'];
 			$this->session->data['guest']['lastname'] = $this->request->post['lastname'];

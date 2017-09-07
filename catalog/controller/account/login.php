@@ -69,8 +69,19 @@ class ControllerAccountLogin extends Controller {
 				$userProfile = $adapter->getUserProfile();
 			}
 
+		} else if ( isset( $this->request->get['guest'] ) ) {
+			$this->session->data['guest'] = [];
 
-		} else if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			if ( isset( $this->session->data['redirect_page'] ) ) {
+				$r = $this->session->data['redirect_page'];
+				unset( $this->session->data['redirect_page'] );
+				$this->response->redirect( $r );
+
+			} else {
+				$this->response->redirect( HTTPS_SERVER );
+			}
+
+		}  else if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			// Unset guest
 			unset($this->session->data['guest']);
 
@@ -96,11 +107,14 @@ class ControllerAccountLogin extends Controller {
 				}
 			}
 
-			// Added strpos check to pass McAfee PCI compliance test (http://forum.opencart.com/viewtopic.php?f=10&t=12043&p=151494#p151295)
-			if (isset($this->request->post['redirect']) && $this->request->post['redirect'] != $this->url->link('account/logout', '', true) && (strpos($this->request->post['redirect'], $this->config->get('config_url')) !== false || strpos($this->request->post['redirect'], $this->config->get('config_ssl')) !== false)) {
-				$this->response->redirect(str_replace('&amp;', '&', $this->request->post['redirect']));
+			if ( isset( $this->session->data['redirect_page'] ) ) {
+				$r = $this->session->data['redirect_page'];
+				unset( $this->session->data['redirect_page'] );
+				$this->response->redirect( $r );
+
+
 			} else {
-				$this->response->redirect($this->url->link('account/account', '', true));
+				$this->response->redirect($this->url->link('account/account'), null, 'SSL' );
 			}
 		}
 
@@ -120,6 +134,8 @@ class ControllerAccountLogin extends Controller {
 			'text' => $this->language->get('text_login'),
 			'href' => $this->url->link('account/login', '', true)
 		);
+
+		$data['error_email'] = isset( $this->error['email'] ) ? $this->error['email'] : '';
 
 		if (isset($this->session->data['error'])) {
 			$data['error_warning'] = $this->session->data['error'];
@@ -178,26 +194,26 @@ class ControllerAccountLogin extends Controller {
 
 	protected function validate() {
 		// Check how many login attempts have been made.
-		$login_info = $this->model_account_customer->getLoginAttempts($this->request->post['email']);
+		// $login_info = $this->model_account_customer->getLoginAttempts($this->request->post['email']);
 
-		if ($login_info && ($login_info['total'] >= $this->config->get('config_login_attempts')) && strtotime('-1 hour') < strtotime($login_info['date_modified'])) {
-			$this->error['warning'] = $this->language->get('error_attempts');
-		}
+		// if ($login_info && ($login_info['total'] >= $this->config->get('config_login_attempts')) && strtotime('-1 hour') < strtotime($login_info['date_modified'])) {
+		// 	$this->error['warning'] = $this->language->get('error_attempts');
+		// }
 
 		// Check if customer has been approved.
 		$customer_info = $this->model_account_customer->getCustomerByEmail($this->request->post['email']);
 
 		if ($customer_info && !$customer_info['status']) {
-			$this->error['warning'] = $this->language->get('error_approved');
+			$this->error['email'] = $this->language->get('error_approved');
 		}
 
 		if (!$this->error) {
 			if (!$this->customer->login($this->request->post['email'], $this->request->post['password'])) {
-				$this->error['warning'] = $this->language->get('error_login');
+				$this->error['email'] = $this->language->get('error_login');
 
-				$this->model_account_customer->addLoginAttempt($this->request->post['email']);
+				// $this->model_account_customer->addLoginAttempt($this->request->post['email']);
 			} else {
-				$this->model_account_customer->deleteLoginAttempts($this->request->post['email']);
+				// $this->model_account_customer->deleteLoginAttempts($this->request->post['email']);
 			}
 		}
 

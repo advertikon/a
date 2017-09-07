@@ -30,7 +30,12 @@ class ControllerAccountRegister extends Controller {
 
 			unset($this->session->data['guest']);
 
-			$this->response->redirect($this->url->link('account/success'));
+			if ( isset( $this->session->data['redirect_page'] ) ) {
+				$this->response->redirect( $this->session->data['redirect_page'] );
+
+			} else {
+				$this->response->redirect($this->url->link('account/account'), null, 'SSL' );
+			}
 		}
 
 		$data['breadcrumbs'] = array();
