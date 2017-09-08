@@ -10,18 +10,42 @@ class ModelExtensionThemeArbole extends Model {
 		$this->thumb_dir = DIR_SYSTEM . 'storage/constructor/thumb/';
 	}
 
-	public function add_tables() { return;
-		$this->db->query(
-			"CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "giftart_customer`
-			(
-				`id`         INT(11)      UNSIGNED,
-				`date_birth` DATE,
-				`marital`    VARCHAR(255),
-				PRIMARY KEY(`id`)
-			)
-			ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
-		);
+	public function add_tables() {
+		// $this->db->query(
+		// 	"CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "giftart_customer`
+		// 	(
+		// 		`id`         INT(11)      UNSIGNED,
+		// 		`date_birth` DATE,
+		// 		`marital`    VARCHAR(255),
+		// 		PRIMARY KEY(`id`)
+		// 	)
+		// 	ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
+		// );
 
+	}
+
+	public function fix_tables() {
+		$birth = $sex = false;
+		$q = $this->db->query( "show columns from " . DB_PREFIX . "customer" );
+
+		if ( $q && $q->num_rows ) {
+			foreach( $q->rows as $row ) {
+				if ( $row['Field'] === 'is_male' ) {
+					$sex = true;
+
+				} else if ( $row['Field'] === 'birth' ) {
+					$birth = true;
+				}
+			}
+
+			if ( !$birth ) {
+				$this->db->query( "alter table " . DB_PREFIX . "customer add birth date default null" );
+			}
+
+			if ( !$sex ) {
+				$this->db->query( "alter table " . DB_PREFIX . "customer add is_male tinyint default 1" );
+			}
+		}
 	}
 
 	public function get_template( $name ) {

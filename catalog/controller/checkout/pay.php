@@ -23,9 +23,14 @@ class ControllerCheckoutPay extends Controller {
 		);
 
 		$this->session->data['comment'] = '';
-		$this->load->Controller( 'checkout/confirm' );
+		
+		if ( false === $this->load->controller( 'checkout/confirm' ) ) {
+			$this->response->setOutput( '<script>location.assign("' .  HTTP_SERVER . '")</script>' );
 
-		$this->response->setOutput( $this->load->controller( 'extension/payment/pp_standard' ) );
+		} else {
+			$this->response->setOutput( $this->load->controller( 'extension/payment/pp_standard' ) );
+		}
+
 	}
 
 }

@@ -56,14 +56,16 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 		$json = array();
 
+
 		// Validate if customer is logged in.
 		if (!$this->customer->isLogged()) {
 			$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+			$json['msg'] = 'Unlogged customer';
 		}
-
 		// Validate cart has products and has stock.
 		if ((!$this->cart->hasProducts() && empty($this->session->data['vouchers'])) || (!$this->cart->hasStock() && !$this->config->get('config_stock_checkout'))) {
 			$json['redirect'] = $this->url->link('checkout/cart');
+			$json['msg'] = 'Empty cart or low stock';
 		}
 
 		// Validate minimum quantity requirements.
@@ -80,6 +82,7 @@ class ControllerCheckoutPaymentAddress extends Controller {
 
 			if ($product['minimum'] > $product_total) {
 				$json['redirect'] = $this->url->link('checkout/cart');
+				$json['msg'] = 'Minimum amount';
 
 				break;
 			}
@@ -147,6 +150,23 @@ class ControllerCheckoutPaymentAddress extends Controller {
 							$json['error']['custom_field' . $custom_field['custom_field_id']] = sprintf($this->language->get('error_custom_field'), $custom_field['name']);
 						}
 					}
+				}
+
+
+				if ((utf8_strlen($this->request->post['email']) > 96) || !filter_var($this->request->post['email'], FILTER_VALIDATE_EMAIL)) {
+					$json['error']['email'] = $this->language->get('error_email');
+				}
+
+				if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
+					$json['error']['telephone'] = $this->language->get('error_telephone');
+				}
+
+				if ((utf8_strlen(trim($this->request->post['postcode'])) < 2 || utf8_strlen(trim($this->request->post['postcode'])) > 10)) {
+					$json['error']['postcode'] = $this->language->get('error_postcode');
+				}
+
+				if ($this->request->post['country'] == '') {
+					$json['error']['country'] = $this->language->get('error_country');
 				}
 
 				if (!$json) {

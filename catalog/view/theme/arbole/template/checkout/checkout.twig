@@ -82,15 +82,16 @@
                 <input type="text" id="postcode"/>
                 <p class="error-text"></p>
               </div>
-              <button id="ok-button">{{ __( 'OK' ) }}</button>
+	            <button id="ok-button">{{ __( 'OK' ) }}</button>
             </div>
           </div>
           <div class="checkout-block payment-method">
             <div class="title"><span>4</span>{{ __( 'PAYMENT METHOD' ) }}</div>
             <p>{{ __( 'You can pay by using Paypal.' ) }}</p>
-            <p><img class="paypal" src="{{ image( 'paypal.png') }}"/></p>
-            <button disabled id="order">{{ __( 'PLACE ORDER' ) }}</button>
-           <div id="pp"></div>
+            <p><img class="paypal" src="{{ image( 'arbole/paypal.png') }}"/></p>
+              <div id="pp">
+           		 <button disabled>{{ __( 'PLACE ORDER' ) }}</button>
+	          </div>
           </div>
           <p class="terms">By placing your order you agree to our <a href="#">Terms & Conditions, privacy and returns policies</a>. You also consent to some of your data being stored by ARBOLE’, which may be used to make future shopping experiences better for you.</p>
         </div>
@@ -117,8 +118,6 @@
 	}
 
 	function order() {
-		var ret = null;
-
 		$( ".error-text" ).hide();
 
 		if ( {{ is_guest }} ) {
@@ -128,19 +127,34 @@
 						showErrors( ret.error )
 
 					} else if ( ret.redirect ) {
-						window.location.assign( window.location.host )
+						window.location.assign( "//" + window.location.host )
 
 					} else {
 						pay();
 					}
 				}
 			} );
-		} 
+
+		} else {
+			paymentAddress( function( ret ){
+				if ( ret ) {
+					if( ret.error ) {
+						showErrors( ret.error )
+
+					} else if ( ret.redirect ) {
+						window.location.assign( "//" + window.location.host )
+
+					} else {
+						pay();
+					}
+				}
+			} );
+		}
 	}
 
 	function showErrors( errors ) {
 		for( var i in errors ) {
-			$( "#" + i ).next().text( errors[ i ] ); console.log( $( "#" + i ).next() );
+			$( "#" + i ).next().text( errors[ i ] );
 		}
 
 		$( ".error-text" ).show();
@@ -189,45 +203,9 @@
 		});
 	}
 
-	function paymentAddress() {
-		var
-			data = get_data();
-
+	function paymentAddress( cb ) {
 		$.ajax({
-			url: 'index.php?route=checkout/payment_address_save',
-			type: 'post',
-			data: data,
-			dataType: 'json',
-			beforeSend: function() {
-				
-			},
-			complete: function() {
-				
-			},
-			success: function(json) {
-				if (json['redirect']) {
-
-				} else if ( json.error ) {
-					alert( json.error );
-
-				} else {
-					if ( true ) {
-						shippingAddress( data );
-
-					} else {
-						pay();
-					}
-				}
-			},
-			error: function(xhr, ajaxOptions, thrownError) {
-				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			}
-		});
-	}
-
-	function shippingAddress() {
-		$.ajax({
-			url: 'index.php?route=checkout/shipping_address_save',
+			url: 'index.php?route=checkout/payment_address/save',
 			type: 'post',
 			data: get_data(),
 			dataType: 'json',
@@ -238,14 +216,33 @@
 				
 			},
 			success: function(json) {
-				if (json['redirect']) {
-
-				} else if ( json.error ) {
-					alert( json.error );
+				if ( json.redirect || json.error ) {
+					cb( json );
 
 				} else {
-					pay();
+					shippingAddress( cb );
 				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			}
+		});
+	}
+
+	function shippingAddress( cb ) {
+		$.ajax({
+			url: 'index.php?route=checkout/shipping_address/save',
+			type: 'post',
+			data: get_data(),
+			dataType: 'json',
+			beforeSend: function() {
+				
+			},
+			complete: function() {
+				
+			},
+			success: function( json ) {
+				cb( json );
 			},
 			error: function(xhr, ajaxOptions, thrownError) {
 				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
@@ -255,49 +252,47 @@
 
 	function pay () {
 		$( "#pp" ).load( '/?route=checkout/pay', function() {
-			$(this).closest('.delivery-form').removeClass('editing');
-    		$('.payment-method button').removeAttr('disabled');
+			$( ".delivery-form" ).removeClass( "editing" );
+    		$( ".payment-method button" ).removeAttr( "disabled" );
 		} );
 	}
 
 	$( document ).delegate( "#apply-coupon", "click", function( e ) {
-	var
-		me = $( this );
+		var
+			me = $( this );
 
-	e.preventDefault();
+		e.preventDefault();
 
-	$.ajax({
-		url: 'index.php?route=extension/total/coupon/coupon',
-		type: 'post',
-		data: 'coupon=' + $( "#coupon-value" ).val(),
-		dataType: 'json',
-		beforeSend: function() {
-			
-		},
-		complete: function() {
-			
-		},
-		success: function(json) {
-			if (json['success']) {
-				alert( json["success"].replace(/<[^>]*?>/g, "") );
-				refreshCartContents();
+		$.ajax({
+			url: 'index.php?route=extension/total/coupon/coupon',
+			type: 'post',
+			data: 'coupon=' + $( "#coupon-value" ).val(),
+			dataType: 'json',
+			beforeSend: function() {
+				
+			},
+			complete: function() {
+				
+			},
+			success: function(json) {
+				if (json['success']) {
+					alert( json["success"].replace(/<[^>]*?>/g, "") );
+					refreshCartContents();
 
-			} else if ( json.error ) {
-				alert( json.error );
+				} else if ( json.error ) {
+					alert( json.error );
+				}
+			},
+			error: function(xhr, ajaxOptions, thrownError) {
+				alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
 			}
-		},
-		error: function(xhr, ajaxOptions, thrownError) {
-			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-		}
-	});
-} );
+		});
+	} );
 
-	$( document ).delegate( "#order", "click", order );
-
-	document.getElementById( "ok-button" ).onclick = function() { console.log('1');
+	$( "#ok-button" ).on( "click", function() {
 		order();
 		return false;
-	}
-	</script
+	} );
+	</script>
   </body>
 </html>

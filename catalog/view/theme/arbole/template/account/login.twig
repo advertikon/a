@@ -33,7 +33,8 @@
         <p><strong>CONTINUE...</strong></p>
         <a href="{{ u( 'account/login', { 'fb': '1' } ) }}" class="fb">FACEBOOK</a>
         <a href="{{ u( 'account/login', { 'google': 1 } ) }}" class="gp">GOOGLE</a>
-        <button class="light"><a href="{{ u( 'account/login', { 'guest': 1 } ) }}"><span></span>AS A GUEST</a></button>
+        <button class="light" onclick="window.location='{{ u( 'account/register' )}}';return false;"><span></span>CREATE<br/> ACCOUNT</button>
+        <button class="light" onclick="window.location='{{ u( 'account/login', { 'guest': 1 } ) }}';return false;"><span></span>AS A GUEST</button>
       </div>
     </form>
     {{ include( 'arbole/template/common/script.twig' ) }}

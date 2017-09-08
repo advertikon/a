@@ -20,14 +20,6 @@ class ControllerAccountEdit extends Controller {
 
 		$this->load->model('account/customer');
 
-		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_account_customer->editCustomer($this->customer->getId(), $this->request->post);
-
-			$this->session->data['success'] = $this->language->get('text_success');
-
-			$this->response->redirect($this->url->link('account/account', '', true));
-		}
-
 		$data['breadcrumbs'] = array();
 
 		$data['breadcrumbs'][] = array(
@@ -81,10 +73,63 @@ class ControllerAccountEdit extends Controller {
 			$data['error_custom_field'] = array();
 		}
 
+		if (isset($this->error['birth_day'])) {
+			$data['error_birth_day'] = $this->error['birth_day'];
+		} else {
+			$data['error_birth_day'] = '';
+		}
+
+		if (isset($this->error['birth_month'])) {
+			$data['error_birth_month'] = $this->error['birth_month'];
+		} else {
+			$data['error_birth_month'] = '';
+		}
+
+		if (isset($this->error['birth_year'])) {
+			$data['error_birth_year'] = $this->error['birth_year'];
+		} else {
+			$data['error_birth_year'] = '';
+		}
+
 		$data['action'] = $this->url->link('account/edit', '', true);
 
 		if ($this->request->server['REQUEST_METHOD'] != 'POST') {
 			$customer_info = $this->model_account_customer->getCustomer($this->customer->getId());
+		}
+
+		if ( isset( $this->request->post['is_male'] ) ) {
+			$data['is_mail'] = (bool)$this->request->post['is_male'];
+
+		} else {
+			$data['is_mail'] = empty( $customer_info['is_male'] ) ? 0 : 1;
+		}
+
+		$data['birth_day'] = '';
+		$data['birth_month'] = '';
+		$data['birth_year'] = '';
+
+		if ( isset( $customer_info['birth'] ) ) {
+			if( false !== ( $d = date_parse( $customer_info['birth'] ) ) ) {
+				$data['birth_day'] = $d['day'];
+				$data['birth_month'] = $d['month'];
+				$data['birth_year'] = $d['year'];
+			}
+		}
+
+		if ( isset( $this->request->post['birth_day'] ) ) {
+			$data['birth_day'] = $this->request->post['birth_day'];
+		}
+
+		if ( isset( $this->request->post['birth_month'] ) ) {
+			$data['birth_minth'] = $this->request->post['birth_month'];
+		}
+
+		if ( isset( $this->request->post['birth_year'] ) ) {
+			$data['birth_year'] = $this->request->post['birth_year'];
+		}
+
+		if ( $data['birth_day'] && $data['birth_month'] && $data['birth_year'] ) {
+			$data['birth'] = strftime( '%d/%m/%Y' ,mktime( 0, 0, 0, $data['birth_day'], $data['birth_month'], $data['birth_year'] ) );
 		}
 
 		if (isset($this->request->post['firstname'])) {
@@ -169,8 +214,21 @@ class ControllerAccountEdit extends Controller {
 			$this->error['warning'] = $this->language->get('error_exists');
 		}
 
-		if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
-			$this->error['telephone'] = $this->language->get('error_telephone');
+		// if ((utf8_strlen($this->request->post['telephone']) < 3) || (utf8_strlen($this->request->post['telephone']) > 32)) {
+		// 	$this->error['telephone'] = $this->language->get('error_telephone');
+		// }
+
+
+		if ( empty( $this->request->post['birth_day'] ) || $this->request->post['birth_day'] < 1 || $this->request->post['birth_day'] > 31 ) {
+			$this->error['birth_day'] = 'Invalid value';
+		}
+
+		if ( empty( $this->request->post['birth_month'] ) || $this->request->post['birth_month'] < 1 || $this->request->post['birth_month'] > 12 ) {
+			$this->error['birth_month'] = 'Invalid value';
+		}
+
+		if ( empty( $this->request->post['birth_year'] ) || $this->request->post['birth_year'] < 1900 || $this->request->post['birth_year'] > date( 'Y' ) ) {
+			$this->error['birth_year'] = 'Invalid value';
 		}
 
 		// Custom field validation
@@ -189,5 +247,25 @@ class ControllerAccountEdit extends Controller {
 		}
 
 		return !$this->error;
+	}
+
+	public function save() {
+		if ( !$this->customer->isLogged() ) {
+			$this->response->setOutput( json_encode( [ 'error' => 'You need to login' ] ) );
+		}
+
+		$this->load->language('account/edit');
+		
+		if ( !$this->validate() ) {
+			$this->response->setOutput( json_encode( [ 'error' => $this->error ] ) );
+
+		} else {
+			$this->load->model( 'account/customer' );
+			$this->request->post['telephone'] = '';
+			$this->request->post['birth'] = strftime( '%Y-%m-%d' ,mktime( 0, 0, 0, $this->request->post['birth_day'], $this->request->post['birth_month'], $this->request->post['birth_year'] ) );
+			$this->model_account_customer->editCustomer($this->customer->getId(), $this->request->post);
+
+			$this->response->setOutput( json_encode( [ 'success' => true ] ) );
+		}
 	}
 }

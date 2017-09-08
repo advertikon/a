@@ -117,7 +117,7 @@
 				{{ currency }}
 				<div class="login-toggler">
 		          {% if customer_name %}
-		          <a href="account_details.php"><img src="{{ image('arbole/user2.png') }}"/><span>Hi, </span>{{ customer_name }}</a>
+		          <a href="{{ u( 'account/account' ) }}"><img src="{{ image('arbole/user2.png') }}"/><span>Hi, </span>{{ customer_name }}</a>
 		          {% else %}
 		          <a href="{{ u( 'account/login' ) }}">{{ __( 'LOGIN' ) }}</a>
 		          {% endif %}

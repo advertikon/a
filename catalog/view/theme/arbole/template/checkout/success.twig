@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+  <head>
+  <title>Arbole</title>
+  {{ include( 'arbole/template/common/meta.twig' ) }}
+  </head>
+  <body class="checkout">
+    <div class="header">
+      <a href="index.php" class="logo">
+        <i><img src="{{ image( 'arbole/logo-icon.svg') }}"/></i>
+        <span><img src="{{ image( 'arbole/logo-text.svg') }}"/></span>
+      </a>
+    </div>
+    <div class="checkout-wrapper">
+      <div class="success">
+        <img src="{{ image( 'arbole/logo-icon-2.svg') }}">
+        <p><strong>THANK YOU!</strong></p>
+        <p>Now you can see your order in your account.</p>
+        <a href="purchases.php" class="view-order">VIEW ORDER</a>
+        <a href="{{ u( 'product/category' ) }}"><span></span>Continue shopping</a>
+      </div>
+    </div>
+    {{ include( 'arbole/template/common/script.twig' ) }}
+  </body>
+</html>

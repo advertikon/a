@@ -1,0 +1,109 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide flex-column">
+    <div class="max-width breadcrumbs-wrapper">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'Account details' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'Account details' ) }}</h1></div>
+    </div>
+    <div class="account">
+     {{ include( 'arbole/template/account/sidebar.twig' ) }}
+      <div class="account-main">
+        <div class="account-form">
+          <form action={{ action }} method="post" id="edit">
+            <div class="field">
+              <label>{{ __( 'First name' ) }}</label>
+              <input type="text" value="{{ firstname }}" name="firstname" />
+              <p class="error-text">{{ error_firstname }}</p>
+            </div>
+            <div class="field">
+              <label>{{ __( 'Last name' ) }}</label>
+              <input type="text" value="{{ lastname }}" name="lastname"/>
+              <p class="error-text">{{ error_lastname }}</p>
+            </div>
+            <div class="field-wrapper">
+              <label>{{ __( 'Date of birth' ) }}</label>
+              <div class="field-date">
+                <div class="date-value">{{ birth }}</div>
+                <div class="field">
+                  <input type="text" placeholder="day" value="{{ birth_day }}" name="birth_day"/>
+                  <p class="error-text">{{ error_birth_day }}</p>
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="month" value="{{ birth_month }}" name="birth_month"/>
+                  <p class="error-text">{{ error_birth_month }}</p>
+                </div>
+                <div class="field">
+                  <input type="text" placeholder="year" value="{{ birth_year }}" name="birth_year"/>
+                  <p class="error-text">{{ error_birth_year }}</p>
+                </div>
+              </div>
+            </div>
+            <div class="field-wrapper">
+              <label>{{ __( 'Gender' ) }}</label>
+              <div class="field-gender">
+                <div class="field radio {{ is_male is empty ? 'checked' }}">
+                  <input type="radio" name="is_male" id="female" {{ is_male is empty ? 'checked' }} value="0"/>
+                  <label for="female">{{ __( 'female' ) }}</label>
+                </div>
+                <div class="field radio {{ is_male ? 'checked' }}">
+                  <input type="radio" name="is_male" id="male" {{ is_male ? 'checked' }} value="1"/>
+                  <label for="male">{{ __( 'male' ) }}</label>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <label>{{ __( 'Email' ) }}</label>
+              <input type="text" value="{{ email }}" name="email"/>
+              <p class="error-text">{{ error_email }}</p>
+            </div>
+            <div class="field">
+              <label>{{ __( 'Password' ) }}</label>
+              <input type="password" value=""/ name="password">
+              <div class="eye"></div>
+              <p class="error-text">{{ error_password }}</p>
+            </div>
+            <button type="submit"><span></span><i>{{ __( 'SAVE' ) }}</i><i>{{ __( 'EDIT' ) }}</i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}
+
+<script>
+$( "form#edit" ).on( "submit", function( e ) {
+	var
+		form = $( this );
+
+	e.preventDefault();
+
+	$( ".error-text" ).hide();
+
+	$.post( '/?route=account/edit/save', form.serialize(), function( resp ) {
+		if ( resp ) {
+			if ( resp.error ) {
+				for( var i in resp.error ) {
+					$( "[name=" + i + "]" ).parent().find( ".error-text" ).text( resp.error[ i ] );
+				}
+			}
+
+			$( ".error-text" ).show();
+		}
+	}, 'json' );
+} );
+</script>

@@ -1,0 +1,30 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide flex-column">
+    <div class="max-width">
+      <div class="breadcrumbs">
+          <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+            <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+              <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+              <meta itemprop="position" content="1" />
+            </li>
+            <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+              <link href="" itemprop="item" />
+              <span itemprop="name">{{ __( 'My Account' ) }}</span> 
+              <meta itemprop="position" content="2" />
+            </li>
+          </ol>
+        </div>
+      <div class="pagename"><h1>{{ __( 'My Account' ) }}</h1></div>
+    </div>
+    <div class="account account-page">
+    {{ include( 'arbole/template/account/sidebar.twig' ) }}
+      <div class="more-links">
+        <a href="{{ u( 'product/category' ) }}" class="more"><span></span><strong>{{ __( 'Gallery' ) }}</strong>{{ __( 'Find jewellery in our store!' ) }}</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer.php }}

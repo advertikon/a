@@ -11,8 +11,7 @@ class ControllerExtensionThemeArbole extends Controller {
 
 	public function index() {
 
-		// $this->uninstall();
-		// $this->install();
+		$this->model->fix_tables();
 	
 		$this->load->language('extension/theme/' . $this->my_name );
 
@@ -46,92 +45,6 @@ class ControllerExtensionThemeArbole extends Controller {
 		// $this->document->addStyle( 'view/stylesheet/select2/select2.min.css' );
 
 		$data['heading_title'] = $this->language->get('heading_title');
-
-		// $data['text_edit'] = $this->language->get('text_edit');
-		// $data['text_enabled'] = $this->language->get('text_enabled');
-		// $data['text_disabled'] = $this->language->get('text_disabled');
-		// $data['text_product'] = $this->language->get('text_product');
-		// $data['text_image'] = $this->language->get('text_image');
-		// $data['text_general'] = $this->language->get('text_general');
-		// $data['text_home'] = $this->language->get('text_home');
-		// $data['text_testimonials'] = $this->language->get('text_testimonials');
-		// $data['entry_testimonial_text'] = $this->language->get('entry_testimonial_text');
-		// $data['entry_testimonial_name'] = $this->language->get('entry_testimonial_name');
-		// $data['entry_testimonial_img'] = $this->language->get('entry_testimonial_img');
-		// $data['entry_testimonial_add'] = $this->language->get('entry_testimonial_add');
-		// $data['text_add'] = $this->language->get('text_add');
-		// $data['text_delete'] = $this->language->get('text_delete');
-		// $data['text_categories'] = $this->language->get('text_categories');
-		// $data['text_banner'] = $this->language->get('text_banner');
-		// $data['text_products'] = $this->language->get('text_products');
-		// $data['text_autocomplete'] = $this->language->get('text_autocomplete');
-		// $data['text_none'] = $this->language->get('text_none');
-		// $data['text_catalog'] = $this->language->get('text_catalog');
-		// $data['text_catalog_banners'] = $this->language->get('text_catalog_banners');
-		// $data['text_catalog_banner_item'] = $this->language->get('text_catalog_banner_item');
-		// $data['text_category'] = $this->language->get('text_category');
-		// $data['text_size'] = $this->language->get('text_size');
-		// $data['text_catalog_banner'] = $this->language->get('text_catalog_banner');
-		// $data['text_category_banner'] = $this->language->get('text_category_banner');
-		// $data['text_coupon'] = $this->language->get('text_coupon');
-		// $data['text_coupon_sample'] = $this->language->get('text_coupon_sample');
-		// $data['text_select_coupon'] = $this->language->get('text_select_coupon');
-		// $data['text_coupon_count'] = $this->language->get('text_coupon_count');
-		// $data['text_search_banner'] = $this->language->get('text_search_banner');
-		// $data['text_search_banner2'] = $this->language->get('text_search_banner2');
-		// $data['text_search'] = $this->language->get('text_search');
-		// $data['text_blog'] = $this->language->get('text_blog');
-		// $data['text_blog_banner'] = $this->language->get('text_blog_banner');
-		// $data['text_faq'] = $this->language->get('text_faq');
-		// $data['text_about'] = $this->language->get('text_about');
-		// $data['text_review'] = $this->language->get('text_review');
-		// $data['text_success'] = $this->language->get('text_success');
-		// $data['text_checkout'] = $this->language->get('text_checkout');
-		// $data['text_header'] = $this->language->get('text_header');
-		// $data['text_footer'] = $this->language->get('text_footer');
-		// $data['text_menu'] = $this->language->get('text_menu');
-		// $data['text_section_name'] = $this->language->get('text_section_name');
-		// $data['text_url'] = $this->language->get('text_url');
-		// $data['text_special'] = $this->language->get('text_special');
-
-		// $data['entry_banner_url_text'] = $this->language->get('entry_banner_url_text');
-		// $data['entry_directory'] = $this->language->get('entry_directory');
-		// $data['entry_status'] = $this->language->get('entry_status');		
-		// $data['entry_product_limit'] = $this->language->get('entry_product_limit');
-		// $data['entry_product_description_length'] = $this->language->get('entry_product_description_length');
-		// $data['entry_image_category'] = $this->language->get('entry_image_category');
-		// $data['entry_image_thumb'] = $this->language->get('entry_image_thumb');
-		// $data['entry_image_popup'] = $this->language->get('entry_image_popup');
-		// $data['entry_image_product'] = $this->language->get('entry_image_product');
-		// $data['entry_image_additional'] = $this->language->get('entry_image_additional');
-		// $data['entry_image_related'] = $this->language->get('entry_image_related');
-		// $data['entry_image_compare'] = $this->language->get('entry_image_compare');
-		// $data['entry_image_wishlist'] = $this->language->get('entry_image_wishlist');
-		// $data['entry_image_cart'] = $this->language->get('entry_image_cart');
-		// $data['entry_image_location'] = $this->language->get('entry_image_location');
-		// $data['entry_width'] = $this->language->get('entry_width');
-		// $data['entry_height'] = $this->language->get('entry_height');
-		// $data['entry_home_category'] = $this->language->get('entry_home_category');
-		// $data['entry_general_item_count'] = $this->language->get('entry_general_item_count');
-		// $data['entry_general_line_count'] = $this->language->get('entry_general_line_count');
-		// $data['entry_testimonial_rating'] = $this->language->get('entry_testimonial_rating');
-		// $data['entry_banner_text1'] = $this->language->get('entry_banner_text1');
-		// $data['entry_banner_text2'] = $this->language->get('entry_banner_text2');
-		// $data['entry_banner_date'] = $this->language->get('entry_banner_date');
-		// $data['entry_banner_url'] = $this->language->get('entry_banner_url');
-		// $data['entry_banner_img'] = $this->language->get('entry_banner_img');
-		// $data['entry_banner_add'] = $this->language->get('entry_banner_add');
-		// $data['entry_coupon_img'] = $this->language->get('entry_coupon_img');
-		
-		// $data['help_product_limit'] = $this->language->get('help_product_limit');
-		// $data['help_product_description_length'] = $this->language->get('help_product_description_length');
-		// $data['help_directory'] = $this->language->get('help_directory');
-		// $data['helper_home_category'] = $this->language->get('helper_home_category');
-		// $data['helper_general_item_count'] = $this->language->get('helper_general_item_count');
-		// $data['helper_general_line_count'] = $this->language->get('helper_general_line_count');
-
-		// $data['button_save'] = $this->language->get('button_save');
-		// $data['button_cancel'] = $this->language->get('button_cancel');
 
 		$name = 'status';
 		$data[ $name ] = $this->a->r()->render_form_group( [
@@ -398,84 +311,6 @@ class ControllerExtensionThemeArbole extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		// if (isset($this->error['general_item_count'])) {
-		// 	$data['error_general_item_count'] = $this->error['general_item_count'];
-		// } else {
-		// 	$data['error_general_item_count'] = '';
-		// }
-
-		// if (isset($this->error['general_line_count'])) {
-		// 	$data['error_general_line_count'] = $this->error['general_line_count'];
-		// } else {
-		// 	$data['error_general_line_count'] = '';
-		// }
-
-		// if (isset($this->error['product_description_length'])) {
-		// 	$data['error_product_description_length'] = $this->error['product_description_length'];
-		// } else {
-		// 	$data['error_product_description_length'] = '';
-		// }
-
-		// if (isset($this->error['image_category'])) {
-		// 	$data['error_image_category'] = $this->error['image_category'];
-		// } else {
-		// 	$data['error_image_category'] = '';
-		// }
-
-		// if (isset($this->error['image_thumb'])) {
-		// 	$data['error_image_thumb'] = $this->error['image_thumb'];
-		// } else {
-		// 	$data['error_image_thumb'] = '';
-		// }
-
-		// if (isset($this->error['image_popup'])) {
-		// 	$data['error_image_popup'] = $this->error['image_popup'];
-		// } else {
-		// 	$data['error_image_popup'] = '';
-		// }
-
-		// if (isset($this->error['image_product'])) {
-		// 	$data['error_image_product'] = $this->error['image_product'];
-		// } else {
-		// 	$data['error_image_product'] = '';
-		// }
-
-		// if (isset($this->error['image_additional'])) {
-		// 	$data['error_image_additional'] = $this->error['image_additional'];
-		// } else {
-		// 	$data['error_image_additional'] = '';
-		// }
-
-		// if (isset($this->error['image_related'])) {
-		// 	$data['error_image_related'] = $this->error['image_related'];
-		// } else {
-		// 	$data['error_image_related'] = '';
-		// }
-
-		// if (isset($this->error['image_compare'])) {
-		// 	$data['error_image_compare'] = $this->error['image_compare'];
-		// } else {
-		// 	$data['error_image_compare'] = '';
-		// }
-
-		// if (isset($this->error['image_wishlist'])) {
-		// 	$data['error_image_wishlist'] = $this->error['image_wishlist'];
-		// } else {
-		// 	$data['error_image_wishlist'] = '';
-		// }
-
-		// if (isset($this->error['image_cart'])) {
-		// 	$data['error_image_cart'] = $this->error['image_cart'];
-		// } else {
-		// 	$data['error_image_cart'] = '';
-		// }
-
-		// if (isset($this->error['image_location'])) {
-		// 	$data['error_image_location'] = $this->error['image_location'];
-		// } else {
-		// 	$data['error_image_location'] = '';
-		// }
-		
 		$data['breadcrumbs'] = array();
 
 		$data['breadcrumbs'][] = array(
@@ -501,37 +336,9 @@ class ControllerExtensionThemeArbole extends Controller {
 			$setting_info = $this->model_setting_setting->getSetting('arbole', $this->request->get['store_id']);
 		}
 
-		// if (isset($this->request->post['arbole_general_item_count'])) {
-		// 	$data['general_item_count'] = $this->request->post['arbole_general_item_count'];
-
-		// } elseif (isset($setting_info['arbole_general_item_count'])) {
-		// 	$data['general_item_count'] = $setting_info['arbole_general_item_count'];
-
-		// } else {
-		// 	$data['general_item_count'] = 4;
-		// }
-
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
-
-		// $this->load->model( 'tool/image');
-		// $data['img'] = $this->model_tool_image;
-		// $data['placeholder'] = $this->model_tool_image->resize( 'no_image.png', 100, 100 );
-
-		// $data['token'] = $this->session->data['user_token'];
-
-		// $data['catalog_head_banner_src'] = $this->config->get(
-		// 	'arbole_catalog_head_banner_img'
-		// ) &&
-		// is_file( DIR_IMAGE . $this->config->get( 'arbole_catalog_head_banner_img' ) ) ?
-		// $this->model_tool_image->resize(
-		// 	$this->config->get( 'arbole_catalog_head_banner_img' ),
-		// 	100, 100
-		// ) :
-		// $data['placeholder'];
-
-		
 
 		$this->response->setOutput($this->load->view( $this->a->type .'/'. $this->a->code, $data) );
 	}
@@ -586,6 +393,7 @@ class ControllerExtensionThemeArbole extends Controller {
 
 	public function install() {
 		$this->model->add_tables();
+		$this->model->fix_tables();
 	}
 
 	public function uninstall() {

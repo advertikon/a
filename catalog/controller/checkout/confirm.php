@@ -410,6 +410,7 @@ class ControllerCheckoutConfirm extends Controller {
 			$data['payment'] = $this->load->controller('extension/payment/' . $this->session->data['payment_method']['code']);
 		} else {
 			$data['redirect'] = $redirect;
+			return false;
 		}
 
 		$this->response->setOutput($this->load->view('checkout/confirm', $data));
