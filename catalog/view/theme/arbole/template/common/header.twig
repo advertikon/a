@@ -102,16 +102,24 @@
 		</div>
 		<div class="header">
 			<a href="/" class="logo">
-				<i><img src="{{logo}}"/></i>
+				<i><img src="{{ image( 'arbole/logo-icon.svg' ) }}"/></i>
 				<span><img src="{{logo_text}}"/></span>
 			</a>
 			<div class="menu-wrapper">
 				<ul>
 					<li><a href="constructor_step_1.php">{{ __( 'design your own' )|e }}</a></li>
-					<li {{ is_active( 'product/category' ) ? 'class="active"' }}><a href="{{ u( 'product/category' ) }}">{{ __( 'gallery store' )|e }}</a></li>
-					<li><a href="about.php">{{ __( 'About Us' )|e }}</a></li>
-					<li><a href="faq.php">{{ __( 'faq' )|e }}</a></li>
-					<li class="mobile-link"><a href="account_details.php">{{ __( 'My account' )|e }}</a></li>
+					<li {{ is_active( 'product/category' ) ? 'class="active"' }}>
+						<a href="{{ u( 'product/category' ) }}">{{ __( 'gallery store' )|e }}</a>
+					</li>
+					<li {{ is_active( 'information/about' ) ? 'class="active"' }}>
+						<a href="{{ u( 'information/about' ) }}">{{ __( 'About Us' )|e }}</a>
+					</li>
+					<li {{ is_active( 'information/faq' ) ? 'class="active"' }}>
+						<a href="{{ u( 'information/faq' ) }}">{{ __( 'faq' )|e }}</a>
+					</li>
+					<li class="mobile-link" {{ is_active( 'account/' ) ? 'class="active"' }}>
+						<a href="{{ u( 'accoutn/edit' ) }}">{{ __( 'My account' )|e }}</a>
+					</li>
 					<li class="mobile-link search-link"><a href="#">{{ __( 'Search' )|e }}</a></li>
 				</ul>
 				{{ currency }}
@@ -130,9 +138,10 @@
 		<div class="search-wrapper">
 			<div class="close"></div>
 			<div class="title">{{ __( 'Start searching' )|e }}</div>
-			<form>
+			<form action="/" method="get">
 				<div class="field">
-					<input type="text" placeholder="Find jewellery"/>
+					<input type="hidden" name="route" value="product/search">
+					<input type="text" placeholder="Find jewellery" name="search"/>
 					<button><img src="{{ image( 'arbole/search.png' ) }}"/></button>
 				</div>
 			</form>
@@ -143,7 +152,7 @@
 		<div class="right-sidebar">
 			<ul class="user-menu">
 				<li class="cart-toggler"><a href="checkout.php"><img src="{{ image('arbole/cart.png') }}"/><span id="cart-quantity">{{ cart_quantity }}</span></a></li>
-				<li class="favorites-toggler"><a href="my_favorites.php"><img src="{{ image( 'arbole/heart.png' ) }}"/></a></li>
+				<li class="favorites-toggler"><a href="{{ u( 'account/wishlist' ) }}"><img src="{{ image( 'arbole/heart.png' ) }}"/></a></li>
 				<li class="search-toggler"><a href="#"><img src="{{ image( 'arbole/search.png' ) }}"/><img src="{{ image( 'arbole/cross.png' ) }}"/></a></li>
 			</ul>
 		</div>

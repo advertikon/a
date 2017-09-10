@@ -1,0 +1,58 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide flex-column">
+    <div class="max-width breadcrumbs-wrapper">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'Orders' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'Orders' ) }}</h1></div>
+    </div>
+    <div class="account">
+      {{ include( 'arbole/template/account/sidebar.twig' ) }}
+      <div class="account-main">
+        <div class="purchases-inner-header">
+          <a href="{{ u( 'account/order' ) }}" class="back">{{ __( 'Back' ) }}</a>
+          <a href="#" class="print">{{ __( 'Print' ) }}</a>
+          <p>{{ __( 'Order Number' ) }}: {{ order_id }}</p>
+        </div>
+        <table class="purchases">
+          <tr>
+            <th>{{ __( 'Image' ) }}</th>
+            <th>{{ __( 'Product Name' ) }}</th>
+            <th>{{ __( 'Quantity' ) }}</th>
+            <th>{{ __( 'Total' ) }}</th>
+          </tr>
+          {% for product in products %}
+          <tr>
+            <td data-title="Image"><div class="img"><img src="{{ image( product.image) }}"></div></td>
+            <td data-title="Product Name">{{ product.name }}</td>
+            <td data-title="Quantity">{{ product.quantity }}</td>
+            <td data-title="Total"><span>{{ product.total }}</span></td>
+          </tr>
+          {% endfor %}
+          <tr class="purchases-total">
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td data-title="Total"><span>{{ total }}</span></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}
+<script type="text/javascript">
+  jQuery('body').addClass('purchases-inner-page');
+</script>

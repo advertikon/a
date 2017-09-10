@@ -7,6 +7,8 @@ class ControllerAccountWishList extends Controller {
 			$this->response->redirect($this->url->link('account/login', '', true));
 		}
 
+		$image_width = $image_height = 220;
+
 		$this->load->language('account/wishlist');
 
 		$this->load->model('account/wishlist');
@@ -54,13 +56,14 @@ class ControllerAccountWishList extends Controller {
 		$data['products'] = array();
 
 		$results = $this->model_account_wishlist->getWishlist();
+		\Advertikon\Arbole\Advertikon::instance();
 
 		foreach ($results as $result) {
 			$product_info = $this->model_catalog_product->getProduct($result['product_id']);
 
 			if ($product_info) {
 				if ($product_info['image']) {
-					$image = $this->model_tool_image->resize($product_info['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_wishlist_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_wishlist_height'));
+					$image = $this->model_tool_image->resize($product_info['image'], $image_width, $image_height );
 				} else {
 					$image = false;
 				}
@@ -85,6 +88,17 @@ class ControllerAccountWishList extends Controller {
 					$special = false;
 				}
 
+				$your_size = [];
+				$option_your_size = ADK( 'Advertikon\\Arbole' )->config( 'your_size' );
+				$product_options = $this->model_catalog_product->getProductOptions( $product_info['product_id'] );
+
+				foreach( $product_options as $option ) {
+					if ( $option_your_size == $option['option_id'] ) {
+						$your_size = $option;
+						break;
+					}
+				}
+
 				$data['products'][] = array(
 					'product_id' => $product_info['product_id'],
 					'thumb'      => $image,
@@ -94,7 +108,8 @@ class ControllerAccountWishList extends Controller {
 					'price'      => $price,
 					'special'    => $special,
 					'href'       => $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
-					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
+					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id']),
+					'your_size'  => $your_size,
 				);
 			} else {
 				$this->model_account_wishlist->deleteWishlist($result['product_id']);

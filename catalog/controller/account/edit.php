@@ -98,10 +98,10 @@ class ControllerAccountEdit extends Controller {
 		}
 
 		if ( isset( $this->request->post['is_male'] ) ) {
-			$data['is_mail'] = (bool)$this->request->post['is_male'];
+			$data['is_male'] = (bool)$this->request->post['is_male'];
 
 		} else {
-			$data['is_mail'] = empty( $customer_info['is_male'] ) ? 0 : 1;
+			$data['is_male'] = empty( $customer_info['is_male'] ) ? false : true;
 		}
 
 		$data['birth_day'] = '';
@@ -264,6 +264,10 @@ class ControllerAccountEdit extends Controller {
 			$this->request->post['telephone'] = '';
 			$this->request->post['birth'] = strftime( '%Y-%m-%d' ,mktime( 0, 0, 0, $this->request->post['birth_day'], $this->request->post['birth_month'], $this->request->post['birth_year'] ) );
 			$this->model_account_customer->editCustomer($this->customer->getId(), $this->request->post);
+
+			if ( isset( $this->request->post['password'] ) ) {
+				$this->model_account_customer->editPassword( $this->request->post['email'], $this->request->post['password'] );
+			}
 
 			$this->response->setOutput( json_encode( [ 'success' => true ] ) );
 		}

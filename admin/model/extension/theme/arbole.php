@@ -112,7 +112,7 @@ HTML;
 
 		] )}
 	</div>
-	<div>
+	<div class="col-sm-2">
 		{$this->a->r( [
 			'type'        => 'button',
 			'button_type' => 'danger',
@@ -168,7 +168,7 @@ HTML;
 
 		] )}
 	</div>
-	<div>
+	<div class="col-sm-2">
 		{$this->a->r( [
 			'type'        => 'button',
 			'button_type' => 'danger',
@@ -202,7 +202,45 @@ HTML;
 			'name'        => "{$name}[{$id}][url]",
 		] )}
 	</div>
-	<div>
+	<div class="col-sm-2">
+		{$this->a->r( [
+			'type'        => 'button',
+			'button_type' => 'danger',
+			'icon'        => 'fa-close',
+			'class'       => 'remove-line',
+		] )}
+	</div>
+</div>
+HTML;
+		return $ret;
+	}
+
+	public function line_faq( $name, $id = '{id}', $data = [] ) {
+		$ret = <<<HTML
+<div class="row template-line">
+	<div class="col-sm-5">
+		{$this->a->r( [
+			'type'        => 'text',
+			'class'       => 'form-control',
+			'value'       => isset( $data['question'] ) ? htmlspecialchars_decode( $data['question'] ) : '',
+			'name'        => "{$name}[{$id}][question]",
+			'placeholder' => $this->a->__( 'Question' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-6">
+		{$this->a->r( [
+			'type'        => 'textarea',
+			'class'       => 'form-control',
+			'value'       => isset( $data['answer'] ) ? htmlspecialchars_decode( $data['answer'] ) : '',
+			'name'        => "{$name}[{$id}][answer]",
+			'placeholder' => $this->a->__( 'Answer' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-1">
 		{$this->a->r( [
 			'type'        => 'button',
 			'button_type' => 'danger',

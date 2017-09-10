@@ -1,0 +1,68 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide">
+    <div class="max-width">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'My favorites' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'My favorites' ) }}</h1></div>
+      <div class="my-favorites">
+      {% if products is not empty %}
+        <div class="product-list">
+        {% for product in products %}
+          <div class="product-item product-data" data-id="{{ product.product_id }}">
+            <div class="remove" onclick="location.assign('{{ u( 'account/wishlist', { remove: product.product_id }) }}')"></div>
+            <a href="{{ u( 'product/product', { 'product_id': product.product_id} ) }}" class="img">
+              <img src="{{ product.thumb }}">
+              <div class="img-action"><span data-popupp="quick-view">{{ __( 'View' ) }}</span></div>
+            </a>
+            <a href="{{ u( 'product/product', { 'product_id': product.product_id} ) }}" class="product-name">{{ product.name }}</a>
+            <div class="product-price"><span>{{ product.special ?: product.price }}</span></div>
+            <div class="product-options">
+            {% if product.your_size is not empty %}
+              <div class="option">
+                <label>{{ product.your_size.name }}:</label>
+                <div class="field">
+                  <input type="text" value="{{ product.your_size.value }}" class="decimal your-size" data-id="{{ product.your_size.product_option_id }}"/>
+                  <span>mm</span>
+                </div>
+              </div>
+              {% endif %}
+              <div class="option">
+                <label class="mobile-hide">{{ __( 'Quantity' ) }}:</label>
+                <div class="field field-counter">
+                  <div class="minus">-</div>
+                  <input type="text" value="1" maxlength="2" class="decimal product-quantity"/>
+                  <div class="plus">+</div>
+                </div>
+              </div>
+            </div>
+            <a href="#" class="add-to-cart">{{ __( 'add to cart' ) }}</a>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+          <div class="empty">
+          <img src="{{ image( 'arbole/favorites-empty.png') }}">
+          <p><strong>{{ __( 'YOU HAVE NO SAVED ITEMS' ) }}</strong></p>
+          <p>{{ __( 'Start saving as you shop by selecting the little heart.' ) }} <br/>{{ __( 'We\'ll sync your items across all your devices. Easy.' ) }}  </p>
+          <a href="{{ u( 'product/category' ) }}"><span></span>{{ __( 'Continue shopping' ) }}</a>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}

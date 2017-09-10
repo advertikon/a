@@ -283,14 +283,119 @@ class ControllerExtensionThemeArbole extends Controller {
 			] ),
 		] );
 
+		$name = 'about_1_header';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Header' ),
+			'element' => $this->a->r( [
+				'type'  => 'textarea',
+				'value' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'about_1_text';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Text' ),
+			'element' => $this->a->r( [
+				'type'  => 'textarea',
+				'value' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'about_1_image1';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Image #1' ),
+			'element' => $this->a->r( [
+				'type'   => 'image',
+				'value'  => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+				'id'     => "about-$name-1",
+			] ),
+		] );
+
+		$name = 'about_1_image2';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Image #2' ),
+			'element' => $this->a->r( [
+				'type'   => 'image',
+				'value'  => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+				'id'     => "about-$name-2",
+			] ),
+		] );
+
+		$name = 'about_2_text';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Text' ),
+			'element' => $this->a->r( [
+				'type'  => 'textarea',
+				'value' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'about_2_image';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Image #1' ),
+			'element' => $this->a->r( [
+				'type'   => 'image',
+				'value'  => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+				'id'     => "about-$name-1",
+			] ),
+		] );
+
+		$name = 'about_3_header';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Header' ),
+			'element' => $this->a->r( [
+				'type'  => 'textarea',
+				'value' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'about_3_text';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Text' ),
+			'element' => $this->a->r( [
+				'type'  => 'textarea',
+				'value' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'about_3_image';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Image #1' ),
+			'element' => $this->a->r( [
+				'type'   => 'image',
+				'value'  => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+				'id'     => "about-$name-1",
+			] ),
+		] );
+
 		$data['hp_hiw_steps'] = $this->model->get_template( 'hp_hiw_steps' );
 		$data['hp_review' ] = $this->model->get_template( 'hp_review' );
 		$data['footer_links' ] = $this->model->get_template( 'footer_links' );
+		$data['faq' ] = $this->model->get_template( 'faq' );
 
 		$data['locale'] = json_encode( array(
 			'hp_hiw_steps'              => $this->model->line_hp_hiw_steps( 'hp_hiw_steps' ),
 			'hp_review'                 => $this->model->line_hp_review( 'hp_review' ),
 			'footer_links'              => $this->model->line_footer_links( 'footer_links' ),
+			'faq'                       => $this->model->line_faq( 'faq' ),
 
 			// Common stuff
 			'networkError'              => $this->a->__( 'Network error' ),

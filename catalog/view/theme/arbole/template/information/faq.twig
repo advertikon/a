@@ -1,0 +1,32 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide">
+    <div class="max-width">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'FAQ' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'FAQ' ) }}</h1></div>
+      <div class="faq-wrapper">
+      {% for f in c( 'faq' ) %}
+        <div class="faq-item">
+          <h5>{{ f.question }}</h5>
+          <p>{{ f.answer }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}

@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+  <title>{{ __( 'Arbole' ) }}</title>
+  {{ include( 'arbole/template/common/meta.twig' ) }}
+  </head>
+  <body>
+    <div class="header">
+      <a href="index.php" class="logo">
+        <i><img src="{{ image( 'arbole/logo-icon.svg') }}"/></i>
+        <span><img src="{{ image( 'arbole/logo-text.svg' ) }}"/></span>
+      </a>
+    </div>
+    <form class="reset-wrapper" action="{{ action }}" method="post">
+      <div class="col">
+        <p><strong>{{ __( 'RESET PASSWORD' ) }}</strong></p>
+        <p>{{ __( 'Enter the email address associated with your account, and we\’ll email you a link to reset your password.' ) }}</p>
+        <div class="form">
+          <div class="field">
+            <label>{{ __( 'E-mail' ) }}</label>
+            <input type="email" name="email" value="{{ email }}">
+            <p class="error-text">{{ error_warning }}</p>
+          </div>
+          <button><span></span>{{ __( 'Send reset link' ) }}</button>
+          <button class="light" onclick="location.assign( '{{ u( 'account/login' ) }}' );return false;"><span></span>{{ __( 'BACK to login' ) }}</button>
+        </div>
+      </div>
+    </form>
+    {{ include( 'arbole/template/common/script.twig' ) }}
+    <script>$( ".error-text" ).show();</script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide flex-column">
+    <div class="max-width breadcrumbs-wrapper">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'Orders' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'Orders' ) }}</h1></div>
+    </div>
+    <div class="account">
+     {{ include( 'arbole/template/account/sidebar.twig' ) }}
+      <div class="account-main">
+      {% if orders is empty %}
+        <div class="my-designs">
+          <div class="empty">
+            <img src="{{ image( 'arbole/purchases-empty.png') }}">
+            <p><strong>{{ __( 'YOU HAVE NO PREVIOUS ORDERS :(' ) }}</strong></p>
+            <p>{{ __( 'Find something beautiful in our store now' ) }} </p>
+            <a href="{{ u( 'product/category' ) }}"><span></span>{{ __( 'Start shopping' ) }}</a>
+          </div>
+        </div>
+      {% else %}
+       <table class="purchases">
+          <tr>
+            <th>{{ __( 'Tracking Number' ) }}</th>
+            <th>{{ __( 'Order Date' ) }}</th>
+            <th>{{ __( 'Total' ) }}</th>
+            <th>{{ __( 'Date Shipped' ) }}</th>
+            <th>{{ __( 'Status' ) }}</th>
+            <th>{{ __( 'Order' ) }}</th>
+          </tr>
+          {% for order in orders %}
+            <tr>
+              <td class="order-number" data-title="Tracking Number">{{ order.order_id }}</td>
+              <td class="order-date" data-title="Order Date">{{ order.date_added }}</td>
+              <td class="order-total" data-title="Total"><span>{{ order.total }}</span></td>
+              <td data-title="Date Shipped">{{ order.date_modified }}</td>
+              <td data-title="Status">{{ order.status|upper }}</td>
+              <td data-title="Order"><a href="{{ order.view }}">{{ __( 'view' ) }}</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}

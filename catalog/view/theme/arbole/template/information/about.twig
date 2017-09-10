@@ -1,0 +1,59 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide">
+    <div class="max-width">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'About us' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'ABOUT US' ) }}</h1></div>
+      <div class="about-wrapper">
+        <div class="about-block reverse">
+          <div class="bg"></div>
+          <div class="col col-1">
+            <div class="bg"></div>
+            <img src="{{ image( c( 'about_1_image1' ) ) }}">
+            <h3>{{ c( 'about_1_header' )|nl2br }}</h3>
+            <p>{{ c( 'about_1_text')|nl2br }}</p>
+          </div>
+          <div class="col col-2">
+            <img src="{{ image( c( 'about_1_image2' ) ) }}">
+          </div>
+        </div>
+        <div class="about-block">
+          <div class="bg"></div>
+          <div class="col col-2">
+            <img src="{{ image( c( 'about_2_image' ) ) }}">
+          </div>
+          <div class="col col-1">{{ c( 'about_2_text' )|wrap_p }}</div>
+        </div>
+        <div class="about-block reverse">
+          <div class="bg"></div>
+          <div class="col col-1">
+            <h3>{{ c( 'about_3_header' ) }}</h3>
+            <p>{{ c( 'about_3_text' ) }}</p>
+          </div>
+          <div class="col col-2">
+            <img src="{{ image( c( 'about_3_image' ) ) }}">
+          </div>
+        </div>
+        <div class="more-links">
+          <a href="constructor_step_1.php" class="more to-constructor"><span></span><strong>{{ __( 'Constructor' ) }}</strong>{{ __( 'Create you own jewelery!' ) }}</a>
+          <a href="{{ u( 'product/category' ) }}" class="more"><span></span><strong>{{ __( 'Gallery' ) }}</strong>{{ __( 'Find jewelery in our store!' ) }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}

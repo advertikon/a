@@ -30,8 +30,8 @@ class ControllerAccountRegister extends Controller {
 
 			unset($this->session->data['guest']);
 
-			if ( isset( $this->session->data['redirect_page'] ) ) {
-				$this->response->redirect( $this->session->data['redirect_page'] );
+			if ( isset( $this->session->data['redirect'] ) ) {
+				$this->response->redirect( $this->session->data['redirect'] );
 
 			} else {
 				$this->response->redirect($this->url->link('account/account'), null, 'SSL' );

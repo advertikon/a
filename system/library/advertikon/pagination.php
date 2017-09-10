@@ -109,6 +109,7 @@ class Pagination extends \Model {
 	 */
 	public function run() {
 		if ( $this->query ) {
+// echo $this->query . $this->get_filter() . $this->get_sort() . $this->get_limit();
 			$this->data = $this->db->query( $this->query . $this->get_filter() . $this->get_sort() . $this->get_limit() );
 			if ( $this->data ) {
 				$total = $this->db->query( "SELECT FOUND_ROWS() as total" );
@@ -130,25 +131,75 @@ class Pagination extends \Model {
 	 * @return string
 	 */
 	protected function get_filter() {
-		$f = array();
 		$this->init_filter();
-		$q = new Query();
+		$this->q = new Query();
+		$where = ' WHERE';
+		$total_count = 0;
 
 		foreach( $this->filter as $alias => $data ) {
-			$operator = '=';
+			if ( is_array( current( $data ) ) ) {
+				$count = 0;
+				$d_count = count( $data );
+				$parenth = false;
 
-			if ( isset( $data['operator'] ) ) {
-				$operator = $this->get_operator( $data['operator'] );
+				foreach( $data as $w ) {
+					if ( 0 === $count && $where ) {
+						$where .= ' ' . $this->get_glue( $w );
+
+						if ( $d_count > 1 ) {
+							$where .= ' (';
+							$parenth = true;
+						}
+					}
+
+					$where .= $this->get_where( $where, $w, 0 === $count );
+
+					if ( ++$count === $d_count && $parenth ) {
+						$where .= ' )';
+					}
+				}
+
+			} else {
+
+				$where .= $this->get_where( $where, $data, 0 === $total_count );
 			}
 
-			$f[] = $this->db->escape( $data['name'] ) . $operator . $q->escape_db( $data['value'] );
+			$total_count++;
 		}
 
-		if ( $f ) {
-			return ' WHERE ' . implode( ' AND ', $f );
+		return $where;
+	}
+
+	protected function get_where( $where, $data, $first = false ) {
+		$operator = $this->get_operator( $data );
+		$glue = $this->get_glue( $data );
+
+		if ( $first ) {
+			return ' ' . $this->db->escape( $data['name'] ) . ' ' . $operator . ' ' . $this->get_value( $data );
+
+		} else {
+			return ' ' . $glue . ' ' . $this->db->escape( $data['name'] ) . ' ' . $operator . ' ' . $this->get_value( $data );
+		}
+	}
+
+	protected function get_value( $data ) {
+		if ( null === $this->q ) {
+			$this->q = new Query();
 		}
 
-		return '';
+		$value = '';
+
+		if ( isset( $data['value'] ) ) {
+			$value = $data['value'];
+
+			if ( isset( $data['wrap'] ) ) {
+				$value  = $data['wrap'] . $value . $data['wrap'];
+			}
+
+			$value = $this->q->escape_db( $value );
+		}
+
+		return $value;
 	}
 
 	/**
@@ -159,20 +210,39 @@ class Pagination extends \Model {
 		if ( $this->filter_init ) return;
 
 		foreach( $this->filter as $alias => &$data ) {
-			if ( isset( $this->request->get[ $alias ] ) ) {
-				$data['value'] = $this->request->get[ $alias ];
+			if ( is_array( current( $data ) ) ) {
+				$count = 0;
+				foreach( $data as &$d ) {
+					if( false === $this->if( $alias, $d ) ) {
+						unset( $this->filter[ $alias ][ $count ] );
+					}
 
-			} elseif ( isset( $data['default'] ) && false !== $data['default'] ) {
-				$data['value'] = $data['default'];
+					$count++;
+				} 
 
 			} else {
-				unset( $this->filter[ $alias ] );
+				if( false === $this->if( $alias, $data ) ) {
+					unset( $this->filter[ $alias ] );
+				}
 			}
 		}
 
 		unset( $data );
-
 		$this->filter_init = true;
+	}
+
+	protected function if( $alias, &$data ) {
+		if ( isset( $this->request->get[ $alias ] ) ) {
+			$data['value'] = $this->request->get[ $alias ];
+
+		} elseif ( isset( $data['default'] ) && false !== $data['default'] ) {
+			$data['value'] = $data['default'];
+
+		} else {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -249,9 +319,16 @@ class Pagination extends \Model {
 	 * @return string
 	 */
 	protected function get_operator( $o ) {
-		if ( in_array( $o, [ '>', '<', '<=', '>=', '<>', 'LIKE', 'IN', ] ) ) return $o;
+		return isset( $o['operator'] ) && in_array( $o['operator'], [ '>', '<', '<=', '>=', '<>', 'LIKE', 'IN', ] ) ? $o['operator'] : '=';
+	}
 
-		return '=';
+	/**
+	 * Sanitizes glue
+	 * @param string $g
+	 * @return string
+	 */
+	protected function get_glue( $g ) {
+		return isset( $g['glue'] ) && 'OR' === strtoupper( $g['glue'] ) ? 'OR' : 'AND';
 	}
 
 	/**
@@ -269,6 +346,10 @@ class Pagination extends \Model {
 
 			// Show only active filters without default ones
 			if ( !isset( $this->request->get[ $item_alias ] ) ) continue;
+
+			if ( is_array( current( $item ) ) ) {
+				$item = current( $item );
+			}
 
 			$query[ $item_alias ] = $item['value'];
 		}

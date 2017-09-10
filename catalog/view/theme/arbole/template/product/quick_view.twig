@@ -32,7 +32,7 @@
 							<div class="option">
 								<label>{{ product.your_size.name }}:</label> 
 								<div class="field">
-									<input class="your-size" type="text" data-id="{{ product.your_size.product_option_id}}" value="{{ product.your_size.value }}" class="decimal"/>
+									<input class="your-size decimal" type="text" data-id="{{ product.your_size.product_option_id}}" value="{{ product.your_size.value }}" />
 									<span>mm</span>
 									<a href="#" class="size-guide" data-popup="size-guide">{{ __( 'size guide' ) }}</a>
 								</div>
@@ -42,7 +42,7 @@
 								<label>{{ __( 'Quantity:' ) }}</label>
 								<div class="field field-counter">
 									<div class="minus">-</div>
-									<input class="product-quantity" type="text" value="1" maxlength="2" class="decimal"/>
+									<input class="product-quantity decimal" type="text" value="1" maxlength="2" />
 									<div class="plus">+</div>
 								</div>
 							</div>

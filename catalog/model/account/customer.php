@@ -31,7 +31,7 @@ class ModelAccountCustomer extends Model {
 				email = '" . $this->db->escape($data['email']) . "',
 				telephone = '" . $this->db->escape($data['telephone']) . "',
 				custom_field = '" . $this->db->escape(isset($data['custom_field']['account']) ? json_encode($data['custom_field']['account']) : '') . "',
-				is_male='" . !empty( $data['is_male'] ) . "',
+				is_male='" . (int)!empty( $data['is_male'] ) . "',
 				birth='" . ( isset( $data['birth'] ) ? $data['birth'] : '' ) . "'
 			WHERE customer_id = '" . (int)$customer_id . "'"
 		);

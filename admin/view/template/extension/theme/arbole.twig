@@ -34,6 +34,12 @@
             <li role="presentation" class=>
             	<a href="#footer-tab" role="tab" data-toggle="tab">{{ __( 'Footer' ) }}</a>
             </li>
+             <li role="presentation" class=>
+            	<a href="#about-tab" role="tab" data-toggle="tab">{{ __( 'About As' ) }}</a>
+            </li>
+            <li role="presentation" class=>
+            	<a href="#faq-tab" role="tab" data-toggle="tab">{{ __( 'FAQ' ) }}</a>
+            </li>
         </ul>
 
         <form action="{{action}}" method="post" enctype="multipart/form-data" id="form-theme-default" class="form-horizontal">
@@ -92,6 +98,31 @@
                         {{ footer_cf_header }}
                         {{ footer_cf_button }}
                     </fieldset>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="about-tab">
+                    <fieldset>
+                        <legend>{{ __( 'First row' ) }}</legend>
+                        {{ about_1_header }}
+                        {{ about_1_text }}
+                        {{ about_1_image1 }}
+                        {{ about_1_image2 }}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ __( 'Second row' ) }}</legend>
+                        {{ about_2_text }}
+                        {{ about_2_image }}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ __( 'Third row' ) }}</legend>
+                        {{ about_3_header }}
+                        {{ about_3_text }}
+                        {{ about_3_image }}
+                    </fieldset>
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="faq-tab">
+                    {{ faq }}
                 </div>
 
             </div>

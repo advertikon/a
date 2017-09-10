@@ -46,7 +46,7 @@ class ControllerAccountOrder extends Controller {
 
 		$order_total = $this->model_account_order->getTotalOrders();
 
-		$results = $this->model_account_order->getOrders(($page - 1) * 10, 10);
+		$results = $this->model_account_order->getOrders(($page - 1) * 10, 1000);
 
 		foreach ($results as $result) {
 			$product_total = $this->model_account_order->getTotalOrderProductsByOrderId($result['order_id']);
@@ -57,6 +57,7 @@ class ControllerAccountOrder extends Controller {
 				'name'       => $result['firstname'] . ' ' . $result['lastname'],
 				'status'     => $result['status'],
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
+				'date_modified' => date($this->language->get('date_format_short'), strtotime($result['date_modified'])),
 				'products'   => ($product_total + $voucher_total),
 				'total'      => $this->currency->format($result['total'], $result['currency_code'], $result['currency_value']),
 				'view'       => $this->url->link('account/order/info', 'order_id=' . $result['order_id'], true),
@@ -75,14 +76,14 @@ class ControllerAccountOrder extends Controller {
 
 		$data['continue'] = $this->url->link('account/account', '', true);
 
-		$data['column_left'] = $this->load->controller('common/column_left');
-		$data['column_right'] = $this->load->controller('common/column_right');
-		$data['content_top'] = $this->load->controller('common/content_top');
-		$data['content_bottom'] = $this->load->controller('common/content_bottom');
+		// $data['column_left'] = $this->load->controller('common/column_left');
+		// $data['column_right'] = $this->load->controller('common/column_right');
+		// $data['content_top'] = $this->load->controller('common/content_top');
+		// $data['content_bottom'] = $this->load->controller('common/content_bottom');
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
-		$this->response->setOutput($this->load->view('account/order_list', $data));
+		$this->response->setOutput($this->load->view('account/order', $data));
 	}
 
 	public function info() {
@@ -280,7 +281,8 @@ class ControllerAccountOrder extends Controller {
 					'price'    => $this->currency->format($product['price'] + ($this->config->get('config_tax') ? $product['tax'] : 0), $order_info['currency_code'], $order_info['currency_value']),
 					'total'    => $this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']),
 					'reorder'  => $reorder,
-					'return'   => $this->url->link('account/return/add', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id'], true)
+					'return'   => $this->url->link('account/return/add', 'order_id=' . $order_info['order_id'] . '&product_id=' . $product['product_id'], true),
+					'image'    => $product_info['image'],
 				);
 			}
 
@@ -324,6 +326,7 @@ class ControllerAccountOrder extends Controller {
 			}
 
 			$data['continue'] = $this->url->link('account/order', '', true);
+			$data['total'] = $order_info['total'];
 
 			$data['column_left'] = $this->load->controller('common/column_left');
 			$data['column_right'] = $this->load->controller('common/column_right');
@@ -332,7 +335,7 @@ class ControllerAccountOrder extends Controller {
 			$data['footer'] = $this->load->controller('common/footer');
 			$data['header'] = $this->load->controller('common/header');
 
-			$this->response->setOutput($this->load->view('account/order_info', $data));
+			$this->response->setOutput($this->load->view('account/order_item', $data));
 		} else {
 			return new Action('error/not_found');
 		}

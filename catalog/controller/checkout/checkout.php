@@ -2,7 +2,7 @@
 class ControllerCheckoutCheckout extends Controller {
 	public function index() {
 		if ( !$this->customer->isLogged() && !isset( $this->session->data['guest'] ) ) {
-			$this->session->data['redirect_page'] = $this->url->link( 'checkout/checkout', null, 'SSL' );
+			$this->session->data['redirect'] = $this->url->link( 'checkout/checkout', null, 'SSL' );
 			$this->response->redirect( $this->url->link( 'account/login', null, 'SSL' ) );
 		}
 

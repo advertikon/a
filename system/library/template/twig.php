@@ -75,6 +75,13 @@ final class Twig {
 		} );
 
 		$this->twig->addFilter( $filter_html_decode );
+
+		$filter_wrap_p = new \Twig_SimpleFilter( 'wrap_p', function ( $string ) {
+			$parts = preg_split( '/\r?\n/', $string );
+			return '<p>' . implode( '</p><p>', $parts ) . '</p>';
+		} );
+
+		$this->twig->addFilter( $filter_wrap_p );
 		
 		try {
 			// load template

@@ -1,0 +1,107 @@
+{{ header }}
+{{ include( 'arbole/template/product/filter.twig' ) }}
+<div class="container-inner">
+	<div class="section wide">
+		<div class="max-width">
+			<div class="breadcrumbs">
+				<ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+					<li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+						<a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+						<meta itemprop="position" content="1" />
+					</li>
+					<li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+						<link href="" itemprop="item" />
+						<span itemprop="name">{{ __( 'Search results' ) }}: {{ search }}</span>
+						<meta itemprop="position" content="2" />
+					</li>
+				</ol>
+			</div>
+			<div class="pagename"><h1>{{ search }}</h1><span>1  - 35  / 35 Items</span></div>
+			<div class="gallery">
+				<div class="filters-wrapper">
+					<div class="filters-fixed">
+						<div class="max-width">
+							<div class="filters">
+								<div class="filter">
+									<label>{{ __( 'Jewelry type' ) }}</label>
+									<select class="filter-page">
+									{% for i in categories %}
+										<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+									{% endfor %}
+									</select>
+								</div>
+								<div class="filter">
+									<label>{{ __( 'Material' ) }}</label>
+									<select class="filter-page">
+									{% for i in material %}
+										<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+									{% endfor %}
+									</select>
+								</div>
+								<div class="filter sort">
+									<label>{{ __( 'Sort by' ) }}</label>
+									<select class="filter-page">
+									{% for i in sort %}
+										<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+									{% endfor %}
+									</select>
+									</select>
+								</div>
+								<div class="filters-toggler">
+								{{ __( 'Open filters' ) }}
+								</div>
+							</div>
+							<div class="user-designs-toggler">
+								{{ custom_switch }}
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="product-list">
+					{% for product in products %}
+					<div class="product-item">
+						<a href="" class="to-favorites" data-id="{{ product.product_id }}"></a>
+						<a href="{{ u( 'product/product', {'product_id': product.product_id, 'path': category_id }) }}" class="img">
+							<img src="{{ product.thumb }}">
+							<div class="img-action">
+								<span data-popup="quick-view-{{ loop.index }}">{{ __( 'quick view' ) }}</span>
+								<span>{{ __( 'shop now' ) }}</span>
+							</div>
+						</a>
+						<a href="gallery_item.php" class="product-name">{{ product.name }}</a>
+						<div class="product-price"><span>{{ product.special ?: product.price }}</span></div>
+					</div>
+					{% set l_index = loop.index %}
+					{{ include( 'arbole/template/product/quick_view.twig' ) }}
+					{% endfor %}
+				</div>
+				{{ pagination }}
+			</div>
+		</div>
+	</div>
+</div>
+
+{{ include( 'arbole/template/product/quick_view.twig' ) }}
+
+{{ footer }}
+<script type="text/javascript">
+	jQuery('body').addClass('gallery-page');
+
+	$( ".filter-page" ).on( "change", function() {
+		var url = '';
+
+		if ( 'checkbox' === $( this ).attr( "type" ) ) {
+			if ( $( this ).is( ":checked" ) ) {
+				url = $( this ).attr( "data-on" )
+
+			} else {
+				url = $( this ).attr( "data-off" )
+			}
+
+			setTimeout( function(){ window.location.assign( url ); }, 500 );
+			return;
+		}
+
+		window.location.assign( this.value );
+	} );
+</script>
