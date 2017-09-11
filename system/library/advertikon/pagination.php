@@ -13,6 +13,8 @@ class Pagination extends \Model {
 	public $total = 0;
 	public $page = null;
 	public $item_per_page = 20;
+	public $first_element = 0;
+	public $last_element = 0;
 
 	protected $query = null;
 	protected $filter = array();
@@ -117,6 +119,12 @@ class Pagination extends \Model {
 				if ( $total && $total->num_rows > 0 ) {
 					$this->total = $total->row['total'];
 					$this->total_page = ceil( $this->total / $this->item_per_page );
+
+					if ( $this->total_page > 0 ) {
+						$this->first_element = ( ( $this->page - 1 ) * $this->item_per_page ) + 1;
+						$this->last_element = $this->total_page != $this->page ?
+							$this->first_element + $this->item_per_page - 1 : $this->total % $this->item_per_page;
+					}
 				}
 
 				return $this->data->rows;
@@ -213,7 +221,7 @@ class Pagination extends \Model {
 			if ( is_array( current( $data ) ) ) {
 				$count = 0;
 				foreach( $data as &$d ) {
-					if( false === $this->if( $alias, $d ) ) {
+					if( false === $this->iff( $alias, $d ) ) {
 						unset( $this->filter[ $alias ][ $count ] );
 					}
 
@@ -221,7 +229,7 @@ class Pagination extends \Model {
 				} 
 
 			} else {
-				if( false === $this->if( $alias, $data ) ) {
+				if( false === $this->iff( $alias, $data ) ) {
 					unset( $this->filter[ $alias ] );
 				}
 			}
@@ -231,7 +239,7 @@ class Pagination extends \Model {
 		$this->filter_init = true;
 	}
 
-	protected function if( $alias, &$data ) {
+	protected function iff( $alias, &$data ) {
 		if ( isset( $this->request->get[ $alias ] ) ) {
 			$data['value'] = $this->request->get[ $alias ];
 

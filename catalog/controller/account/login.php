@@ -5,42 +5,6 @@ class ControllerAccountLogin extends Controller {
 	public function index() {
 		$this->load->model('account/customer');
 
-		// Login override for admin users
-		// if (!empty($this->request->get['token'])) {
-		// 	$this->customer->logout();
-		// 	$this->cart->clear();
-
-		// 	unset($this->session->data['order_id']);
-		// 	unset($this->session->data['payment_address']);
-		// 	unset($this->session->data['payment_method']);
-		// 	unset($this->session->data['payment_methods']);
-		// 	unset($this->session->data['shipping_address']);
-		// 	unset($this->session->data['shipping_method']);
-		// 	unset($this->session->data['shipping_methods']);
-		// 	unset($this->session->data['comment']);
-		// 	unset($this->session->data['coupon']);
-		// 	unset($this->session->data['reward']);
-		// 	unset($this->session->data['voucher']);
-		// 	unset($this->session->data['vouchers']);
-
-		// 	$customer_info = $this->model_account_customer->getCustomerByToken($this->request->get['token']);
-
-		// 	if ($customer_info && $this->customer->login($customer_info['email'], '', true)) {
-		// 		// Default Addresses
-		// 		$this->load->model('account/address');
-
-		// 		if ($this->config->get('config_tax_customer') == 'payment') {
-		// 			$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-		// 		}
-
-		// 		if ($this->config->get('config_tax_customer') == 'shipping') {
-		// 			$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-		// 		}
-
-		// 		$this->response->redirect($this->url->link('account/account', '', true));
-		// 	}
-		// }
-
 		if ($this->customer->isLogged()) {
 			$this->response->redirect($this->url->link('account/account', '', true));
 		}
@@ -49,74 +13,7 @@ class ControllerAccountLogin extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		if ( isset( $this->request->get['fb'] ) || isset( $this->request->get['google'] ) ) {
-			require_once DIR_SYSTEM . 'library/Hybridauth/autoload.php';
-
-			if ( isset( $this->request->get['google'] ) ) {
-				$config = [
-					'callback' => $this->url->link( 'account/login' ),
-					'keys' => [ 
-				        'id'     => 'my-project-1492171037707',
-				        'secret' => 'your-google-client-secret' 
-				    ],
-
-				];
-
-				$adapter = new Hybridauth\Provider\Google($config);
-
-				$adapter->authenticate();
-				$accessToken = $adapter->getAccessToken();
-				$userProfile = $adapter->getUserProfile();
-			}
-
-		} else if ( isset( $this->request->get['guest'] ) ) {
-			$this->session->data['guest'] = [];
-
-			if ( isset( $this->session->data['redirect'] ) ) {
-				$r = $this->session->data['redirect'];
-				unset( $this->session->data['redirect'] );
-				$this->response->redirect( $r );
-
-			} else {
-				$this->response->redirect( HTTPS_SERVER );
-			}
-
-		}  else if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			// Unset guest
-			unset($this->session->data['guest']);
-
-			// Default Shipping Address
-			$this->load->model('account/address');
-
-			if ($this->config->get('config_tax_customer') == 'payment') {
-				$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-			}
-
-			if ($this->config->get('config_tax_customer') == 'shipping') {
-				$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
-			}
-
-			// Wishlist
-			if (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
-				$this->load->model('account/wishlist');
-
-				foreach ($this->session->data['wishlist'] as $key => $product_id) {
-					$this->model_account_wishlist->addWishlist($product_id);
-
-					unset($this->session->data['wishlist'][$key]);
-				}
-			}
-
-			if ( isset( $this->session->data['redirect'] ) ) {
-				$r = $this->session->data['redirect'];
-				unset( $this->session->data['redirect'] );
-				$this->response->redirect( $r );
-
-
-			} else {
-				$this->response->redirect($this->url->link('account/account'), null, 'SSL' );
-			}
-		}
+		$this->try_to_login();
 
 		$data['breadcrumbs'] = array();
 
@@ -218,5 +115,108 @@ class ControllerAccountLogin extends Controller {
 		}
 
 		return !$this->error;
+	}
+
+	protected function success() {
+		// Unset guest
+		unset($this->session->data['guest']);
+
+		// Default Shipping Address
+		$this->load->model('account/address');
+
+		if ($this->config->get('config_tax_customer') == 'payment') {
+			$this->session->data['payment_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
+		}
+
+		if ($this->config->get('config_tax_customer') == 'shipping') {
+			$this->session->data['shipping_address'] = $this->model_account_address->getAddress($this->customer->getAddressId());
+		}
+
+		// Wishlist
+		if (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
+			$this->load->model('account/wishlist');
+
+			foreach ($this->session->data['wishlist'] as $key => $product_id) {
+				$this->model_account_wishlist->addWishlist($product_id);
+
+				unset($this->session->data['wishlist'][$key]);
+			}
+		}
+
+		if ( isset( $this->session->data['redirect'] ) ) {
+			$r = $this->session->data['redirect'];
+			unset( $this->session->data['redirect'] );
+			$this->response->redirect( $r );
+
+		} else {
+			$this->response->redirect($this->url->link('account/account'), null, 'SSL' );
+		}
+	}
+
+	protected function try_to_login() {
+		Advertikon\Arbole\Advertikon::instance();
+
+		if ( isset( $this->request->get['fb'] ) || isset( $this->request->get['google'] ) ) {
+			require_once DIR_SYSTEM . 'library/Hybridauth/autoload.php';
+
+			if ( isset( $this->request->get['google'] ) ) {
+				$config = [
+					'callback' => str_replace( '&amp;', '&', $this->url->link( 'account/login', [ 'g' => 1, ] ) ),
+					'keys' => [ 
+				       'id'     => ADK( 'Advertikon\\Arbole' )->config( 'social_g_id' ),
+				       'secret' => ADK( 'Advertikon\\Arbole' )->config( 'social_g_secret' ),
+				    ],
+				    'scope'    => 'profile https://www.googleapis.com/auth/plus.login',
+				];
+
+			} else {
+				$config = [
+					'callback' => str_replace( '&amp;', '&', $this->url->link( 'account/login', [ 'fb' => 1, ] ) ),
+					'keys' => [ 
+				        'id'     => ADK( 'Advertikon\\Arbole' )->config( 'social_fb_id' ),
+				        'secret' => ADK( 'Advertikon\\Arbole' )->config( 'social_fb_secret' ),
+				    ],
+				    'scope'      => 'email',
+				];
+			}
+
+			// $config['debug_mode'] = 'debug';
+			// $config['debug_file'] = __DIR__ . '/hyb.log';
+
+			try {
+				$adapter = new Hybridauth\Provider\Facebook($config);
+				$adapter->authenticate();
+				$userProfile = $adapter->getUserProfile();
+				$tokens = $adapter->getAccessToken(); 
+
+			} catch( Exception $e ){
+				$this->log->write( 'FB login: ' . $e->getMessage() );
+			}
+
+			if ( isset( $userProfile->email ) ) {
+				if ( $this->customer->login( $userProfile->email, '', true ) ) {
+					$this->success();
+
+				} else {
+					$this->error['email'] = 'Customer doesn\'t exist';
+					return;
+				}
+			}
+
+		} else if ( isset( $this->request->get['guest'] ) ) {
+			$this->session->data['guest'] = [];
+
+			if ( isset( $this->session->data['redirect'] ) ) {
+				$r = $this->session->data['redirect'];
+				unset( $this->session->data['redirect'] );
+				$this->response->redirect( $r );
+
+			} else {
+				$this->response->redirect( HTTPS_SERVER );
+			}
+
+		}  else if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			$this->success();
+		}
 	}
 }

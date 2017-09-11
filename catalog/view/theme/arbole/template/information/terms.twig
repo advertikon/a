@@ -1,0 +1,33 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide">
+    <div class="max-width">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">Home</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ c( 'terms_header' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ c( 'terms_header' ) }}</h1></div>
+      <div class="simple-wrapper">
+        <div class="simple-content">
+        	{% for term in c( 'terms' ) %}
+          <h5>{{ term.header }}</h5>
+          {{ term.content|wrap_p }}
+          <p>&nbsp;</p>
+      		{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ footer }}

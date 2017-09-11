@@ -40,6 +40,12 @@
             <li role="presentation" class=>
             	<a href="#faq-tab" role="tab" data-toggle="tab">{{ __( 'FAQ' ) }}</a>
             </li>
+            <li role="presentation" class=>
+            	<a href="#terms-tab" role="tab" data-toggle="tab">{{ __( 'Terms' ) }}</a>
+            </li>
+            <li role="presentation" class=>
+            	<a href="#login-tab" role="tab" data-toggle="tab">{{ __( 'Login' ) }}</a>
+            </li>
         </ul>
 
         <form action="{{action}}" method="post" enctype="multipart/form-data" id="form-theme-default" class="form-horizontal">
@@ -123,6 +129,24 @@
 
                 <div role="tabpanel" class="tab-pane" id="faq-tab">
                     {{ faq }}
+                </div>
+
+                 <div role="tabpanel" class="tab-pane" id="terms-tab">
+                    {{ terms_header }}
+                    {{ terms }}
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="login-tab">
+                    <fieldset>
+                        <legend>{{ __( 'Facebook' ) }}</legend>
+                        {{ social_fb_id }}
+                        {{ social_fb_secret }}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{{ __( 'Google' ) }}</legend>
+                        {{ social_g_id }}
+                        {{ social_g_secret }}
+                    </fieldset>
                 </div>
 
             </div>

@@ -16,7 +16,8 @@
 					</li>
 				</ol>
 			</div>
-			<div class="pagename"><h1>{{ search }}</h1><span>1  - 35  / 35 Items</span></div>
+			{% if total_count > 0 %}
+			<div class="pagename"><h1>{{ search }}</h1><span>{{ p.first_element }}  - {{ p.last_element }}  / {{ total_count }} Items</span></div>
 			<div class="gallery">
 				<div class="filters-wrapper">
 					<div class="filters-fixed">
@@ -77,6 +78,19 @@
 				</div>
 				{{ pagination }}
 			</div>
+			{% else %}
+		<div class="pagename"><h1>0 results for {{ search }}</h1><span>0 - 0 / 0 Items</span></div>
+      <div class="search-empty">
+        <p>{{ __ (' We are very sorry, we couldn\'t find anything to match your search.<br/>Make sure all keywords are entered correctly or try a less specific search' ) }}</p>
+        <form method="get">
+          <div class="field field-promo">
+            <input type="text" placeholder="search..." name="search" value="{{search }}">
+            <input type="hidden" name="route" value="product/search">
+            <button><span></span>{{ __( 'search' ) }}</button>
+          </div>
+        </form>
+      </div>
+  			{% endif %}
 		</div>
 	</div>
 </div>

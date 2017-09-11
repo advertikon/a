@@ -46,6 +46,22 @@ class ModelExtensionThemeArbole extends Model {
 				$this->db->query( "alter table " . DB_PREFIX . "customer add is_male tinyint default 1" );
 			}
 		}
+
+		$render = false;
+		$q = $this->db->query( "show columns from " . DB_PREFIX . "category" );
+
+		if ( $q && $q->num_rows ) {
+			foreach( $q->rows as $row ) {
+				if ( $row['Field'] === 'render' ) {
+					$render = true;
+					break;
+				}
+			}
+
+			if ( !$render ) {
+				$this->db->query( "alter table " . DB_PREFIX . "category add render varchar(255)" );
+			}
+		}
 	}
 
 	public function get_template( $name ) {
@@ -236,6 +252,44 @@ HTML;
 			'value'       => isset( $data['answer'] ) ? htmlspecialchars_decode( $data['answer'] ) : '',
 			'name'        => "{$name}[{$id}][answer]",
 			'placeholder' => $this->a->__( 'Answer' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-1">
+		{$this->a->r( [
+			'type'        => 'button',
+			'button_type' => 'danger',
+			'icon'        => 'fa-close',
+			'class'       => 'remove-line',
+		] )}
+	</div>
+</div>
+HTML;
+		return $ret;
+	}
+
+	public function line_terms( $name, $id = '{id}', $data = [] ) {
+		$ret = <<<HTML
+<div class="row template-line">
+	<div class="col-sm-5">
+		{$this->a->r( [
+			'type'        => 'text',
+			'class'       => 'form-control',
+			'value'       => isset( $data['header'] ) ? htmlspecialchars_decode( $data['header'] ) : '',
+			'name'        => "{$name}[{$id}][header]",
+			'placeholder' => $this->a->__( 'Header' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-6">
+		{$this->a->r( [
+			'type'        => 'textarea',
+			'class'       => 'form-control',
+			'value'       => isset( $data['content'] ) ? htmlspecialchars_decode( $data['content'] ) : '',
+			'name'        => "{$name}[{$id}][content]",
+			'placeholder' => $this->a->__( 'Content' ),
 			'id'          => $id,
 
 		] )}

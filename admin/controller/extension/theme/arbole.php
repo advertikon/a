@@ -386,16 +386,73 @@ class ControllerExtensionThemeArbole extends Controller {
 			] ),
 		] );
 
+		$name = 'terms_header';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Header' ),
+			'element' => $this->a->r( [
+				'type'   => 'text',
+				'value'  =>  htmlspecialchars_decode( $this->a->get_value_from_post( $name ) ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'social_fb_id';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'ID' ),
+			'element' => $this->a->r( [
+				'type'   => 'text',
+				'value'  =>  $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'social_fb_secret';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Secret' ),
+			'element' => $this->a->r( [
+				'type'   => 'text',
+				'value'  =>  $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'social_g_id';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'ID' ),
+			'element' => $this->a->r( [
+				'type'   => 'text',
+				'value'  =>  $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'social_g_secret';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( 'Secret' ),
+			'element' => $this->a->r( [
+				'type'   => 'text',
+				'value'  =>  $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
 		$data['hp_hiw_steps'] = $this->model->get_template( 'hp_hiw_steps' );
 		$data['hp_review' ] = $this->model->get_template( 'hp_review' );
 		$data['footer_links' ] = $this->model->get_template( 'footer_links' );
 		$data['faq' ] = $this->model->get_template( 'faq' );
+		$data['terms' ] = $this->model->get_template( 'terms' );
 
 		$data['locale'] = json_encode( array(
 			'hp_hiw_steps'              => $this->model->line_hp_hiw_steps( 'hp_hiw_steps' ),
 			'hp_review'                 => $this->model->line_hp_review( 'hp_review' ),
 			'footer_links'              => $this->model->line_footer_links( 'footer_links' ),
 			'faq'                       => $this->model->line_faq( 'faq' ),
+			'terms'                     => $this->model->line_terms( 'terms' ),
 
 			// Common stuff
 			'networkError'              => $this->a->__( 'Network error' ),

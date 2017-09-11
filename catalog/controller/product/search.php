@@ -130,6 +130,20 @@ class ControllerProductSearch extends Controller {
 						'wrap'     => '%'
 
 					],
+					[
+						'name'     => 'cd.name',
+						'operator' => 'LIKE',
+						'glue'     => 'OR',
+						'wrap'     => '%'
+
+					],
+					[
+						'name'     => 'pa.text',
+						'operator' => 'LIKE',
+						'glue'     => 'OR',
+						'wrap'     => '%'
+
+					],
 				],
 			],
 			'sort' => [
@@ -173,7 +187,9 @@ class ControllerProductSearch extends Controller {
 					p.product_id=pa.product_id AND
 					pa.language_id = " . (int)$this->config->get('config_language_id') . " AND
 					pa.attribute_id = {$product_attribute}
-				)"
+				)
+			LEFT JOIN " . DB_PREFIX . "category_description cd
+				ON(p2c.category_id = cd.category_id AND cd.language_id = " . (int)$this->config->get('config_language_id') . ")"
 		);
 
 		$data['text_compare'] = sprintf($this->language->get('text_compare'), (isset($this->session->data['compare']) ? count($this->session->data['compare']) : 0));
@@ -255,6 +271,9 @@ class ControllerProductSearch extends Controller {
 		$product_total = $pagination->total;
 		$page = $pagination->page;
 		$option_your_size = ADK( 'Advertikon\\Arbole' )->config( 'your_size' );
+
+		$data['total_count'] = $product_total;
+		$data['p'] = $pagination;
 
 		foreach ($results as $result) {
 			if ($result['image']) {
