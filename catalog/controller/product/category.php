@@ -205,7 +205,7 @@ class ControllerProductCategory extends Controller {
 			[
 				'name'   => ADK()->__( 'Name: Z to A' ),
 				'href'   => $pagination->url( 'sort', 'name_high' ),
-				'active' => $pagination->is_sort( 'name_hight' )
+				'active' => $pagination->is_sort( 'name_high' )
 			],
 		];
 

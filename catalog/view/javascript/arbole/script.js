@@ -26,7 +26,7 @@ $( document ).delegate( ".to-favorites", "click", function( e ) {
 	wishlist.add( $( this ).attr( "data-id" ) );
 } );
 
-$( document ).delegate( ".cart-sidebar .field-counter", "click", function() {
+$( document ).delegate( " .field-counter", "click", function() {
 	$( this ).find( "input" ).trigger( "change" );
 } );
 
@@ -57,6 +57,8 @@ $( document ).delegate( ".product-data .add-to-cart", "click", function( e ) {
 		hidePopup( me.closest( ".popup" ).attr( "id" ) );
 	} );
 } );
+
+$( document ).delegate( ".price-influence", "change", updatePrice );
 
 // Cart add remove functions
 cart = {
@@ -137,5 +139,20 @@ cart = {
 function refreshCart() {
 	$( ".cart-sidebar" ).load( "/?route=common/cart/info", function(){
 		$( "#cart-quantity" ).text( $( ".cart-sidebar-inner" ).attr( "data-quantity" ) );
+	} );
+}
+
+function updatePrice() {
+	var
+		me = $( this ),
+		parent = me.closest( ".product-data" ),
+		opt = {};
+
+	opt[ parent.find( ".your-size" ).attr( "data-id" ) ] = parent.find( ".your-size" ).val();
+
+	parent.find( ".price-span" ).load( '/?route=product/product/price', {
+		product_id: parent.attr( "data-id" ),
+		quantity:    parent.find( ".product-quantity" ).val(),
+		option:    opt
 	} );
 }

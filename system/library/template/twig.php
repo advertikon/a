@@ -55,9 +55,20 @@ final class Twig {
 			$this->twig->addFunction( $configuration_func );
 
 			$is_active_func = new \Twig_SimpleFunction( 'is_active', function ( $str ) {
-			    if ( empty( $_GET['route'] ) ) return false;
+				$ret = false;
 
-				return strpos( $_GET['route'], $str ) === 0;
+			    if ( empty( $str ) || empty( $_GET['route'] ) ) return false;
+
+			    if ( ( $p = strpos( $str, 'route=' ) ) !== false ) {
+			    	$ret = strpos( $_GET['route'], substr( $str, $p + 6 ) ) === 0;
+
+			    } else {
+					$ret =  strpos( $_GET['route'], $str ) === 0;
+			    	
+			    }
+
+			    return $ret;
+
 			} );
 
 			$this->twig->addFunction( $is_active_func );

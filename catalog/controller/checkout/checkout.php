@@ -16,6 +16,12 @@ class ControllerCheckoutCheckout extends Controller {
 		$data['cart'] = $this->cart_contents();
 		$data['is_guest'] = !isset( $this->session->data['guest'] ) ? 'false' : 'true';
 
+		if ( $this->customer->isLogged() ) {
+			$data['email'] = $this->customer->getEmail();
+			$data['firstname'] = $this->customer->getFirstname();
+			$data['lastname'] = $this->customer->getLastname();
+		} 
+
 		// Validate minimum quantity requirements.
 		// $products = $this->cart->getProducts();
 

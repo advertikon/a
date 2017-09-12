@@ -39,7 +39,7 @@
             <div class="title"><span>2</span>{{ __( 'E-MAIL ADDRESS' ) }}</div>
             <div class="field">
               <label>E-mail</label>
-              <input type="text" id="email"/ id="email">
+              <input type="text" id="email"/ id="email" value="" ="{{ email }}">
               <p class="error-text"></p>
             </div>
           </div>
@@ -49,12 +49,12 @@
               <div class="edit-toggler">{{ __( 'edit' ) }}</div>
               <div class="field">
                 <label>{{ __( 'First name' ) }}</label>
-                <input type="text" id="firstname"/>
+                <input type="text" id="firstname" value="{{ firstname }}"/>
                 <p class="error-text"></p>
               </div>
               <div class="field">
                 <label>{{ __( 'Last name' ) }}</label>
-                <input type="text" id="lastname"/>
+                <input type="text" id="lastname" value="{{ lastname }}"/>
                 <p class="error-text"></p>
               </div>
               <div class="field">
@@ -251,6 +251,8 @@
 	}
 
 	function pay () {
+		rememberMe();
+
 		$( "#pp" ).load( '/?route=checkout/pay', function() {
 			$( ".delivery-form" ).removeClass( "editing" );
     		$( ".payment-method button" ).removeAttr( "disabled" );
@@ -293,6 +295,22 @@
 		order();
 		return false;
 	} );
+
+	function rememberMe() {
+		var data = get_data();
+
+		for( var i in data ) {
+			window.localStorage.setItem( i, data[ i ] );
+		}
+	}
+
+	function doYouRememberMe() {
+		$.each( [ "firstname", "lastname", "address_1", "city", "telephone", "postcode", "country", "email"], function() {
+			$( "#" + this ).val( window.localStorage.getItem( this ) );
+		} );
+	}
+
+	doYouRememberMe();
 	</script>
   </body>
 </html>

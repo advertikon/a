@@ -35,7 +35,7 @@
 				<div class="product-info product-data" data-id="{{ product_id }}">
 					<div class="product-name">{{ name }}</div>
 					<div class="product-description">{{ description }}</div>
-					<div class="product-price"><label>{{ __( 'Price' ) }}:</label><span>{{ special ?: price }}</span></div>
+					<div class="product-price"><label>{{ __( 'Price' ) }}:</label><span class="price-span">{{ special ?: price }}</span></div>
 					<div class="product-options">
 						{% if your_size is not empty %}
 						<div class="option">
@@ -51,7 +51,7 @@
 							<label>{{ __( 'Quantity' ) }}:</label>
 							<div class="field field-counter">
 								<div class="minus">-</div>
-									<input type="text" value="1" maxlength="2" class="decimal product-quantity"/>
+									<input type="text" value="1" maxlength="2" class="decimal product-quantity price-influence"/>
 								<div class="plus">+</div>
 							</div>
 						</div>

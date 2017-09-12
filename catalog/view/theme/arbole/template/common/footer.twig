@@ -10,7 +10,7 @@
 						<div class="footer-menu">
 							<ul>
 								{% for i in c( 'footer_links' ) %}
-								<li class="active"><a href="{{ i.url }}">{{ i.name|html_decode }}</a></li>
+								<li class="{{ is_active( i.url ) ? 'active' }}"><a href="{{ i.url }}">{{ i.name|html_decode }}</a></li>
 								{% endfor %}
 							</ul>
 							<div class="social">

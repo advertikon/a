@@ -7,7 +7,7 @@
   <body>
     <div class="header">
       <a href="index.php" class="logo">
-        <i><img src="{{ image( 'argole/logo-icon.svg') }}"/></i>
+        <i><img src="{{ image( 'arbole/logo-icon.svg') }}"/></i>
         <span><img src="{{ image( 'arbole/logo-text.svg' ) }}"/></span>
       </a>
     </div>
@@ -17,27 +17,27 @@
         <div class="form">
           <div class="field">
             <label>E-mail</label>
-            <input type="text"/ name="email">
+            <input type="text" name="email" value="{{ email }}">
             <p class="error-text">{{ error_email }}</p>
           </div>
           <div class="field">
             <label>First name</label>
-            <input type="text"/ name="firstname">
+            <input type="text" name="firstname" value="{{ firstname }}" >
             <p class="error-text">{{ error_firstname }}</p>
           </div>
           <div class="field">
             <label>Last name</label>
-            <input type="text"/ name="lastname">
+            <input type="text" name="lastname" value="{{ lastname }}">
             <p class="error-text">{{ error_lastname }}</p>
           </div>
           <div class="field">
             <label>Password</label>
-            <input type="password"/ name="password">
+            <input type="password" name="password" value="{{ password }}">
             <p class="error-text">{{ error_password }}</p>
           </div>
           <div class="field">
             <label>Confirm password</label>
-            <input type="password"/ name="confirm">
+            <input type="password" name="confirm" value="{{ confirm }}">
             <p class="error-text">{{ error_confirm }}</p>
           </div>
           <button><span></span>SIGN UP</button>
