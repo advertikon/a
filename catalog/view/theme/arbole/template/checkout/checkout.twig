@@ -39,7 +39,7 @@
             <div class="title"><span>2</span>{{ __( 'E-MAIL ADDRESS' ) }}</div>
             <div class="field">
               <label>E-mail</label>
-              <input type="text" id="email"/ id="email" value="" ="{{ email }}">
+              <input type="text" id="email"/ id="email" value="{{ email }}">
               <p class="error-text"></p>
             </div>
           </div>
@@ -306,6 +306,7 @@
 
 	function doYouRememberMe() {
 		$.each( [ "firstname", "lastname", "address_1", "city", "telephone", "postcode", "country", "email"], function() {
+			if ( !window.localStorage.getItem( this ) ) return;
 			$( "#" + this ).val( window.localStorage.getItem( this ) );
 		} );
 	}

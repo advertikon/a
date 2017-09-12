@@ -43,7 +43,7 @@ class ModelExtensionThemeArbole extends Model {
 			}
 
 			if ( !$sex ) {
-				$this->db->query( "alter table " . DB_PREFIX . "customer add is_male tinyint default 1" );
+				$this->db->query( "alter table " . DB_PREFIX . "customer add is_male tinyint" );
 			}
 		}
 
