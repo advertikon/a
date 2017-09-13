@@ -28,6 +28,9 @@
             <li role="presentation" class="active">
             	<a href="#general-tab" role="tab" data-toggle="tab">{{ __( 'General' ) }}</a>
             </li>
+            {# <li role="presentation" class=>
+            	<a href="#menu-tab" role="tab" data-toggle="tab">{{ __( 'Main menu' ) }}</a>
+            </li> #}
             <li role="presentation" class=>
             	<a href="#home-tab" role="tab" data-toggle="tab">{{ __( 'Home page' ) }}</a>
             </li>
@@ -131,9 +134,13 @@
                     {{ faq }}
                 </div>
 
-                 <div role="tabpanel" class="tab-pane" id="terms-tab">
+                <div role="tabpanel" class="tab-pane" id="terms-tab">
                     {{ terms_header }}
                     {{ terms }}
+                </div>
+
+                <div role="tabpanel" class="tab-pane" id="menu-tab">
+                    {{ menu }}
                 </div>
 
                 <div role="tabpanel" class="tab-pane" id="login-tab">

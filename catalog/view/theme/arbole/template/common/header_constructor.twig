@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+  <head>
+  {{ include( 'arbole/template/common/meta.twig' ) }}
+  </head>
+  <body class="constructor-page">
+    <?php include_once( 'size-guide.php' ); ?>
+  	<div class="header">
+      <h1>my jewellery design</h1>
+      <a href="index.php" class="logo">
+        <i><img src="{{ image( 'arbole/logo-icon.svg' ) }}"/></i>
+        <span><img src="{{ image( 'arbole/logo-text.svg' ) }}"/></span>
+      </a>
+      <div class="menu-wrapper">
+        {{ currency }}
+        <div class="cart-sidebar-toggler"><a href="#"><img src="{{ image('arbole/cart.png') }}"/><span id="cart-quantity">{{ cart_quantity }}</span></a></div>
+        <div class="constructor-sidebar-toggler"><img src="{{ image( 'arbole/ham.png' ) }}"/></div>
+      </div>
+  	</div>
+    <div class="filters-mobile filters-mobile-constructor">
+      <div class="close"></div>
+      <div class="title">FILTERS</div>
+      <form>
+        <div class="filters-mobile-block">
+          <label>Jewerlly type</label>
+          <select>
+            <option>All</option>
+            <option>Rings</option>
+            <option>Bracelets</option>
+          </select>
+        </div>
+        <div class="filters-mobile-block">
+          <label>Material</label>
+          <select>
+            <option>All</option>
+            <option>Gold</option>
+            <option>Wood</option>
+          </select>
+        </div>
+        <button>Apply filters</button>
+      </form>
+    </div>
+    <div class="constructor-sidebar">
+      <div class="constructor-sidebar-inner">
+        <ul class="main-menu">
+          <li {{ is_active( 'constructor/step1' ) ? 'class="active"' }}>
+				<a href="{{ u( 'constructor/step1' ) }}">{{ __( 'design your own' )|e }}</a>
+			</li>
+			<li {{ is_active( 'product/category' ) ? 'class="active"' }}>
+				<a href="{{ u( 'product/category' ) }}">{{ __( 'gallery store' )|e }}</a>
+			</li>
+			<li {{ is_active( 'information/about' ) ? 'class="active"' }}>
+				<a href="{{ u( 'information/about' ) }}">{{ __( 'About Us' )|e }}</a>
+			</li>
+			<li {{ is_active( 'information/faq' ) ? 'class="active"' }}>
+				<a href="{{ u( 'information/faq' ) }}">{{ __( 'faq' )|e }}</a>
+			</li>
+        </ul>
+        <ul class="user-menu">
+          <li>
+          	<a href="{{ u( 'account/edit' ) }}"><img src="{{ image( 'arbole/user.png' ) }}"/></a>
+          </li>
+          <li>
+          	<a href="{{ u( 'account/wishlist' ) }}"><img src="{{ image( 'arbole/heart.png' ) }}"/></a>
+          </li>
+          <li class="search-toggler">
+          	<a href="#"><img src="{{ image( 'arbole/search.png') }}"/></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="cart-sidebar">
+    	{{ cart }}
+    </div>
+
+

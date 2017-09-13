@@ -446,6 +446,7 @@ class ControllerExtensionThemeArbole extends Controller {
 		$data['footer_links' ] = $this->model->get_template( 'footer_links' );
 		$data['faq' ] = $this->model->get_template( 'faq' );
 		$data['terms' ] = $this->model->get_template( 'terms' );
+		$data['menu' ] = $this->model->get_template( 'menu' );
 
 		$data['locale'] = json_encode( array(
 			'hp_hiw_steps'              => $this->model->line_hp_hiw_steps( 'hp_hiw_steps' ),
@@ -453,6 +454,7 @@ class ControllerExtensionThemeArbole extends Controller {
 			'footer_links'              => $this->model->line_footer_links( 'footer_links' ),
 			'faq'                       => $this->model->line_faq( 'faq' ),
 			'terms'                     => $this->model->line_terms( 'terms' ),
+			'menu'                      => $this->model->line_menu( 'menu' ),
 
 			// Common stuff
 			'networkError'              => $this->a->__( 'Network error' ),

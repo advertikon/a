@@ -331,6 +331,7 @@ class Renderer {
 		$checked = '';
 		if( isset( $data['check_non_empty_value'] ) ) {
 			$checked = ! empty( $value ) ? 'checked="checked"' : '';
+			$value = $value ?: '1';
 		}
 		$text_on = isset( $data['text_on'] ) ? htmlentities( $data['text_on'] ) : ADK( $this->namespace )->__( 'On' );
 		$text_off = isset( $data['text_off'] ) ? htmlentities( $data['text_off'] ) : ADK( $this->namespace )->__( 'Off' );

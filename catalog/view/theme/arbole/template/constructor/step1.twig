@@ -1,0 +1,34 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="constructor-wrapper">
+    {{ include( 'arbole/template/common/rotate.twig' ) }}
+    <div class="step-wrapper">
+      <div class="title"><span>1</span>My jewelery</div>
+      <div class="jewellery-type">
+      	{% for i in categories %}
+        <div class="type">
+          <input type="radio" name="type" id="category-{{ i.id }}" data-url="{{ u( 'constructor/step2', { 'id': i.id } ) }}"/>
+          <label for="category-{{ i.id }}">
+            <div class="img"><img src="{{ image( i.render ) }}"></div>
+            <p>{{ i.name }}</p>
+          </label>
+        </div>
+    	{% endfor %}
+      </div>
+      <div class="btns">
+        <button disabled onclick="window.location='constructor_step_2.php'"><span></span>next step</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function(){
+    $('.jewellery-type input').click(function(){
+      $('.btns button').attr('onclick',"window.location='" + $(this).attr('data-url') + "'" );
+    })
+  })
+</script>
+</body>
+</html>

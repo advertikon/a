@@ -306,4 +306,54 @@ HTML;
 HTML;
 		return $ret;
 	}
+
+	public function line_menu( $name, $id = '{id}', $data = [] ) {
+		$ret = <<<HTML
+<div class="row template-line">
+	<div class="col-sm-4">
+		{$this->a->r( [
+			'type'        => 'text',
+			'class'       => 'form-control',
+			'value'       => isset( $data['text'] ) ? htmlspecialchars_decode( $data['text'] ) : '',
+			'name'        => "{$name}[{$id}][text]",
+			'placeholder' => $this->a->__( 'Text' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-4">
+		{$this->a->r( [
+			'type'        => 'url',
+			'class'       => 'form-control',
+			'value'       => isset( $data['url'] ) ? $data['url'] : '',
+			'name'        => "{$name}[{$id}][url]",
+			'placeholder' => $this->a->__( 'Url' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-2">
+		{$this->a->r( [
+			'type'        => 'checkbox',
+			'class'       => 'form-control',
+			'value'       => isset( $data['mobile'] ) ? $data['mobile'] : '',
+			'check_non_empty_value' => 1,
+			'name'        => "{$name}[{$id}][mobile]",
+			'label'       => $this->a->__( 'Mobile' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-2">
+		{$this->a->r( [
+			'type'        => 'button',
+			'button_type' => 'danger',
+			'icon'        => 'fa-close',
+			'class'       => 'remove-line',
+		] )}
+	</div>
+</div>
+HTML;
+		return $ret;
+	}
 }
