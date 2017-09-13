@@ -21,26 +21,33 @@
 						<p class="copy"><a href="http://www.ego-wba.co.il/" target="_blank">Designed by EGO</a><br/>Copywrite ARBOLE&nbsp;&nbsp;2017</p>
 					</div>
 					<div class="contact-form">
-						<h3>{{ c( 'footer_cf_header' )|html_decode }}</h3>
-						<form id="inquiry-form" method="post" action="{{ u( 'information/contact/inquiry' ) }}">
-							<div class="field field-name">
-								<input type="text" placeholder="Your name" name="name"/>
-								<p class="error-text">*error</p>
-							</div>
-							<div class="field field-phone">
-								<input type="text" placeholder="Phone" name="telephone"/>
-								<p class="error-text">*error</p>
-							</div>
-							<div class="field field-email">
-								<input type="text" placeholder="E-mail" name="email"/>
-								<p class="error-text">*error</p>
-							</div>
-							<div class="field field-message">
-								<input type="text" placeholder="Message" name="enquiry"/>
-								<p class="error-text">*error</p>
-							</div>
-							<button><span></span>{{ c( 'footer_cf_button' )|html_decode }}</button>
-						</form>
+						<div class="contact-form-body">
+							<h3>{{ c( 'footer_cf_header' )|html_decode }}</h3>
+							<form id="inquiry-form" method="post" action="{{ u( 'information/contact/inquiry' ) }}">
+								<div class="field field-name">
+									<input type="text" placeholder="Your name" name="name"/>
+									<p class="error-text">*error</p>
+								</div>
+								<div class="field field-phone">
+									<input type="text" placeholder="Phone" name="telephone"/>
+									<p class="error-text">*error</p>
+								</div>
+								<div class="field field-email">
+									<input type="text" placeholder="E-mail" name="email"/>
+									<p class="error-text">*error</p>
+								</div>
+								<div class="field field-message">
+									<input type="text" placeholder="Message" name="enquiry"/>
+									<p class="error-text">*error</p>
+								</div>
+								<button><span></span>{{ c( 'footer_cf_button' )|html_decode }}</button>
+							</form>
+						</div>
+						<div class="success-text">
+				            <img src="{{ image( 'arbole/newsletter.png' ) }}"/>
+				            <p>Thanks for your <br/>interest to my website!<br/><span> I’ll contact you shortly</span> </p>
+				            <a href="#">Back to form<span></span></a>
+				        </div>
 					</div>
 				</div>
 			</div>
@@ -69,7 +76,9 @@
 					}
 
 					if ( resp.success ) {
-						alert( 'You inquiry has been successfully sent' );
+						$('.contact-form-body').hide();
+						$('.contact-form .success-text').show();
+						//alert( 'You inquiry has been successfully sent' );
 
 					} else if ( resp.error ) {
 						$.each( resp.error, function( n, v ) {
@@ -95,6 +104,12 @@
 			} );
 
 		} );
+
+		$('.contact-form .success-text a').click(function(e){
+			e.preventDefault();
+			$('.contact-form-body').show();
+			$('.contact-form .success-text').hide();
+		})
 
 		</script>
 	</body>

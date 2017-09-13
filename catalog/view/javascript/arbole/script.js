@@ -1,4 +1,8 @@
-wishlist.add = function(product_id) {
+var wishlistTimeout;
+
+wishlist.add = function(product_id, product) {
+	$(product).closest('.product-list').find('.notification, .notification-success').hide();
+	clearTimeout(wishlistTimeout);
 	$.ajax({
 		url: 'index.php?route=account/wishlist/add',
 		type: 'post',
@@ -12,14 +16,28 @@ wishlist.add = function(product_id) {
 			}
 
 			if (json['success']) {
-				alert( json["success"].replace(/<[^>]*?>/g, "") );
+				//alert( json["success"].replace(/<[^>]*?>/g, "") );
+				$(product).addClass('active');
+				$(product).closest('.product-item').find('.notification-success').show();
+				wishlistTimeout = setTimeout(function(){
+					$(product).closest('.product-item').find('.notification-success').hide();
+				}, 3000)
 			}
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+			$(product).closest('.product-item').find('.notification').show();
+			wishlistTimeout = setTimeout(function(){
+				$(product).closest('.product-item').find('.notification').hide();
+			}, 8000)
 		}
 	});
 };
+
+$( document ).delegate( ".to-favorites", "click", function( e ) {
+	e.preventDefault();
+	wishlist.add( $( this ).attr( "data-id" ), $( this ) );
+} );
 
 $( document ).delegate( ".to-favorites", "click", function( e ) {
 	e.preventDefault();

@@ -60,6 +60,8 @@
 				<div class="product-list">
 					{% for product in products %}
 					<div class="product-item">
+						<div class="notification">Please <a href="#">login</a> or <a href="#">create an account </a><br/> to save the item to your wish list</div>
+						<div class="notification-success">You successfully added the item to your Wish List! </div>
 						<a href="" class="to-favorites" data-id="{{ product.product_id }}"></a>
 						<a href="{{ u( 'product/product', {'product_id': product.product_id, 'path': category_id }) }}" class="img">
 							<img src="{{ product.thumb }}">
