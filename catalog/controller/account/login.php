@@ -161,17 +161,17 @@ class ControllerAccountLogin extends Controller {
 
 			if ( isset( $this->request->get['google'] ) ) {
 				$config = [
-					'callback' => str_replace( '&amp;', '&', $this->url->link( 'account/login', [ 'g' => 1, ] ) ),
+					'callback' => HTTPS_SERVER . 'index.php?route=account/login&google=1',
 					'keys' => [ 
 				       'id'     => ADK( 'Advertikon\\Arbole' )->config( 'social_g_id' ),
 				       'secret' => ADK( 'Advertikon\\Arbole' )->config( 'social_g_secret' ),
 				    ],
-				    'scope'    => 'profile https://www.googleapis.com/auth/plus.login',
+				    'scope'    => 'https://www.googleapis.com/auth/plus.login',
 				];
 
 			} else {
 				$config = [
-					'callback' => str_replace( '&amp;', '&', $this->url->link( 'account/login', [ 'fb' => 1, ] ) ),
+					'callback' => HTTPS_SERVER . 'index.php?route=account/login&google=1',
 					'keys' => [ 
 				        'id'     => ADK( 'Advertikon\\Arbole' )->config( 'social_fb_id' ),
 				        'secret' => ADK( 'Advertikon\\Arbole' )->config( 'social_fb_secret' ),
@@ -184,23 +184,29 @@ class ControllerAccountLogin extends Controller {
 			// $config['debug_file'] = __DIR__ . '/hyb.log';
 
 			try {
-				$adapter = new Hybridauth\Provider\Facebook($config);
-				$adapter->authenticate();
-				$userProfile = $adapter->getUserProfile();
-				$tokens = $adapter->getAccessToken(); 
-
-			} catch( Exception $e ){
-				$this->log->write( 'FB login: ' . $e->getMessage() );
-			}
-
-			if ( isset( $userProfile->email ) ) {
-				if ( $this->customer->login( $userProfile->email, '', true ) ) {
-					$this->success();
+				if ( isset( $this->request->get['google'] ) ) {
+					$adapter = new Hybridauth\Provider\Google($config);
 
 				} else {
-					$this->error['email'] = 'Customer doesn\'t exist';
-					return;
+					$adapter = new Hybridauth\Provider\Facebook($config);
 				}
+
+				$adapter->authenticate();
+				$userProfile = $adapter->getUserProfile();
+				$tokens = $adapter->getAccessToken();
+
+				if ( isset( $userProfile->email ) ) {
+					if ( $this->customer->login( $userProfile->email, '', true ) ) {
+						$this->success();
+
+					} else {
+						$this->error['email'] = 'Customer doesn\'t exist';
+					}
+				}
+
+			} catch( Exception $e ){
+				$this->log->write( 'Social login: ' . $e->getMessage() );
+				$this->error['email'] = 'Authentication failed';
 			}
 
 		} else if ( isset( $this->request->get['guest'] ) ) {

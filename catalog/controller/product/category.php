@@ -301,6 +301,7 @@ class ControllerProductCategory extends Controller {
 		$data['continue'] = $this->url->link('common/home' );
 		$data['pagination'] = $this->load->controller( 'common/pagination', [ $pagination, ] );
 		$data['category_id'] = $category_id;
+		$data['is_logged'] = $this->customer->isLogged();
 
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['column_right'] = $this->load->controller('common/column_right');

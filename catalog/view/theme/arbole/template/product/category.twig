@@ -87,6 +87,8 @@
 
 {{ footer }}
 <script type="text/javascript">
+	var isLogged = {{ is_logged ? 'true' : 'false' }};
+
 	jQuery('body').addClass('gallery-page');
 
 	$( ".filter-page" ).on( "change", function() {

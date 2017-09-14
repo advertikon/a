@@ -3,6 +3,17 @@ var wishlistTimeout;
 wishlist.add = function(product_id, product) {
 	$(product).closest('.product-list').find('.notification, .notification-success').hide();
 	clearTimeout(wishlistTimeout);
+
+	if ( typeof isLogged != "undefined" && !isLogged ) {
+		$(product).closest('.product-item').find('.notification').show();
+
+		wishlistTimeout = setTimeout( function(){
+			product.closest('.product-item').find('.notification').hide();
+		}, 8000);
+
+		return;
+	}
+
 	$.ajax({
 		url: 'index.php?route=account/wishlist/add',
 		type: 'post',
@@ -26,10 +37,6 @@ wishlist.add = function(product_id, product) {
 		},
 		error: function(xhr, ajaxOptions, thrownError) {
 			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
-			$(product).closest('.product-item').find('.notification').show();
-			wishlistTimeout = setTimeout(function(){
-				$(product).closest('.product-item').find('.notification').hide();
-			}, 8000)
 		}
 	});
 };
@@ -39,10 +46,10 @@ $( document ).delegate( ".to-favorites", "click", function( e ) {
 	wishlist.add( $( this ).attr( "data-id" ), $( this ) );
 } );
 
-$( document ).delegate( ".to-favorites", "click", function( e ) {
-	e.preventDefault();
-	wishlist.add( $( this ).attr( "data-id" ) );
-} );
+// $( document ).delegate( ".to-favorites", "click", function( e ) {
+// 	e.preventDefault();
+// 	wishlist.add( $( this ).attr( "data-id" ) );
+// } );
 
 $( document ).delegate( " .field-counter", "click", function() {
 	$( this ).find( "input" ).trigger( "change" );
@@ -96,7 +103,7 @@ cart = {
 				var total = 0;
 
 				if (json['success']) {
-					alert( json["success"].replace(/<[^>]*?>/g, "") );
+					// alert( json["success"].replace(/<[^>]*?>/g, "") );
 					refreshCart();
 					if ( typeof cb === "function" ) cb();
 				}
