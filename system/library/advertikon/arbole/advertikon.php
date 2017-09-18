@@ -84,7 +84,7 @@ class Advertikon extends \Advertikon\Advertikon {
 	public function get_top_categories() {
 		$ret = [];
 
-		$q = $this->db->query( "SELECT cd.name, c.category_id as id, c.image, c.sort_order FROM " . DB_PREFIX . "category c JOIN " . DB_PREFIX . "category_description cd USING(category_id) WHERE c.status = 1 AND c.top = 1 AND cd.language_id = " . $this->config->get( 'config_language_id' ) . " ORDER by c.sort_order" );
+		$q = $this->db->query( "SELECT cd.name, c.category_id as id, c.image, c.render, c.sort_order FROM " . DB_PREFIX . "category c JOIN " . DB_PREFIX . "category_description cd USING(category_id) WHERE c.status = 1 AND c.top = 1 AND cd.language_id = " . $this->config->get( 'config_language_id' ) . " ORDER by c.sort_order" );
 
 		if ( $q && $q->rows ) {
 			$ret = $q->rows;

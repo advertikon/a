@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonHeader extends Controller {
+class ControllerCommonHeaderConstructor extends Controller {
 	public function index() {
 
 		// Analytics
@@ -25,15 +25,6 @@ class ControllerCommonHeader extends Controller {
 			$this->document->addLink($server . 'image/' . $this->config->get('config_icon'), 'icon');
 		}
 
-		if ( is_file( DIR_IMAGE . 'arbole/fav@2x.png' ) ) {
-			$this->document->addLink(
-				$server . 'image/' . 'arbole/fav@2x.png',
-				'icon',
-				'image/png',
-				'@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)'
-			);
-		}
-
 		$data['title'] = $this->document->getTitle();
 
 		$data['base'] = $server;
@@ -47,11 +38,6 @@ class ControllerCommonHeader extends Controller {
 
 		$data['name'] = $this->config->get('config_name');
 
-		// if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
-		// 	$data['logo'] = $server . 'image/' . $this->config->get('config_logo');
-		// } else {
-		// 	$data['logo'] = '';
-		// }
 
 		if (is_file(DIR_IMAGE . 'arbole/logo-icon.svg' ) ) {
 			$data['logo'] = $server . 'image/arbole/logo-icon.svg';
@@ -94,12 +80,10 @@ class ControllerCommonHeader extends Controller {
 		$data['telephone'] = $this->config->get('config_telephone');
 		$data['customer_name'] = $this->customer->getFirstName();
 		
-		// $data['language'] = $this->load->controller('common/language');
 		$data['currency'] = $this->load->controller('common/currency');
-		// $data['search'] = $this->load->controller('common/search');
 		$data['cart'] = $this->load->controller('common/cart');
 		$data['menu'] = $this->load->controller('common/menu');
 
-		return $this->load->view('common/header', $data);
+		return $this->load->view('common/header_constructor', $data);
 	}
 }

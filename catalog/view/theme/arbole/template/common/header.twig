@@ -6,103 +6,10 @@
 <html dir="{{ direction }}" lang="{{ lang }}">
 <!--<![endif]-->
 	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge">
-		<title>{{ title }}</title>
-		<base href="{{ base }}" />
-		{% if description %}
-		<meta name="description" content="{{ description }}" />
-		{% endif %}
-		{% if keywords %}
-		<meta name="keywords" content="{{ keywords }}" />
-		{% endif %}
-		<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/jquery-ui.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-		<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
-		<link type="text/css" rel="stylesheet" media="screen" href="catalog/view/theme/arbole/stylesheet/main.min.css" />
-		<link type="text/css" rel="stylesheet" media="screen" href="catalog/view/theme/arbole/stylesheet/style.css" />
-		<link href="catalog/view/theme/arbole/stylesheet/advertikon/advertikon.css" rel="stylesheet" type="text/css" />
-		{% for style in styles %}
-		<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
-		{% endfor %}
-		{% for script in scripts %}
-		<script src="{{ script }}" type="text/javascript"></script>
-		{% endfor %}
-		<script src="catalog/view/javascript/common.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/fabric.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/customiseControls.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/functions.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/jquery.panzoom.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/jquery.scrollbar.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/jquery.ui.touch-punch.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/main.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/swiper.jquery.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/swiper.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/utils.min.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/advertikon/advertikon.js" type="text/javascript"></script>
-		<script src="catalog/view/javascript/arbole/script.js" type="text/javascript"></script>
-		{% for link in links %}
-		<link href="{{ link.href }}" rel="{{ link.rel }}" {{ link.type ? "type=\"#{link.type}\"" }} {{ link.style ? "type=\"#{link.style}\"" }}/>
-		{% endfor %}
-		{% for analytic in analytics %}
-		{{ analytic }}
-		{% endfor %}
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-		<!-- Chrome, Firefox OS and Opera -->
-		<meta name="theme-color" content="#4285f4">
-		<!-- Windows Phone -->
-		<meta name="msapplication-navbutton-color" content="#4285f4">
-		<!-- iOS Safari -->
-		<meta name="apple-mobile-web-app-status-bar-style" content="#4285f4">
-		<meta name="format-detection" content="telephone=no" />
-		<link rel="icon" type="image/x-icon" href="{{ image( 'arbole/fav.png' ) }}" />
-		<link rel="icon" style="@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min-resolution: 144dpi)" type="image/png" href="{{ image( 'arbole/fav@2x.png' ) }}" />
+		{{ include( 'arbole/template/common/meta.twig' ) }}
 	</head>
 	<body class="">
-		<div class="popup" id="size-guide">
-			<div class="popup-outer">
-				<div class="popup-inner">
-					<div class="popup-body">
-						<div class="size-guide-popup">
-							<div class="close"></div>
-							<div class="title">{{ __('Size Guide')|e }}</div>
-							<p>{{ __( 'Also you can use this site:' )|e }} <a href="http://findmyringsize.com/" target="_blank">findmyringsize.com</a></p>
-							<table>
-								<tr>
-									<th colspan="2">{{__( 'INSIDE DIAMETER' )|e }}</th>
-									<th colspan="2">{{ __( 'INSIDE CIRCUMFERENCE' )|e }}</th>
-									<th colspan="4">{{ __( 'SIZES' )|e }}</th>
-								</tr>
-								<tr>
-									<td>inches</th>
-									<td>mm</td>
-									<td>inches</th>
-									<td>mm</td>
-									<td>US & Canada</td>
-									<td>Uk, Ireland & Australia</td>
-									<td>Japan</td>
-									<td>US & Canada</td>
-								</tr>
-								{% for i in 1..20 %}
-								<tr>
-									<td>0,459</th>
-									<td>11,64</td>
-									<td>1,459</th>
-									<td>23,64</td>
-									<td>0</td>
-									<td>-</td>
-									<td>-</td>
-									<td>-</td>
-								</tr>
-								{% endfor %}
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		{{ include( 'arbole/template/common/size_guide.twig' ) }}
 		<div class="header">
 			<a href="/" class="logo">
 				<i><img src="{{ image( 'arbole/logo-icon.svg' ) }}"/></i>
@@ -110,7 +17,9 @@
 			</a>
 			<div class="menu-wrapper">
 				<ul>
-					<li><a href="constructor_step_1.php">{{ __( 'design your own' )|e }}</a></li>
+					<li {{ is_active( 'constructor/step1' ) ? 'class="active"' }}>
+						<a href="{{ u( 'constructor/step1' ) }}">{{ __( 'design your own' )|e }}</a>
+					</li>
 					<li {{ is_active( 'product/category' ) ? 'class="active"' }}>
 						<a href="{{ u( 'product/category' ) }}">{{ __( 'gallery store' )|e }}</a>
 					</li>
@@ -154,7 +63,7 @@
 		</div>
 		<div class="right-sidebar">
 			<ul class="user-menu">
-				<li class="cart-toggler"><a href="checkout.php"><img src="{{ image('arbole/cart.png') }}"/><span id="cart-quantity">{{ cart_quantity }}</span></a></li>
+				<li class="cart-toggler"><a href="#"><img src="{{ image('arbole/cart.png') }}"/><span id="cart-quantity">{{ cart_quantity }}</span></a></li>
 				<li class="favorites-toggler"><a href="{{ u( 'account/wishlist' ) }}"><img src="{{ image( 'arbole/heart.png' ) }}"/></a></li>
 				<li class="search-toggler"><a href="#"><img src="{{ image( 'arbole/search.png' ) }}"/><img src="{{ image( 'arbole/cross.png' ) }}"/></a></li>
 			</ul>
