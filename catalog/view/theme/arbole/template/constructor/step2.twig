@@ -1,0 +1,27 @@
+{{ header }}
+
+		<div class="container-inner">
+			<div class="constructor-wrapper">
+				{{ include( 'arbole/template/common/rotate.twig' ) }}
+				<div class="step-wrapper">
+					<div class="title"><span>2</span>{{ __( 'My jewelery model' ) }}</div>
+					<div class="jewellery-type">
+						{% for i in subcategories %}
+						<div class="type">
+							<input type="radio" name="subcategory" id="type-{{ i.id }}" class="input-subcategory" value="{{ i.id }}"/>
+							<label for="type-{{ i.id }}">
+								<div class="img"><img src="{{ image( i.render ) }}"></div>
+								<p>{{ i.name }}</p>
+							</label>
+						</div>
+						{% endfor %}
+					</div>
+					<div class="btns">
+						<button class="back go-to-category"><span></span>{{ __( 'back' ) }}</button>
+						<button disabled class="go-to-material"><span></span>{{ __( 'next step' ) }}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -92,4 +92,16 @@ class Advertikon extends \Advertikon\Advertikon {
 
 		return $ret;
 	}
+
+	public function get_sub_categories( $parent_id ) {
+		$ret = [];
+
+		$q = $this->db->query( "SELECT cd.name, c.category_id as id, c.image, c.render, c.sort_order FROM " . DB_PREFIX . "category c JOIN " . DB_PREFIX . "category_description cd USING(category_id) WHERE c.status = 1 AND c.parent_id = " . (int)$parent_id . " AND cd.language_id = " . $this->config->get( 'config_language_id' ) . " ORDER by c.sort_order" );
+
+		if ( $q && $q->rows ) {
+			$ret = $q->rows;
+		}
+
+		return $ret;
+	}
 }

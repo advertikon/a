@@ -1,34 +1,30 @@
 {{ header }}
 
-<div class="container-inner">
-  <div class="constructor-wrapper">
-    {{ include( 'arbole/template/common/rotate.twig' ) }}
-    <div class="step-wrapper">
-      <div class="title"><span>1</span>My jewelery</div>
-      <div class="jewellery-type">
-      	{% for i in categories %}
-        <div class="type">
-          <input type="radio" name="type" id="category-{{ i.id }}" data-url="{{ u( 'constructor/step2', { 'id': i.id } ) }}"/>
-          <label for="category-{{ i.id }}">
-            <div class="img"><img src="{{ image( i.render ) }}"></div>
-            <p>{{ i.name }}</p>
-          </label>
-        </div>
-    	{% endfor %}
-      </div>
-      <div class="btns">
-        <button disabled onclick="window.location='constructor_step_2.php'"><span></span>next step</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script type="text/javascript">
-  $(function(){
-    $('.jewellery-type input').click(function(){
-      $('.btns button').attr('onclick',"window.location='" + $(this).attr('data-url') + "'" );
-    })
-  })
-</script>
-</body>
+		<div class="container-inner">
+		  <div class="constructor-wrapper">
+		    {{ include( 'arbole/template/common/rotate.twig' ) }}
+		    <div class="step-wrapper">
+			<div class="title jewelery-name" style="display: none;">
+				<input id="product-name" type="text" placeholder="My Jewellery"/>
+			</div>
+		      <div class="title constructor-title"><span>1</span>{{ __( 'My jewelery' ) }}</div>
+		      <div class="jewellery-type">
+		      	{% for i in categories %}
+		        <div class="type">
+		          <input type="radio" value="{{ i.id }}" name="type" id="category-{{ i.id }}"  class="input-category"/>
+		          <label for="category-{{ i.id }}">
+		            <div class="img"><img src="{{ image( i.render ) }}"></div>
+		            <p>{{ i.name }}</p>
+		          </label>
+		        </div>
+		    	{% endfor %}
+		      </div>
+		      <div class="btns">
+		        <button class="go-to-subcategory" disabled><span></span>{{ __( 'next step' ) }}</button>
+		      </div>
+		    </div>
+		    {{ include( 'arbole/template/constructor/sidebar.twig' ) }}
+		  </div>
+		</div>
+	</body>
 </html>

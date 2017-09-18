@@ -60,10 +60,10 @@ final class Twig {
 			    if ( empty( $str ) || empty( $_GET['route'] ) ) return false;
 
 			    if ( ( $p = strpos( $str, 'route=' ) ) !== false ) {
-			    	$ret = strpos( $_GET['route'], substr( $str, $p + 6 ) ) === 0;
+			    	$ret = strpos( urldecode( $_GET['route'] ), substr( $str, $p + 6 ) ) === 0;
 
 			    } else {
-					$ret =  strpos( $_GET['route'], $str ) === 0;
+					$ret =  strpos( urldecode( $_GET['route'] ), $str ) === 0;
 			    	
 			    }
 
@@ -75,7 +75,6 @@ final class Twig {
 		}
 
 		$image_func = new \Twig_SimpleFunction( 'image', function ( $str ) {
-			
 		    return ( defined( 'HTTPS_CATALOG' ) ? HTTPS_CATALOG : HTTPS_SERVER ) . 'image/' . $str;
 		} );
 
