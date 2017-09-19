@@ -1,0 +1,86 @@
+{{ header }}
+
+<div class="container-inner">
+	<div class="constructor-wrapper">
+		{{ include( 'arbole/template/common/rotate.twig' ) }}
+		<div class="step-wrapper">
+			<div class="filters-wrapper">
+				{{ filter }}
+			</div>
+			<div class="scrollbar-outer">
+				<div class="product-list">
+					{{ products }}
+				</div>
+				<div class="btns">
+					<button class="back go-to-step2"><span></span>{{ __( 'back' ) }}</button>
+					<button disabled class="go-to-step4"><span></span>{{ __( 'next step' ) }}</button>
+				</div>
+			</div>
+		</div>
+		{{ include( 'arbole/template/constructor/sidebar.twig' ) }}
+	</div>
+</div>
+
+<div class="popup" id="zoom">
+	<div class="popup-outer">
+		<div class="popup-inner">
+			<div class="popup-body">
+				<div class="close"></div>
+				<div class="zoom-wrapper">
+					<div class="product-name">Gold Plated Regular Earring</div>
+					<div class="swiper-container">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">
+								<div class="img">
+									<img src="">
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="img">
+									<img src="">
+								</div>
+							</div>
+							<div class="swiper-slide">
+								<div class="img">
+									<img src="">
+								</div>
+							</div>
+						</div>
+						<div class="swiper-pagination"></div>
+						<div class="swiper-prev"><span></span></div>
+						<div class="swiper-next"><span></span></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+  jQuery('body').addClass('step-3-page');
+</script>
+<script type="text/javascript">
+	// var isLogged = {{ is_logged ? 'true' : 'false' }};
+
+	// jQuery('body').addClass('gallery-page');
+
+	// $( ".filter-page" ).on( "change", function() {
+	// 	var url = '';
+
+	// 	if ( 'checkbox' === $( this ).attr( "type" ) ) {
+	// 		if ( $( this ).is( ":checked" ) ) {
+	// 			url = $( this ).attr( "data-on" )
+
+	// 		} else {
+	// 			url = $( this ).attr( "data-off" )
+	// 		}
+
+	// 		setTimeout( function(){ window.location.assign( url ); }, 500 );
+	// 		return;
+	// 	}
+
+	// 	window.location.assign( this.value );
+	// } );
+</script>
+	</body>
+</html>

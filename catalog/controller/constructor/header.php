@@ -1,5 +1,5 @@
 <?php
-class ControllerCommonHeaderConstructor extends Controller {
+class ControllerConstructorHeader extends Controller {
 	public function index() {
 
 		// Analytics
@@ -84,6 +84,6 @@ class ControllerCommonHeaderConstructor extends Controller {
 		$data['cart'] = $this->load->controller('common/cart');
 		$data['menu'] = $this->load->controller('common/menu');
 
-		return $this->load->view('common/header_constructor', $data);
+		return $this->load->view('constructor/header', $data);
 	}
 }

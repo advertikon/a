@@ -345,7 +345,7 @@ class Pagination extends \Model {
 	 * @param string|null $value Parameter value, if NULL alias will be unset
 	 * @return type
 	 */
-	public function url( $alias = null, $value = null ) {
+	public function url( $alias = null, $value = null, $route = '' ) {
 		$this->init_filter();
 		$this->init_sort();
 		$query = [ 'page' => $this->page ];
@@ -376,7 +376,9 @@ class Pagination extends \Model {
 			}
 		}
 
-		$route = isset( $this->request->get['route'] ) ? $this->request->get['route'] : '';
+		if ( !$route ) {
+			$route = isset( $this->request->get['route'] ) ? $this->request->get['route'] : '';
+		}
 
 		return preg_replace( '/&amp;/', '&', $this->url->link( $route, $query, 'SSL' ) );
 	}

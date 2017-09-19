@@ -1,7 +1,7 @@
-<div class="constructor-edit-sidebar">
+<div class="constructor-edit-sidebar" style="display: none;">
 	<div class="title">{{ __( 'my jewelery design' ) }}:</div>
 	<div class="edit-steps">
-		<a href="#" class="edit-step go-to-category {{ is_active( 'constructor/step1' ) ? 'active' }}">
+		<a href="#" class="edit-step go-to-step1 {{ is_active( 'constructor/step1' ) ? 'active' }}">
 			{% if is_active( 'constructor/step1' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
@@ -9,7 +9,7 @@
 			{% endif %}
 			{{ __( 'My jewelery' ) }}
 		</a>
-		<a href="#" class="edit-step go-to-subcategory {{ is_active( 'constructor/step2' ) ? 'active' }}">
+		<a href="#" class="edit-step go-to-step2 {{ is_active( 'constructor/step2' ) ? 'active' }}">
 			{% if is_active( 'constructor/step2' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
@@ -17,16 +17,28 @@
 			{% endif %}
 			{{ __( 'My jewelery model' ) }}
 		</a>
-		<a href="#" class="edit-step">
+		<a href="#" class="edit-step go-to-step3 {{ is_active( 'constructor/step3' ) ? 'active' }}">
+			{% if is_active( 'constructor/step3' ) %}
+			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+			{% else %}
 			<span>3</span>
+			{% endif %}
 			{{ __( 'My jewelery material' ) }}
 		</a>
-		<a href="#" class="edit-step">
+		<a href="#" class="edit-step go-to-step4 {{ is_active( 'constructor/step4' ) ? 'active' }}">
+			{% if is_active( 'constructor/step4' ) %}
+			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+			{% else %}
 			<span>4</span>
+			{% endif %}
 			{{ __( 'My unique design' ) }}
 		</a>
-		<a href="#" class="edit-step">
+		<a href="#" class="edit-step go-to-step5 {{ is_active( 'constructor/step4' ) ? 'active' }}">
+			{% if is_active( 'constructor/step5' ) %}
+			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+			{% else %}
 			<span>5</span>
+			{% endif %}
 			{{ __( 'My order' ) }}
 		</a>
 	</div>

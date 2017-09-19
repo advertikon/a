@@ -4,7 +4,10 @@
 			<div class="constructor-wrapper">
 				{{ include( 'arbole/template/common/rotate.twig' ) }}
 				<div class="step-wrapper">
-					<div class="title"><span>2</span>{{ __( 'My jewelery model' ) }}</div>
+					<div class="title jewelery-name" style="display: none;">
+					<input id="product-name" type="text" placeholder="My Jewellery"/>
+				</div>
+					<div class="title constructor-title"><span>2</span>{{ __( 'My jewelery model' ) }}</div>
 					<div class="jewellery-type">
 						{% for i in subcategories %}
 						<div class="type">
@@ -17,10 +20,11 @@
 						{% endfor %}
 					</div>
 					<div class="btns">
-						<button class="back go-to-category"><span></span>{{ __( 'back' ) }}</button>
-						<button disabled class="go-to-material"><span></span>{{ __( 'next step' ) }}</button>
+						<button class="back go-to-step1"><span></span>{{ __( 'back' ) }}</button>
+						<button disabled class="go-to-step3"><span></span>{{ __( 'next step' ) }}</button>
 					</div>
 				</div>
+				{{ include( 'arbole/template/constructor/sidebar.twig' ) }}
 			</div>
 		</div>
 	</body>

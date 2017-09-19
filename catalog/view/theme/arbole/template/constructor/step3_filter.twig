@@ -1,0 +1,34 @@
+<div class="filters-fixed">
+	<div class="max-width">
+		<div class="filters">
+			<div class="filter">
+				<label>{{ __( 'Jewerlly type' ) }}</label>
+				<select class="filter-page">
+				{% for i in categories %}
+					<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+				{% endfor %}
+				</select>
+			</div>
+			<div class="filter">
+				<label>{{ __( 'Material' ) }}</label>
+				<select class="filter-page">
+				{% for i in material %}
+					<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+				{% endfor %}
+				</select>
+			</div>
+			<div class="filter sort">
+				<label>{{ __( 'Sort by' ) }}</label>
+				<select class="filter-page">
+				{% for i in sort %}
+					<option value="{{ i.href }}" {{ i.active ? ' selected="true"' }}>{{ i.name }}</option>
+				{% endfor %}
+				</select>
+				</select>
+			</div>
+			<div class="filters-toggler">
+			{{ __( 'Open filters' ) }}
+			</div>
+		</div>
+	</div>
+</div>

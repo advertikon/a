@@ -5,49 +5,69 @@ var C = function() {
 		category = window.localStorage.getItem( 'cCategory' ),
 		subcategory = window.localStorage.getItem( 'cSubcategory' ),
 		product_name = window.localStorage.getItem( 'cProductName' ),
+		product = window.localStorage.getItem( 'cProduct' ),
 
 		categoryInputName = ".input-category",
 		subcategoryInputName = ".input-subcategory",
 		productName = "#product-name",
+		productInputName = ".input-product",
+		step3ProductName = ".product-list",
+		step3FilterName = ".filter-page",
+		step3FilterWrapperName = ".filters-wrapper",
 
-		categoryButtonName = ".go-to-category",
-		subcategoryButtonName = ".go-to-subcategory";
+		step1ButtonName = ".go-to-step1",
+		step2ButtonName = ".go-to-step2",
+		step3ButtonName = ".go-to-step3",
+		step4ButtonName = ".go-to-step4",
+		step5ButtonName = ".go-to-step5",
+
+		isEditMode = false,
+		clickDelay = 200;
 
 	$( document ).ready( function() {
 		if ( category ) {
 			$( categoryInputName ).each( function(){
 				var el = this;
 				if ( $( this ).val() == category ) {
-					setTimeout(
-						function(){
-							el.click();
-						},
-						1000
-					);
+					setTimeout(	function(){	el.click();	}, clickDelay	);
 					return;
 				}
 			} );
 
-			editMode();
+			isEditMode = true;
 		}
 
 		if ( subcategory ) {
 			$( subcategoryInputName ).each( function(){
 				var el = this;
 				if ( $( this ).val() == subcategory ) {
-					setTimeout(
-						function(){
-							el.click();
-						},
-						1000
-					);
+					setTimeout(	function(){	el.click();	}, clickDelay	);
 					return;
 				}
 			} );
+
+			isEditMode = true;
 		}
 
 		if ( product_name ) {
 			$( productName ).val( product_name );
+			isEditMode = true;
+		}
+
+		if ( product ) {
+			$( productInputName ).each( function(){
+				var el = this;
+				if ( $( this ).val() == product ) {
+					setTimeout(	function(){	el.click();	}, clickDelay	);
+					return;
+				}
+			} );
+
+			isEditMode = true;
+		}
+
+		if ( isEditMode ) {
+			editMode();
 		}
 
 	} );
@@ -55,9 +75,15 @@ var C = function() {
 	$( document ).delegate( categoryInputName, "change", setCategory );
 	$( document ).delegate( subcategoryInputName, "change", setSubcategory );
 	$( document ).delegate( productName, "change", setProductName );
+	$( document ).delegate( productInputName, "change", setProduct );
 
-	$( document ).delegate( categoryButtonName, "click", goToCategory );
-	$( document ).delegate( subcategoryButtonName, "click", goToSubcategory );
+	$( document ).delegate( step1ButtonName, "click", goToStep1 );
+	$( document ).delegate( step2ButtonName, "click", goToStep2 );
+	$( document ).delegate( step3ButtonName, "click", goToStep3 );
+	$( document ).delegate( step4ButtonName, "click", goToStep4 );
+	$( document ).delegate( step5ButtonName, "click", goToStep5 );
+
+	$( document ).delegate( step3FilterName, "change", filter );
 
 	function setCategory(){
 		var t = null;
@@ -112,37 +138,95 @@ var C = function() {
 		}
 	}
 
-	function goToCategory( e ) {
+	function setProduct(){
+		var t = null;
+
+		if ( typeof this !== "undefined" ) {
+			t = $( this ).val();
+
+			if ( t === product ) return;
+
+			product = t;
+			window.localStorage.setItem( 'cProduct', product );
+
+		} else {
+			product = null;
+			window.localStorage.removeItem( 'cProduct' );
+		}
+	}
+
+	function goToStep1( e ) {
 		var o;
 
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		o = parseQuery();
 		o.route = 'constructor/step1';
-		window.location.assign( window.location.protocol + "//" + window.location.host + window.location.pathname + makeQuery( o ) );
+		redirect( makeQuery( o ) );
 
-		return false;
+		return true;
 	};
 
-	function goToSubcategory( e ) {
+	function goToStep2( e ) {
 		var o;
 
 		e.preventDefault();
+		e.stopImmediatePropagation();
 
 		if ( category ) {
 			o = parseQuery();
 			o.route = 'constructor/step2';
 			o.id = category;
-			window.location.assign( window.location.protocol + "//" + window.location.host + window.location.pathname + makeQuery( o ) );
+			redirect( makeQuery( o ) );
 		}
 
-		return false;
+		return true;
 	};
 
-	function parseQuery() {
+	function goToStep3( e ) {
+		var o;
+
+		e.preventDefault();
+		e.stopImmediatePropagation();
+
+		if ( category && subcategory ) {
+			o = parseQuery();
+			o.route = 'constructor/step3';
+			o.id = category;
+			o.sid = subcategory;
+			redirect( makeQuery( o ) );
+		}
+
+		return true;
+	};
+
+	function goToStep4() {
+
+	}
+
+	function goToStep5() {
+
+	}
+
+	function redirect( search ) {
+		// window.location.assign( window.location.protocol + "//" + window.location.host + window.location.pathname + makeQuery( o ) );
+		window.location.search = search;
+	}
+
+	function parseQuery( q ) {
 		var
-			q = window.location.search,
-			o = {};
+			o = {},
+			i = 0;
+
+		if ( !q ) {
+			q = window.location.search;
+
+		} else {
+			if ( ( i = q.indexOf( "?" ) ) > 0 ) {
+				q = q.substr( ++i );
+			}
+		}
 
 		if ( q[ 0 ] == "?" ) {
 			q = q.substr( 1 );
@@ -180,6 +264,19 @@ var C = function() {
 	function editMode() {
 		$( ".jewelery-name" ).show();
 		$( ".constructor-title" ).hide();
+		$( ".constructor-edit-sidebar" ).show();
+	}
+
+	function filter() {
+		var
+			o = parseQuery( $( this ).val() );
+
+		o.route = "constructor/step3/product";
+
+		$( step3ProductName ).load( "/" + makeQuery( o ), function() {
+			o.route = "constructor/step3/filter"
+			$( step3FilterWrapperName ).load( "/" + makeQuery( o ) );
+		} );
 	}
 }
 

@@ -1,0 +1,16 @@
+{% for product in products %}
+<div class="product-item">
+	<input type="radio" name="type" class="input-product" id="product-{{ product.product_id }}" value="{{ product.product_id }}"/>
+	<label for="product-{{ product.product_id }}">
+		<div class="img">
+			<img src="{{ product.thumb }}">
+			<div class="img-action">
+				<a href="#" data-popup="zoom"><img src="{{ image('arbole/zoom.png' ) }}"></a>
+				<a href="#">{{ __( 'add' ) }}</a>
+			</div>
+		</div>
+	</label>
+	<a href="{{ u( 'product/product', { product_id: product.product_id }, 'SSL' ) }}" class="product-name">{{ product.name|html_decode }}</a>
+	<div class="product-price"><span>{{ product.special ?: product.price }}</span></div>
+</div>
+{% endfor %}
