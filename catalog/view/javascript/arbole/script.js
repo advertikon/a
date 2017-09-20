@@ -46,11 +46,6 @@ $( document ).delegate( ".to-favorites", "click", function( e ) {
 	wishlist.add( $( this ).attr( "data-id" ), $( this ) );
 } );
 
-// $( document ).delegate( ".to-favorites", "click", function( e ) {
-// 	e.preventDefault();
-// 	wishlist.add( $( this ).attr( "data-id" ) );
-// } );
-
 $( document ).delegate( " .field-counter", "click", function() {
 	$( this ).find( "input" ).trigger( "change" );
 } );
@@ -62,6 +57,34 @@ $( document ).delegate( ".cart-sidebar .remove", "click", function( e ) {
 
 $( document ).delegate( "#sidebar-cart-quantity", "change", function() {
 	cart.update( $( this ).closest( ".order-item" ).attr( "data-id" ), $( this ).parent().find( "input" ).val() );
+} );
+
+$( document ).delegate( ".your-size", "change", function() {
+	var
+		min = parseInt( $( this ).attr( "min" ), 10 ),
+		max = parseInt( $( this ).attr( "max" ), 10 ),
+		value = parseInt( $( this ).val(), 10 );
+
+	if ( isNaN( value ) ) {
+		if ( !isNaN( min ) ) {
+			$( this ).val( min );
+
+		} else if ( !isNaN( max ) ) {
+			$( this ).val( max );
+		}
+
+		return;
+	}
+
+	if ( !isNaN( min ) && value < min ) {
+		$( this ).val( min );
+		alert( 'Value may not be less than ' + min );
+
+	} else if ( !isNaN( max ) && value > max ) {
+		$( this ).val( max );
+		alert( 'Value may not be greater than ' + max );
+	}
+
 } );
 
 $( document ).delegate( ".product-data .add-to-cart", "click", function( e ) {
@@ -181,3 +204,7 @@ function updatePrice() {
 		option:    opt
 	} );
 }
+
+$( document ).ready( function() {
+	$( ".quick-view" ).appendTo( $("body") );
+} );

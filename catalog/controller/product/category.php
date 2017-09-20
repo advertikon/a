@@ -236,7 +236,7 @@ class ControllerProductCategory extends Controller {
 		$results = $pagination->run();;
 		$product_total = $pagination->total;
 		$page = $pagination->page;
-		$option_your_size = ADK( 'Advertikon\\Arbole' )->config( 'your_size' );
+		$sizes = ADK( 'Advertikon\\Arbole' )->get_sizes();
 
 		foreach ($results as $result) {
 			if ($result['image']) {
@@ -270,14 +270,13 @@ class ControllerProductCategory extends Controller {
 				$rating = false;
 			}
 
-			$your_size = [];
+			$size = [];
 
 			$product_options = $this->model_catalog_product->getProductOptions( $result['product_id'] );
 
 			foreach( $product_options as $option ) {
-				if ( $option_your_size == $option['option_id'] ) {
-					$your_size = $option;
-					break;
+				if ( array_key_exists( $option['option_id'], $sizes ) ) {
+					$size[] = array_merge( $option,  $sizes[ $option['option_id'] ] );
 				}
 			}
 
@@ -293,7 +292,7 @@ class ControllerProductCategory extends Controller {
 				'rating'      => $result['rating'],
 				'href'        => $this->url->link('product/product', '&product_id=' . $result['product_id'] ),
 				'images'      => $this->model_catalog_product->getProductImages( $result['product_id' ] ),
-				'your_size'   => $your_size,
+				'size'        => $size,
 			);
 		}
 

@@ -55,14 +55,7 @@ var C = function() {
 		}
 
 		if ( product ) {
-			$( productInputName ).each( function(){
-				var el = this;
-				if ( $( this ).val() == product ) {
-					setTimeout(	function(){	el.click();	}, clickDelay	);
-					return;
-				}
-			} );
-
+			initProduct();
 			isEditMode = true;
 		}
 
@@ -85,6 +78,16 @@ var C = function() {
 
 	$( document ).delegate( step3FilterName, "change", filter );
 
+	function initProduct() {
+		$( productInputName ).each( function(){
+			var el = this;
+			if ( $( this ).val() == product ) {
+				setTimeout(	function(){	el.click();	}, clickDelay	);
+				return;
+			}
+		} );
+	}
+
 	function setCategory(){
 		var t = null;
 
@@ -101,7 +104,7 @@ var C = function() {
 			window.localStorage.removeItem( 'cCategory' );
 		}
 
-		setSubcategory.call();
+		setSubcategory();
 	}
 
 	function setSubcategory(){
@@ -119,6 +122,8 @@ var C = function() {
 			subcategory = null;
 			window.localStorage.removeItem( 'cSubcategory' );
 		}
+
+		setProduct();
 	}
 
 	function setProductName(){
@@ -153,7 +158,10 @@ var C = function() {
 			product = null;
 			window.localStorage.removeItem( 'cProduct' );
 		}
+
+		initSidebar();
 	}
+
 
 	function goToStep1( e ) {
 		var o;
@@ -265,6 +273,7 @@ var C = function() {
 		$( ".jewelery-name" ).show();
 		$( ".constructor-title" ).hide();
 		$( ".constructor-edit-sidebar" ).show();
+		initSidebar();
 	}
 
 	function filter() {
@@ -276,6 +285,18 @@ var C = function() {
 		$( step3ProductName ).load( "/" + makeQuery( o ), function() {
 			o.route = "constructor/step3/filter"
 			$( step3FilterWrapperName ).load( "/" + makeQuery( o ) );
+			if ( product )initProduct();
+		} );
+	}
+
+	function initSidebar() {
+		$( ".sidebar-number" ).show();
+		$( ".sidebar-bullet" ).hide();
+
+		$.each( [ null, category, subcategory, product ], function( i, v ) {
+			if ( v ) {
+				$( ".go-to-step" + i ).find( ".sidebar-number" ).hide().end().find( ".sidebar-bullet" ).show();
+			}
 		} );
 	}
 }

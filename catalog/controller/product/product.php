@@ -277,12 +277,17 @@ class ControllerProductProduct extends Controller {
 
 			$data['your_size'] = [];
 			$option_your_size = ADK( 'Advertikon\\Arbole' )->config( 'your_size' );
+			$data['length'] = [];
+			$option_length = ADK( 'Advertikon\\Arbole' )->config( 'length' );
 			$product_options = $this->model_catalog_product->getProductOptions( $product_info['product_id'] );
 
 			foreach( $product_options as $option ) {
 				if ( $option_your_size == $option['option_id'] ) {
 					$data['your_size'] = $option;
-					break;
+				}
+
+				if ( $option_length == $option['option_id'] ) {
+					$data['length'] = $option;
 				}
 			}
 
@@ -333,6 +338,7 @@ class ControllerProductProduct extends Controller {
 			}
 
 			$data['options'] = array();
+			$sizes = ADK( 'Advertikon\\Arbole' )->get_sizes();
 
 			foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) {
 				$product_option_value_data = array();
@@ -366,6 +372,16 @@ class ControllerProductProduct extends Controller {
 					'required'             => $option['required']
 				);
 			}
+
+			$size = [];
+
+			foreach( $data['options'] as $option ) {
+				if ( array_key_exists( $option['option_id'], $sizes ) ) {
+					$size[] = array_merge( $option,  $sizes[ $option['option_id'] ] );
+				}
+			}
+
+			$data['size'] = $size;
 
 			if ($product_info['minimum']) {
 				$data['minimum'] = $product_info['minimum'];
@@ -440,9 +456,8 @@ class ControllerProductProduct extends Controller {
 				$ys = [];
 
 				foreach( $po as $option ) {
-					if ( $option_your_size == $option['option_id'] ) {
-						$ys = $option;
-						break;
+					if ( array_key_exists( $option['option_id'], $sizes ) ) {
+						$ys[] = array_merge( $option,  $sizes[ $option['option_id'] ] );
 					}
 				}
 
@@ -457,7 +472,7 @@ class ControllerProductProduct extends Controller {
 					'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
 					'rating'      => $rating,
 					'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id']),
-					'your_size'   => $ys,
+					'size'   => $ys,
 				);
 			}
 
@@ -502,9 +517,8 @@ class ControllerProductProduct extends Controller {
 				$ys = [];
 
 				foreach( $po as $option ) {
-					if ( $option_your_size == $option['option_id'] ) {
-						$ys = $option;
-						break;
+					if ( array_key_exists( $option['option_id'], $sizes ) ) {
+						$ys[] = array_merge( $option,  $sizes[ $option['option_id'] ] );
 					}
 				}
 
@@ -519,7 +533,7 @@ class ControllerProductProduct extends Controller {
 					'minimum'     => $result['minimum'] > 0 ? $result['minimum'] : 1,
 					'rating'      => $rating,
 					'href'        => $this->url->link('product/product', 'product_id=' . $result['product_id']),
-					'your_size'   => $ys,
+					'size'        => $ys,
 				);
 			}
 

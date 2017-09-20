@@ -271,9 +271,11 @@ class ControllerProductSearch extends Controller {
 		$product_total = $pagination->total;
 		$page = $pagination->page;
 		$option_your_size = ADK( 'Advertikon\\Arbole' )->config( 'your_size' );
+		$option_length = ADK( 'Advertikon\\Arbole' )->config( 'length' );
 
 		$data['total_count'] = $product_total;
 		$data['p'] = $pagination;
+		$sizes = ADK( 'Advertikon\\Arbole' )->get_sizes();
 
 		foreach ($results as $result) {
 			if ($result['image']) {
@@ -307,16 +309,16 @@ class ControllerProductSearch extends Controller {
 				$rating = false;
 			}
 
-			$your_size = [];
+			$size = [];
 
 			$product_options = $this->model_catalog_product->getProductOptions( $result['product_id'] );
 
 			foreach( $product_options as $option ) {
-				if ( $option_your_size == $option['option_id'] ) {
-					$your_size = $option;
-					break;
+				if ( array_key_exists( $option['option_id'], $sizes ) ) {
+					$size[] = array_merge( $option,  $sizes[ $option['option_id'] ] );
 				}
 			}
+
 
 			$data['products'][] = array(
 				'product_id'  => $result['product_id'],
@@ -330,11 +332,12 @@ class ControllerProductSearch extends Controller {
 				'rating'      => $result['rating'],
 				'href'        => $this->url->link('product/product', '&product_id=' . $result['product_id'] ),
 				'images'      => $this->model_catalog_product->getProductImages( $result['product_id' ] ),
-				'your_size'   => $your_size,
+				'size'        => $size,
 			);
 		}
 
 		$data['you_size'] = $this->model_catalog_product->get_you_size_option();
+		$data['length'] = $this->model_catalog_product->get_length_option();
 		$data['continue'] = $this->url->link('common/home' );
 		$data['pagination'] = $this->load->controller( 'common/pagination', [ $pagination, ] );
 		$data['category_id'] = $category_id;

@@ -206,28 +206,6 @@ class ControllerConstructorStep3 extends Controller {
 			],
 		];
 
-		// $data['custom_switch'] = ADK()->r( [
-		// 	'type'        => 'checkbox',
-		// 	'value'       => $pagination->url( 'custom', '1' ),
-		// 	'custom_data' => ( '' === $pagination->get_filter_value( 'custom' ) ? 'checked="true"' : '' ) .
-		// 					' data-on="' . $pagination->url( 'custom', null )  . '"' .
-		// 					'data-off="' . $pagination->url( 'custom', 0 ) . '"',
-		// 	'id'          => 'show-designs',
-		// 	'label'       => ADK()->__( 'Users\' designs' ),
-		// 	'class'       => 'filter-page',
-		// ] );
-
-		// $data['custom_switch1'] = ADK()->r( [
-		// 	'type'        => 'checkbox',
-		// 	'value'       => $pagination->url( 'custom', '1' ),
-		// 	'custom_data' => ( $pagination->get_filter_value( 'custom' ) ? 'checked="true"' : '' ) .
-		// 					' data-on="' . $pagination->url( 'custom', 1 )  . '"' .
-		// 					'data-off="' . $pagination->url( 'custom', 0 ) . '"',
-		// 	'id'          => 'show-designs1',
-		// 	'label'       => ADK()->__( 'Users\' designs' ),
-		// 	'name'        => 'custom',
-		// ] );
-
 		$data['products'] = array();
 
 		$results = $pagination->run();;

@@ -356,4 +356,60 @@ HTML;
 HTML;
 		return $ret;
 	}
+
+	public function line_size( $name, $id = '{id}', $data = [] ) {
+		$this->load->model( 'catalog/option' );
+		$options = [];
+
+		foreach( $this->model_catalog_option->getOptions() as $opt ) {
+			$options[ $opt['option_id'] ] = $opt['name'];
+		}
+
+		$ret = <<<HTML
+<div class="row template-line">
+	<div class="col-sm-5">
+		{$this->a->r( [
+			'type'        => 'select',
+			'class'       => 'form-control',
+			'active'      => isset( $data['id'] ) ? htmlspecialchars_decode( $data['id'] ) : '',
+			'name'        => "{$name}[{$id}][id]",
+			'value'       => $options,
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-3">
+		{$this->a->r( [
+			'type'        => 'number',
+			'class'       => 'form-control',
+			'value'       => isset( $data['min'] ) ? htmlspecialchars_decode( $data['min'] ) : '',
+			'name'        => "{$name}[{$id}][min]",
+			'placeholder' => $this->a->__( 'Min' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-3">
+		{$this->a->r( [
+			'type'        => 'number',
+			'class'       => 'form-control',
+			'value'       => isset( $data['max'] ) ? htmlspecialchars_decode( $data['max'] ) : '',
+			'name'        => "{$name}[{$id}][max]",
+			'placeholder' => $this->a->__( 'Max' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-1">
+		{$this->a->r( [
+			'type'        => 'button',
+			'button_type' => 'danger',
+			'icon'        => 'fa-close',
+			'class'       => 'remove-line',
+		] )}
+	</div>
+</div>
+HTML;
+		return $ret;
+	}
 }

@@ -37,16 +37,16 @@
 					<div class="product-description">{{ description }}</div>
 					<div class="product-price"><label>{{ __( 'Price' ) }}:</label><span class="price-span">{{ special ?: price }}</span></div>
 					<div class="product-options">
-						{% if your_size is not empty %}
+						{% for s in size %}
 						<div class="option">
-							<label>{{ your_size.name }}:</label>
+							<label>{{ s.name }}:</label>
 							<div class="field">
-								<input type="text" value="{{ your_size.value }}" class="decimal your-size" data-id="{{ your_size.product_option_id }}"/>
+								<input type="text" value="{{ s.value }}" class="decimal your-size" data-id="{{ s.product_option_id }}" min="{{ s.min }}" max="{{ s.max }}"/>
 								<span>mm</span>
 								<a href="#" class="size-guide" data-popup="size-guide">{{ __( 'size guide' ) }}</a>
 							</div>
 						</div>
-						{% endif %} 
+						{% endfor %}
 						<div class="option">
 							<label>{{ __( 'Quantity' ) }}:</label>
 							<div class="field field-counter">
@@ -70,7 +70,6 @@
 				</div>
 				<div class="swiper-container">
 					<div class="swiper-wrapper">
-						{% set l_index = 0 %}
 						{% for product in products %}
 						<div class="swiper-slide">
 							<div class="product-item">
@@ -78,7 +77,7 @@
 								<a href="{{ product.href }}" class="img">
 									<img src="{{ product.thumb }}">
 									<div class="img-action">
-										<span data-popup="quick-view-{{ l_index }}">{{ __( 'quick view' ) }}</span>
+										<span data-popup="quick-view-related-{{ loop.index }}">{{ __( 'quick view' ) }}</span>
 										<span>{{ __( 'shop' ) }}</span> 
 									</div>
 								</a>
@@ -86,7 +85,8 @@
 								<div class="product-price"><span>{{ special ?: price }}</span></div>
 							</div>
 						</div>
-						{% set l_index = l_index + 1 %}
+						{% set l_index = "related-#{loop.index}" %}
+						{{ include( 'arbole/template/product/quick_view.twig' ) }}
 						{% endfor %}
 					</div>
 				</div>
@@ -109,7 +109,7 @@
 								<a href="{{ product.href }}" class="img">
 									<img src="{{ product.thumb }}">
 									<div class="img-action">
-										<span data-popup="quick-view-{{ loop.index }}">{{ __( 'quick view' ) }}</span>
+										<span data-popup="quick-view-viewed-{{ loop.index }}">{{ __( 'quick view' ) }}</span>
 										<span>{{ __( 'shop' ) }}</span> 
 									</div>
 								</a>
@@ -117,7 +117,8 @@
 								<div class="product-price"><span>{{ special ?: price }}</span></div>
 							</div>
 						</div>
-						{% set l_index = l_index + 1 %}
+						{% set l_index = "viewed-#{loop.index}" %}
+						{{ include( 'arbole/template/product/quick_view.twig' ) }}
 						{% endfor %}
 					</div>
 				</div>

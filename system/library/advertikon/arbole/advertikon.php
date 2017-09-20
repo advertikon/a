@@ -104,4 +104,29 @@ class Advertikon extends \Advertikon\Advertikon {
 
 		return $ret;
 	}
+
+	public function get_your_size_option() {
+		$options = [];
+
+		foreach( $thiis->q( [
+			'table'     => 'option',
+			'operation' => 'select',
+		] ) as $o ) {
+			if ( $o['option_id'] == $this->cofnfig( 'your_size' ) ) {
+				$options = $o;
+			}
+		}
+
+		return $options;
+	}
+
+	public function get_sizes() {
+		$ret = [];
+
+		foreach( $this->config( 'size') as $s ) {
+			$ret[ $s['id'] ] = $s;
+		}
+
+		return $ret;
+	}
 }

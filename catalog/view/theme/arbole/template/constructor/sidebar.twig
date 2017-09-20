@@ -5,7 +5,8 @@
 			{% if is_active( 'constructor/step1' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
-			<span>1</span>
+			<span class="sidebar-number">1</span>
+			<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
 			{% endif %}
 			{{ __( 'My jewelery' ) }}
 		</a>
@@ -13,7 +14,8 @@
 			{% if is_active( 'constructor/step2' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
-			<span>2</span>
+			<span class="sidebar-number">2</span>
+			<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
 			{% endif %}
 			{{ __( 'My jewelery model' ) }}
 		</a>
@@ -21,7 +23,8 @@
 			{% if is_active( 'constructor/step3' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
-			<span>3</span>
+			<span class="sidebar-number">3</span>
+			<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
 			{% endif %}
 			{{ __( 'My jewelery material' ) }}
 		</a>
@@ -29,7 +32,8 @@
 			{% if is_active( 'constructor/step4' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
-			<span>4</span>
+			<span class="sidebar-number">4</span>
+			<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
 			{% endif %}
 			{{ __( 'My unique design' ) }}
 		</a>
@@ -37,7 +41,8 @@
 			{% if is_active( 'constructor/step5' ) %}
 			<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
 			{% else %}
-			<span>5</span>
+			<span class="sidebar-number">5</span>
+			<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
 			{% endif %}
 			{{ __( 'My order' ) }}
 		</a>

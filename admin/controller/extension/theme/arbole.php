@@ -283,6 +283,62 @@ class ControllerExtensionThemeArbole extends Controller {
 			] ),
 		] );
 
+		$name = 'your_size_min';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( '"Your size" minimum' ),
+			'element' => $this->a->r( [
+				'type'   => 'number',
+				'value'  => $this->a->get_value_from_post( $name, 10 ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'your_size_max';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( '"Your size" maximum' ),
+			'element' => $this->a->r( [
+				'type'   => 'number',
+				'value'  => $this->a->get_value_from_post( $name, 15 ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'length';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( '"Length" option' ),
+			'element' => $this->a->r( [
+				'type'   => 'select',
+				'value'  => $options,
+				'active' => $this->a->get_value_from_post( $name ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'length_min';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( '"Length" minimum' ),
+			'element' => $this->a->r( [
+				'type'   => 'number',
+				'value'  => $this->a->get_value_from_post( $name, 10 ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
+		$name = 'length_max';
+		$data[ $name ] = $this->a->r()->render_form_group( [
+			'label' => $this->a->__( '"Length" maximum' ),
+			'element' => $this->a->r( [
+				'type'   => 'number',
+				'value'  => $this->a->get_value_from_post( $name, 20 ),
+				'class'  => 'form-control',
+				'name'   => $name,
+			] ),
+		] );
+
 		$name = 'about_1_header';
 		$data[ $name ] = $this->a->r()->render_form_group( [
 			'label' => $this->a->__( 'Header' ),
@@ -443,10 +499,11 @@ class ControllerExtensionThemeArbole extends Controller {
 
 		$data['hp_hiw_steps'] = $this->model->get_template( 'hp_hiw_steps' );
 		$data['hp_review' ] = $this->model->get_template( 'hp_review' );
-		$data['footer_links' ] = $this->model->get_template( 'footer_links' );
-		$data['faq' ] = $this->model->get_template( 'faq' );
-		$data['terms' ] = $this->model->get_template( 'terms' );
-		$data['menu' ] = $this->model->get_template( 'menu' );
+		$data['footer_links'] = $this->model->get_template( 'footer_links' );
+		$data['faq'] = $this->model->get_template( 'faq' );
+		$data['terms'] = $this->model->get_template( 'terms' );
+		$data['menu'] = $this->model->get_template( 'menu' );
+		$data['size'] = $this->model->get_template( 'size' );
 
 		$data['locale'] = json_encode( array(
 			'hp_hiw_steps'              => $this->model->line_hp_hiw_steps( 'hp_hiw_steps' ),
@@ -455,6 +512,7 @@ class ControllerExtensionThemeArbole extends Controller {
 			'faq'                       => $this->model->line_faq( 'faq' ),
 			'terms'                     => $this->model->line_terms( 'terms' ),
 			'menu'                      => $this->model->line_menu( 'menu' ),
+			'size'                      => $this->model->line_size( 'size' ),
 
 			// Common stuff
 			'networkError'              => $this->a->__( 'Network error' ),

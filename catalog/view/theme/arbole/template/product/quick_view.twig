@@ -1,4 +1,4 @@
-<div class="popup" id="quick-view-{{ l_index }}">
+<div class="popup quick-view" id="quick-view-{{ l_index }}">
 	<div class="popup-outer">
 		<div class="popup-inner">
 			<div class="popup-body">
@@ -28,16 +28,16 @@
 						<div class="product-name">{{ product.name }}</div>
 						<div class="product-price"><label>Price:</label><span>{{ product.special ?: product.price }}</span></div>
 						<div class="product-options">
-							{% if product.your_size is not empty %}
+							{% for s in product.size %}
 							<div class="option">
-								<label>{{ product.your_size.name }}:</label> 
+								<label>{{ s.name }}:</label> 
 								<div class="field">
-									<input class="your-size decimal" type="text" data-id="{{ product.your_size.product_option_id}}" value="{{ product.your_size.value }}" />
+									<input class="your-size decimal" type="text" data-id="{{ s.product_option_id }}" value="{{ s.value }}" min="{{ s.min }}" max="{{ s.max }}"/>
 									<span>mm</span>
 									<a href="#" class="size-guide" data-popup="size-guide">{{ __( 'size guide' ) }}</a>
 								</div>
 							</div>
-							{% endif %}
+							{% endfor %}
 							<div class="option">
 								<label>{{ __( 'Quantity:' ) }}</label>
 								<div class="field field-counter">
