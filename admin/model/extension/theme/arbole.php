@@ -378,24 +378,35 @@ HTML;
 
 		] )}
 	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-2">
 		{$this->a->r( [
 			'type'        => 'number',
 			'class'       => 'form-control',
 			'value'       => isset( $data['min'] ) ? htmlspecialchars_decode( $data['min'] ) : '',
 			'name'        => "{$name}[{$id}][min]",
-			'placeholder' => $this->a->__( 'Min' ),
+			'placeholder' => $this->a->__( 'Min length' ),
 			'id'          => $id,
 
 		] )}
 	</div>
-	<div class="col-sm-3">
+	<div class="col-sm-2">
 		{$this->a->r( [
 			'type'        => 'number',
 			'class'       => 'form-control',
 			'value'       => isset( $data['max'] ) ? htmlspecialchars_decode( $data['max'] ) : '',
 			'name'        => "{$name}[{$id}][max]",
-			'placeholder' => $this->a->__( 'Max' ),
+			'placeholder' => $this->a->__( 'Max length' ),
+			'id'          => $id,
+
+		] )}
+	</div>
+	<div class="col-sm-2">
+		{$this->a->r( [
+			'type'        => 'number',
+			'class'       => 'form-control',
+			'value'       => isset( $data['weight'] ) ? htmlspecialchars_decode( $data['weight'] ) : '',
+			'name'        => "{$name}[{$id}][weight]",
+			'placeholder' => $this->a->__( 'Max weight' ),
 			'id'          => $id,
 
 		] )}

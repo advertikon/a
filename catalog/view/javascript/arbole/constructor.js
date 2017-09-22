@@ -209,11 +209,25 @@ var C = function() {
 		return true;
 	};
 
-	function goToStep4() {
+	function goToStep4( e ) {
+		var o;
 
+		e.preventDefault();
+		e.stopImmediatePropagation();
+
+		if ( category && subcategory && product ) {
+			o = parseQuery();
+			o.route = 'constructor/step4';
+			o.id = category;
+			o.sid = subcategory;
+			o.product = product;
+			redirect( makeQuery( o ) );
+		}
+
+		return true;
 	}
 
-	function goToStep5() {
+	function goToStep5( e ) {
 
 	}
 

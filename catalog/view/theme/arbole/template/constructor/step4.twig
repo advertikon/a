@@ -1,53 +1,82 @@
-<?php include_once( 'partial/header_constructor_edit.php' ); ?>
+{{ header }}
 
 <div class="container-inner">
-  <div class="constructor-wrapper">
-    <?php include_once( 'partial/rotate.php' ); ?>
-    <div class="step-wrapper">
-      <div class="title">
-        <input type="text" placeholder="My Jewellery"/>
-        <p>You can add the name of your future jewelry</p>
-      </div>
-      <div class="canvas canvas-necklace">
-        <div class="scrollbar-outer">
-          <div class="basement">
-            <img src="<?php includeImg('necklace-basement.png'); ?>">
-            <canvas id="canvas" class="part-place"></canvas>
-          </div>
-          <div class="final-img model-anklet"><img src=""></div>
-        </div>
-      </div>
-      <div class="zoom-controls">
-        <div class="zoom-out"><img src="<?php includeImg('zoom-out.png'); ?>"></div>
-        <span>Zoom</span>
-        <div class="zoom-in"><img src="<?php includeImg('zoom-in.png'); ?>"></div>
-      </div>
-      <div class="constructor-total-wrapper">
-        <div class="constructor-total-price"><label>Price:</label><span><i>300</i> $</span></div>
-        <div class="constructor-total-weight"><label>Weight:</label><span><i>300</i> g</span></div>
-      </div>
-      <a href="#" class="constructor-complete">Complete</a>
-    </div>
-    <div class="constructor-edit-sidebar">
-      <div class="title">my jewelery design:</div>
-      <div class="edit-steps">
-        <a href="constructor_step_1_edit.php" class="edit-step hidden">
-          <span><img src="<?php includeImg('edit-available.png'); ?>"></span>
-          My jewellery
-        </a>
-        <a href="constructor_step_2_edit-anklet.php" class="edit-step hidden">
-          <span><img src="<?php includeImg('edit-available.png'); ?>"></span>
-          My jewellery model
-        </a>
-        <a href="constructor_step_3-anklet-type1.php" class="edit-step hidden">
-          <span><img src="<?php includeImg('edit-available.png'); ?>"></span>
-          My jewellery material
-        </a>
-        <a href="constructor_step_4-anklet-type1.php" class="edit-step active">
-          <span><img src="<?php includeImg('edit.png'); ?>"></span>
-          My unique design
-          <div class="parts-toggler active"><span></span></div>
-        </a>
+	<div class="constructor-wrapper">
+		{{ include( 'arbole/template/common/rotate.twig' ) }}
+		<div class="step-wrapper">
+			<div class="title">
+				<input type="text" placeholder="My Jewelery"/>
+				<p>{{ __( 'You can add the name of your future jewelry' ) }}</p>
+			</div>
+			<div class="canvas canvas-necklace">
+				<div class="scrollbar-outer">
+					<div class="basement">
+						<img src="<?php includeImg('necklace-basement.png'); ?>">
+						<canvas id="canvas" class="part-place"></canvas>
+					</div>
+					<div class="final-img model-anklet"><img src=""></div>
+				</div>
+			</div>
+			<div class="zoom-controls">
+				<div class="zoom-out"><img src="<?php includeImg('zoom-out.png'); ?>"></div>
+					<span>Zoom</span>
+				<div class="zoom-in"><img src="<?php includeImg('zoom-in.png'); ?>"></div>
+			</div>
+			<div class="constructor-total-wrapper">
+				<div class="constructor-total-price"><label>Price:</label><span><i>300</i> $</span></div>
+				<div class="constructor-total-weight"><label>Weight:</label><span><i>300</i> g</span></div>
+			</div>
+			<a href="#" class="constructor-complete">Complete</a>
+		</div>
+
+		<div class="constructor-edit-sidebar">
+			<div class="title">{{ __( 'my jewelery design' ) }}:</div>
+				<div class="edit-steps">
+					<a href="#" class="edit-step go-to-step1 {{ is_active( 'constructor/step1' ) ? 'active' }}">
+						{% if is_active( 'constructor/step1' ) %}
+						<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+						{% else %}
+						<span class="sidebar-number">1</span>
+						<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
+						{% endif %}
+						{{ __( 'My jewelery' ) }}
+					</a>
+					<a href="#" class="edit-step go-to-step2 {{ is_active( 'constructor/step2' ) ? 'active' }}">
+						{% if is_active( 'constructor/step2' ) %}
+						<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+						{% else %}
+						<span class="sidebar-number">2</span>
+						<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
+						{% endif %}
+						{{ __( 'My jewelery model' ) }}
+					</a>
+					<a href="#" class="edit-step go-to-step3 {{ is_active( 'constructor/step3' ) ? 'active' }}">
+						{% if is_active( 'constructor/step3' ) %}
+						<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+						{% else %}
+						<span class="sidebar-number">3</span>
+						<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
+						{% endif %}
+						{{ __( 'My jewelery material' ) }}
+					</a>
+					<a href="#" class="edit-step go-to-step4 {{ is_active( 'constructor/step4' ) ? 'active' }}">
+						{% if is_active( 'constructor/step4' ) %}
+						<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+						{% else %}
+						<span class="sidebar-number">4</span>
+						<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
+						{% endif %}
+						{{ __( 'My unique design' ) }}
+					</a>
+					<a href="#" class="edit-step go-to-step5 {{ is_active( 'constructor/step4' ) ? 'active' }}">
+						{% if is_active( 'constructor/step5' ) %}
+						<span><img src="{{ image( 'arbole/edit.png' ) }}"></span>
+						{% else %}
+						<span class="sidebar-number">5</span>
+						<span class="sidebar-bullet" style="display:none;"><img src="{{ image( 'arbole/edit-available.png') }}"></span>
+						{% endif %}
+						{{ __( 'My order' ) }}
+					</a>
         <div class="parts-wrapper visible">
           <div class="part-view">
             <div class="close"></div>

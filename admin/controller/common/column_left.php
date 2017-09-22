@@ -50,6 +50,14 @@ class ControllerCommonColumnLeft extends Controller {
 					'children' => array()		
 				);
 			}
+
+			if ($this->user->hasPermission('access', 'catalog/product')) {
+				$catalog[] = array(
+					'name'	   => 'Collections',
+					'href'     => $this->url->link('catalog/collection', 'user_token=' . $this->session->data['user_token'], true),
+					'children' => array()		
+				);
+			}
 			
 			// Attributes
 			$attribute = array();
