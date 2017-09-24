@@ -11,16 +11,21 @@ class ModelExtensionThemeArbole extends Model {
 	}
 
 	public function add_tables() {
-		// $this->db->query(
-		// 	"CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "giftart_customer`
-		// 	(
-		// 		`id`         INT(11)      UNSIGNED,
-		// 		`date_birth` DATE,
-		// 		`marital`    VARCHAR(255),
-		// 		PRIMARY KEY(`id`)
-		// 	)
-		// 	ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
-		// );
+		$this->db->query(
+			"CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . $this->a->collection . "`
+			(
+				`id`         INT(11)      UNSIGNED AUTO_INCREMENT,
+				`name`       VARCHAR(255),
+				`material`   VARCHAR(255),
+				`collection` VARCHAR(255),
+				`price`      DECIMAL(15,2),
+				`weight`     FLOAT,
+				`length`     FLOAT,
+				`image`      VARCHAR(255),
+				PRIMARY KEY(`id`)
+			)
+			ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
+		);
 
 	}
 
@@ -421,6 +426,64 @@ HTML;
 	</div>
 </div>
 HTML;
+		return $ret;
+	}
+
+	public function get_collections( $data, $t = null ) {
+		$ret = [];
+
+		$q = $this->a->q( array_merge( [
+			'table' => $this->a->collection,
+			'query' => 'select',
+			'calc'  => true,
+		], $data ) );
+
+		if ( $q ) {
+			$ret = $q;
+		}
+
+		if ( isset( $t['total'] ) ) {
+			$t['total'] = $this->a->q()->get_calc_rows();
+		}
+
+		return $ret;
+	}
+
+	public function get_collection( $id = 0 ) {
+		$ret = [];
+
+		$q = $this->a->q( [
+			'table' => $this->a->collection,
+			'query' => 'select',
+			'where'  => [
+				'value'     => $id,
+				'operation' => '=',
+				'field'     => 'id'
+			],
+		] );
+
+		if ( $q ) {
+			$ret = $q;
+		}
+
+		return $ret;
+	}
+
+	public function get_collection_names() {
+		$ret = [];
+
+		$q = $this->a->q( [
+			'table'  => $this->a->collection,
+			'fields' => 'collection',
+			'query'  => 'select',
+		] );
+
+		if ( $q ) {
+			foreach( $q as $c ) {
+				$ret[ $c['collection'] ] = $c['collection'];
+			}
+		}
+
 		return $ret;
 	}
 }

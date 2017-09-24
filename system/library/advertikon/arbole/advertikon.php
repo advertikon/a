@@ -15,7 +15,7 @@ class Advertikon extends \Advertikon\Advertikon {
 	public $code = 'arbole';
 	public static $c = __NAMESPACE__;
 	public $tables = array(
-
+		'collection' => 'arbole_collection',
 	);
 
 	// ********************** Common part ************************************//
@@ -81,6 +81,18 @@ class Advertikon extends \Advertikon\Advertikon {
 		return 'theme_' . $this->code;
 	}
 
+	public function get_product_type( $id ) {
+		$ret = '';
+
+		$q = $this->db->query( "SELECT cd.name as 'name' FROM " . DB_PREFIX . "product_to_category p2c JOIN " . DB_PREFIX . "category c USING(category_id) JOIN " . DB_PREFIX . "category_description cd USING(category_id) WHERE c.status = 1 AND c.top = 1 AND cd.language_id = " . $this->config->get( 'config_language_id' ) . " AND p2c.product_id = " . (int)$id . " ORDER by c.sort_order" );
+
+		if ( $q && $q->rows ) {
+			$ret = $q->row['name'];
+		}
+
+		return $ret;
+	}
+
 	public function get_top_categories() {
 		$ret = [];
 
@@ -123,10 +135,151 @@ class Advertikon extends \Advertikon\Advertikon {
 	public function get_sizes() {
 		$ret = [];
 
-		foreach( $this->config( 'size') as $s ) {
+		foreach( (array)$this->config( 'size') as $s ) {
 			$ret[ $s['id'] ] = $s;
 		}
 
 		return $ret;
+	}
+
+	public function get_material() {
+		$option_id = 0;
+		$ret = [];
+
+		$option_id = $this->config( 'material' );
+
+		$q = $this->db->query( "SELECT DISTINCT text FROM " . DB_PREFIX . "product_attribute WHERE language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND attribute_id = '" . (int)$option_id . "'" );
+
+		if ( $q ) {
+			foreach( $q->rows as $material ) {
+				$ret[ $material['text'] ] = $material['text'];
+			}
+		}
+
+		return $ret;
+	}
+
+	public function get_product_material( $id ) {
+		$option_id = 0;
+		$ret = '';
+
+		$option_id = $this->config( 'material' );
+
+		$q = $this->db->query( "SELECT text FROM " . DB_PREFIX . "product_attribute WHERE language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND attribute_id = '" . (int)$option_id . "' AND product_id = " . (int)$id );
+
+		if ( $q->num_rows ) {
+			$ret = $q->row['text'];
+		}
+
+		return $ret;
+	}
+
+	public function get_collections() {
+		$q = $this->q( [
+			'table'    => $this->collection,
+			'query'    => 'select',
+			'value'    => 'collection',
+		] );
+
+		return $q;
+	}
+
+	public function add_collection( $data ) {
+		$q = $this->q( [
+			'table' => $this->collection,
+			'query' => 'insert',
+			'values' => [
+				'name'       => $data['name'],
+				'collection' => $data['collection'],
+				'material'   => $data['material'],
+				'image'      => $data['image'],
+				'price'      => $data['price'],
+				'weight'     => $data['price'],
+				'length'     => $data['length'],
+			],
+		] );
+
+		return $q;
+	}
+
+	public function edit_collection( $data ) {
+		$q = $this->q( [
+			'table' => $this->collection,
+			'query' => 'update',
+			'set'   => [
+				'name'       => $data['name'],
+				'collection' => $data['collection'],
+				'material'   => $data['material'],
+				'image'      => $data['image'],
+				'price'      => $data['price'],
+				'weight'     => $data['price'],
+				'length'     => $data['length'],
+			],
+			'where' => [
+				'field'     => 'id',
+				'operation' => '=',
+				'value'     => $data['id'],
+			],
+		] );
+
+		return $q;
+	}
+
+	public function add_material( $material ) {
+		$ret = $material;
+		$create = true;
+		$material_id = $this->config( 'material' );
+
+		$q = $this->q( [
+			'table' => 'product_attribute',
+			'query' => 'select',
+			'where' => [
+				[
+					'field'     => 'attribute_id',
+					'operation' => '=',
+					'value'     => $material_id,
+
+				],
+				[
+					'field'     => 'text',
+					'operation' => '=',
+					'value'     => $material,
+				]
+			],
+		] );
+
+		if ( $q && count( $q ) ) {
+			$create = false;
+		} 
+
+		if ( $create ) {
+			$q = $this->q( [
+				'table' => 'product_attribute',
+				'query' => 'insert',
+				'values' => [
+					'product_id'   => 0,
+					'attribute_id' => (int)$material_id,
+					'language_id'  => $this->config->get( 'config_language_id' ),
+					'text'         => $material,
+				],
+			] );
+
+		}
+
+		return $ret;
+	}
+
+	public function delete_collection( $id ) {
+		$q = $this->q( [
+			'table' => $this->collection,
+			'query' => 'delete',
+			'where' => [
+				'field'     => 'id',
+				'operation' => '=',
+				'value'     => $id,
+			],
+		] );
+
+		return $q;
 	}
 }

@@ -208,3 +208,50 @@ function updatePrice() {
 $( document ).ready( function() {
 	$( ".quick-view" ).appendTo( $("body") );
 } );
+
+$( document ).delegate( ".parts-toggler", "click", function( e ){ e.stopPropagation(); } );
+
+function customizeControls(){
+  fabric.Canvas.prototype.customiseControls({
+    tl: {
+        action: 'remove',
+        cursor: 'pointer',
+    },
+    tr: {
+        action: 'rotate',
+        cursor: 'crosshair'
+    }
+  }, function() {
+      canvas.renderAll();
+  });
+
+  fabric.Object.prototype.customiseCornerIcons({
+    settings: {
+        borderColor: '#ffdcf4',
+        cornerSize: 40,
+        cornerBackgroundColor: '#d13ca3',
+        cornerShape: 'circle',
+        cornerPadding: 15,
+    },
+    tr: {
+      icon: 'image/arbole/rotate.svg',
+    },
+    tl: {
+      icon: 'image/arbole/remove.svg',
+    }
+  }, function() {
+      canvas.renderAll();
+  });
+
+  fabric.Group.prototype._controlsVisibility = {
+    mt: false, 
+    mb: false, 
+    ml: false, 
+    mr: false, 
+    bl: false,
+    br: false,
+    mtr: false,
+    tr: true,
+    tl: true
+  };
+}

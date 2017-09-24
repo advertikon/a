@@ -311,7 +311,8 @@ class Query {
 	 * 	- calc         - boolean      - flag whether to calculate rows
 	 * 	- fields       - array|string - fields to select (alias => name)
 	 * 	- function     - array|string - list to functions to select (function, arguments, alias). Obsolete!!!!!
-	 * 	- values       - array        - values to insert/update (name => array|string)
+	 * 	- values       - array        - values to insert (name => array|string)
+	 * 	- set          - array        - values to update (name => string)
 	 * 	- on_duplicate - array        - values to be update on key duplication ( name => value )
 	 * 	- where        - array        - where clause (operation,field,value)
 	 * 	- order_by     - array|string - ordering option (order field => order direction)

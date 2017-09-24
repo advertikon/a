@@ -571,37 +571,37 @@ class ModelCatalogProduct extends Model {
 		return $ret;
 	}
 
-	public function get_you_size_option() {
-		$option_id = 0;
-		$ret = [];
+	// public function get_you_size_option() {
+	// 	$option_id = 0;
+	// 	$ret = [];
 
-		if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
-			$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'your_size' );
-		}
+	// 	if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
+	// 		$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'your_size' );
+	// 	}
 
-		$q = $this->db->query( "SELECT po.value, po.product_option_id, od.name FROM " . DB_PREFIX . "product_option po JOIN " .  DB_PREFIX . "option_description od USING(option_id) WHERE od.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND option_id = '" . $option_id . "'" );
+	// 	$q = $this->db->query( "SELECT po.value, po.product_option_id, od.name FROM " . DB_PREFIX . "product_option po JOIN " .  DB_PREFIX . "option_description od USING(option_id) WHERE od.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND option_id = '" . $option_id . "'" );
 
-		if ( $q && $q->num_rows ) {
-			$ret = $q->row;
-		}
+	// 	if ( $q && $q->num_rows ) {
+	// 		$ret = $q->row;
+	// 	}
 
-		return $ret;
-	}
+	// 	return $ret;
+	// }
 
-	public function get_length_option() {
-		$option_id = 0;
-		$ret = [];
+	// public function get_length_option() {
+	// 	$option_id = 0;
+	// 	$ret = [];
 
-		if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
-			$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'length' );
-		}
+	// 	if ( class_exists( 'Advertikon\Arbole\Advertikon' ) ) {
+	// 		$option_id = Advertikon\Arbole\Advertikon::instance()->config( 'length' );
+	// 	}
 
-		$q = $this->db->query( "SELECT po.value, po.product_option_id, od.name FROM " . DB_PREFIX . "product_option po JOIN " .  DB_PREFIX . "option_description od USING(option_id) WHERE od.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND option_id = '" . $option_id . "'" );
+	// 	$q = $this->db->query( "SELECT po.value, po.product_option_id, od.name FROM " . DB_PREFIX . "product_option po JOIN " .  DB_PREFIX . "option_description od USING(option_id) WHERE od.language_id = " . (int)$this->config->get( 'config_language_id' ) . " AND option_id = '" . $option_id . "'" );
 
-		if ( $q && $q->num_rows ) {
-			$ret = $q->row;
-		}
+	// 	if ( $q && $q->num_rows ) {
+	// 		$ret = $q->row;
+	// 	}
 
-		return $ret;
-	}
+	// 	return $ret;
+	// }
 }

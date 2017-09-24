@@ -12,6 +12,7 @@ class ControllerExtensionThemeArbole extends Controller {
 	public function index() {
 
 		$this->model->fix_tables();
+		$this->model->add_tables();
 	
 		$this->load->language('extension/theme/' . $this->my_name );
 

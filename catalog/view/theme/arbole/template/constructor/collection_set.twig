@@ -1,0 +1,37 @@
+<div class="filters-wrapper">
+  <div class="filters">
+    <div class="filter">
+      <label>{{ __( 'Collection' ) }}</label>
+      <select>
+        {% for c in collections %}
+        <option {{ c.active ? 'selected' }} data-url="{{ c.href }}">{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="filter">
+      <label>{{ __( 'Sort by' ) }}</label>
+      <select>
+        {% for c in sort %}
+        <option {{ c.active ? 'selected' }} data-url="{{ c.href }}">{{ c.name }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+</div>
+<div class="scrollbar-outer">
+  {% for name, collection in collectionset %}
+  <div class="part-block">
+    <div class="part-type">{{ name }}</div>
+    <div class="part-list">
+      {% for item in collection %}
+      <div class="part">
+        <div class="img" data-src="{{ image( item.image ) }}" data-name="{{ item.name }}" data-size="{{ item.length }}" data-weight="{{ item.weight }}" data-price="{{ item.price }}">
+          <img class="part-img" src="{{ image( item.image ) }}">
+        </div>
+        <div class="product-price"><span>{{ item.oprice_formatted }}</span></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endfor %}
+</div>

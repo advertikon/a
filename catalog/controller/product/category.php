@@ -296,7 +296,7 @@ class ControllerProductCategory extends Controller {
 			);
 		}
 
-		$data['you_size'] = $this->model_catalog_product->get_you_size_option();
+		// $data['you_size'] = $this->model_catalog_product->get_you_size_option();
 		$data['continue'] = $this->url->link('common/home' );
 		$data['pagination'] = $this->load->controller( 'common/pagination', [ $pagination, ] );
 		$data['category_id'] = $category_id;

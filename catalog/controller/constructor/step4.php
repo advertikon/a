@@ -3,6 +3,10 @@
 class ControllerConstructorStep4 extends Controller {
 	public function index() {
 		$this->document->addScript( 'catalog/view/javascript/arbole/constructor.js' );
+		$a = \Advertikon\Arbole\Advertikon::instance();
+
+		$image_width = 300;
+		$image_height = 470;
 
 		if (isset($this->request->get['product'])) {
 			$product_id = (int)$this->request->get['product'];
@@ -10,9 +14,16 @@ class ControllerConstructorStep4 extends Controller {
 			$product_id = 0;
 		}
 
+		if (isset($this->request->get['collection'])) {
+			$collection = $this->request->get['collection'];
+
+		} else {
+			$collection = null;
+		}
+
 		$this->load->model('catalog/product');
 
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->get_product_info( $product_id );
 
 		if ($product_info) {
 			$this->document->setTitle( 'Arbole' );
@@ -69,7 +80,7 @@ class ControllerConstructorStep4 extends Controller {
 				$data['tax'] = false;
 			}
 
-			$discounts = $this->model_catalog_product->getProductDiscounts($this->request->get['product_id']);
+			$discounts = $this->model_catalog_product->getProductDiscounts($this->request->get['product']);
 
 			$data['discounts'] = array();
 
@@ -83,7 +94,7 @@ class ControllerConstructorStep4 extends Controller {
 			$data['options'] = array();
 			$sizes = ADK( 'Advertikon\\Arbole' )->get_sizes();
 
-			foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) {
+			foreach ($this->model_catalog_product->getProductOptions($this->request->get['product']) as $option) {
 				$product_option_value_data = array();
 
 				foreach ($option['product_option_value'] as $option_value) {
@@ -145,29 +156,125 @@ class ControllerConstructorStep4 extends Controller {
 			} else {
 				$data['customer_name'] = '';
 			}
+		}
 
-			$data['reviews'] = sprintf($this->language->get('text_reviews'), (int)$product_info['reviews']);
-			$data['rating'] = (int)$product_info['rating'];
-			$data['share'] = $this->url->link('product/product', 'product_id=' . (int)$this->request->get['product_id']);
-			$data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);
+		$data['type'] = $a->get_product_type( $product_id );
 
-			$data['tags'] = array();
+		
+		$data['collections'] = $this->get_collections();
+		$data['footer'] = $this->load->controller('common/footer');
+		$data['header'] = $this->load->controller('constructor/header');
 
-			if ($product_info['tag']) {
-				$tags = explode(',', $product_info['tag']);
+		$this->response->setOutput($this->load->view('constructor/step4', $data));
 
-				foreach ($tags as $tag) {
-					$data['tags'][] = array(
-						'tag'  => trim($tag),
-						'href' => $this->url->link('product/search', 'tag=' . trim($tag))
-					);
-				}
+	}
+
+	public function get_collections() {
+		$product_id = isset( $this->request->request['product_id'] ) ? $this->request->request['product_id'] : 0;
+		$collection = isset( $this->request->request['collection'] ) ? $this->request->request['collection'] : null;
+		$a = \Advertikon\Arbole\Advertikon::instance();
+		$product_info = $this->get_product_info( $product_id );
+
+		$pagination = new \Advertikon\Pagination( [
+			'filter' => [
+				'collection' => [
+					'name'    => 'collection',
+					'default' => false,
+				],
+				'material' => [
+					'name'    => 'material',
+					'default' => $a->get_product_material( $product_id ),
+				],
+			],
+			'sort' => [
+				'price_low' => [
+					'name'  => 'price ASC',
+				],
+				'price_high' => [
+					'name'    => 'price DESC',
+					'default' => true,
+				],
+				'name_low' => [
+					'name'  => 'name ASC',
+				],
+				'name_high' => [
+					'name'  => 'name DESC',
+				],
+			],
+		] );
+
+		$product_attribute = (int)$a->config( 'material' );
+
+		$pagination->set_query( "SELECT	* FROM " . DB_PREFIX . $a->collection );
+
+		$results = $pagination->run();
+		$data['collectionset'] = [];
+
+		foreach( $results as $r ) {
+			if ( !isset( $data['collectionset'][ $r['collection'] ] ) ) {
+				$data['collectionset'][ $r['collection'] ] = [];
 			}
 
-			$data['footer'] = $this->load->controller('common/footer');
-			$data['header'] = $this->load->controller('constructor/header');
-
-			$this->response->setOutput($this->load->view('constructor/step4', $data));
+			$data['collectionset'][ $r['collection'] ][ $r['id'] ] = [
+				'name'            => $r['name'],
+				'weight'          => $r['weight'],
+				'length'          => $r['length'],
+				'price'           => $r['price'],
+				'image'           => $r['image'],
+				'price_formatted' => $this->currency->format( $this->tax->calculate( $r['price'], $product_info['tax_class_id'], $this->config->get('config_tax') ? 'P' : false), $this->session->data['currency']),
+			];
 		}
+
+		$data['collections'] = [
+			[ 'name' => 'All', 'href' => $pagination->url( 'collection', null ) ],
+		];
+
+		$results = $a->get_collections();
+
+		foreach ($results as $result) {
+			$data['collections'][ $result['collection'] ] = array(
+				'name'   => $result['collection'],
+				'href'   => $pagination->url( 'collection', $result['collection'], 'constructor/step4/collection' ),
+				'active' => $result['collection'] == $collection,
+			);
+		}
+
+		$data['sort'] = [
+			[
+				'name'   => ADK()->__( 'Price: high to low' ),
+				'href'   => $pagination->url( 'sort', 'price_high', 'constructor/step4/collection' ),
+				'active' => $pagination->is_sort( 'price_high' )
+			],
+			[
+				'name'   => ADK()->__( 'Price: low to high' ),
+				'href'   => $pagination->url( 'sort', 'price_low', 'constructor/step4/collection' ),
+				'active' => $pagination->is_sort( 'price_low' )
+			],
+			[
+				'name'   => ADK()->__( 'Name: A to Z' ),
+				'href'   => $pagination->url( 'sort', 'name_low', 'constructor/step4/collection' ),
+				'active' => $pagination->is_sort( 'name_low' )
+			],
+			[
+				'name'   => ADK()->__( 'Name: Z to A' ),
+				'href'   => $pagination->url( 'sort', 'name_high', 'constructor/step4/collection' ),
+				'active' => $pagination->is_sort( 'name_high' )
+			],
+		];
+
+		return  $this->load->view('constructor/collection_set', $data);
+	}
+
+	public function get_product_info( $id ) {
+		if ( !$this->p_info ) {
+			$this->load->model( 'catalog/product' );
+			$this->p_info = $this->model_catalog_product->getProduct($id);
+		}
+
+		return $this->p_info;
+	}
+
+	public function collection() {
+		$this->response->setOutput( $this->get_collections() );
 	}
 }

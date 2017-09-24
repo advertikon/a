@@ -372,9 +372,9 @@ class Renderer {
 		$has_feedback = isset( $data['feedback'] ) ? ' have-feedback' : '';
 		$class = isset( $data['class'] ) ? ' ' . htmlspecialchars( $data['class'] ) : '';
 
-		if ( ! empty( $data['error'] ) ) {
-			$has_status = 'have-error ';
-			$has_feedback = ' have-feedback';
+		if ( ! empty( $data['error'] ) ) { 
+			$has_status = 'has-error ';
+			$has_feedback = ' has-feedback';
 			$feedback =
 			'<span class="fa fa-close form-control-feedback"></span>';
 
@@ -382,7 +382,7 @@ class Renderer {
 		}
 
 		$str =
-		'<div class="form-group ' . $has_status . $class . '" style="' . $css . '">';
+		'<div class="form-group ' . $has_status . $class . $has_feedback . '" style="' . $css . '">';
 
 		if( $label ) {
 			$str .=
@@ -392,7 +392,7 @@ class Renderer {
 		}
 
 		$str .=
-			'<div class="' . $cols[1] . $has_feedback . '">' .
+			'<div class="' . $cols[1] . '">' .
 				$element .
 				'<span class="help-block">' . $description . '</span>' .
 				$feedback .
