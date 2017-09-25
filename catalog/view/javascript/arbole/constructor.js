@@ -6,6 +6,7 @@ var C = function() {
 		subcategory = window.localStorage.getItem( 'cSubcategory' ),
 		product_name = window.localStorage.getItem( 'cProductName' ),
 		product = window.localStorage.getItem( 'cProduct' ),
+		json = window.localStorage.getItem( 'cJSON' ),
 
 		categoryInputName = ".input-category",
 		subcategoryInputName = ".input-subcategory",
@@ -63,6 +64,16 @@ var C = function() {
 			editMode();
 		}
 
+		setTimeout( function(){
+			if ( window.canvas ) {
+				if ( json ) {
+					initJSON();
+				}
+
+				canvas.on( "after:render", setJSON );
+			}
+		}, 1000 );
+
 	} );
 
 	$( document ).delegate( categoryInputName, "change", setCategory );
@@ -86,6 +97,13 @@ var C = function() {
 				return;
 			}
 		} );
+	}
+
+	function initJSON() {
+		return; // ADIs are missing
+		if ( json && window.canvas ) {
+			canvas.loadFromJSON( json );
+		}
 	}
 
 	function setCategory(){
@@ -157,6 +175,25 @@ var C = function() {
 		} else {
 			product = null;
 			window.localStorage.removeItem( 'cProduct' );
+		}
+
+		setJSON();
+	}
+
+	function setJSON() {
+		var t = null;
+
+		if ( typeof this !== "undefined" ) {
+			t = JSON.stringify( this.toJSON() );
+
+			if ( t === json ) return;
+
+			json = t;
+			window.localStorage.setItem( 'cJSON', json );
+
+		} else {
+			json = null;
+			window.localStorage.removeItem( 'cJSON' );
 		}
 
 		initSidebar();

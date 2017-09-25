@@ -1,6 +1,10 @@
 <?php
 
 class ControllerConstructorStep4 extends Controller {
+	static $type_map = [
+
+	];
+
 	public function index() {
 		$this->document->addScript( 'catalog/view/javascript/arbole/constructor.js' );
 		$a = \Advertikon\Arbole\Advertikon::instance();
@@ -170,7 +174,7 @@ class ControllerConstructorStep4 extends Controller {
 	}
 
 	public function get_collections() {
-		$product_id = isset( $this->request->request['product_id'] ) ? $this->request->request['product_id'] : 0;
+		$product_id = isset( $this->request->request['product'] ) ? $this->request->request['product'] : 0;
 		$collection = isset( $this->request->request['collection'] ) ? $this->request->request['collection'] : null;
 		$a = \Advertikon\Arbole\Advertikon::instance();
 		$product_info = $this->get_product_info( $product_id );
@@ -203,6 +207,8 @@ class ControllerConstructorStep4 extends Controller {
 			],
 		] );
 
+		$pagination->item_per_page = 1000;
+
 		$product_attribute = (int)$a->config( 'material' );
 
 		$pagination->set_query( "SELECT	* FROM " . DB_PREFIX . $a->collection );
@@ -226,7 +232,7 @@ class ControllerConstructorStep4 extends Controller {
 		}
 
 		$data['collections'] = [
-			[ 'name' => 'All', 'href' => $pagination->url( 'collection', null ) ],
+			[ 'name' => 'All', 'href' => $pagination->url( 'collection', null, 'constructor/step4', [ 'product' => $product_id ] ) ],
 		];
 
 		$results = $a->get_collections();
@@ -234,7 +240,7 @@ class ControllerConstructorStep4 extends Controller {
 		foreach ($results as $result) {
 			$data['collections'][ $result['collection'] ] = array(
 				'name'   => $result['collection'],
-				'href'   => $pagination->url( 'collection', $result['collection'], 'constructor/step4/collection' ),
+				'href'   => $pagination->url( 'collection', $result['collection'], 'constructor/step4/collection', [ 'product' => $product_id ] ),
 				'active' => $result['collection'] == $collection,
 			);
 		}
@@ -242,22 +248,22 @@ class ControllerConstructorStep4 extends Controller {
 		$data['sort'] = [
 			[
 				'name'   => ADK()->__( 'Price: high to low' ),
-				'href'   => $pagination->url( 'sort', 'price_high', 'constructor/step4/collection' ),
+				'href'   => $pagination->url( 'sort', 'price_high', 'constructor/step4/collection', [ 'product' => $product_id ] ),
 				'active' => $pagination->is_sort( 'price_high' )
 			],
 			[
 				'name'   => ADK()->__( 'Price: low to high' ),
-				'href'   => $pagination->url( 'sort', 'price_low', 'constructor/step4/collection' ),
+				'href'   => $pagination->url( 'sort', 'price_low', 'constructor/step4/collection', [ 'product' => $product_id ] ),
 				'active' => $pagination->is_sort( 'price_low' )
 			],
 			[
 				'name'   => ADK()->__( 'Name: A to Z' ),
-				'href'   => $pagination->url( 'sort', 'name_low', 'constructor/step4/collection' ),
+				'href'   => $pagination->url( 'sort', 'name_low', 'constructor/step4/collection', [ 'product' => $product_id ] ),
 				'active' => $pagination->is_sort( 'name_low' )
 			],
 			[
 				'name'   => ADK()->__( 'Name: Z to A' ),
-				'href'   => $pagination->url( 'sort', 'name_high', 'constructor/step4/collection' ),
+				'href'   => $pagination->url( 'sort', 'name_high', 'constructor/step4/collection', [ 'product' => $product_id ] ),
 				'active' => $pagination->is_sort( 'name_high' )
 			],
 		];

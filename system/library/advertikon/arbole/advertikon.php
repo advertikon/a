@@ -15,7 +15,8 @@ class Advertikon extends \Advertikon\Advertikon {
 	public $code = 'arbole';
 	public static $c = __NAMESPACE__;
 	public $tables = array(
-		'collection' => 'arbole_collection',
+		'collection'    => 'arbole_collection',
+		'customization' => 'arbole_customization', 
 	);
 
 	// ********************** Common part ************************************//
@@ -88,6 +89,10 @@ class Advertikon extends \Advertikon\Advertikon {
 
 		if ( $q && $q->rows ) {
 			$ret = $q->row['name'];
+
+			if ( 's' === $ret[ strlen( $ret ) - 1 ] ) {
+				$ret = substr( $ret, 0, -1 );
+			}
 		}
 
 		return $ret;

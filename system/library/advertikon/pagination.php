@@ -345,10 +345,14 @@ class Pagination extends \Model {
 	 * @param string|null $value Parameter value, if NULL alias will be unset
 	 * @return type
 	 */
-	public function url( $alias = null, $value = null, $route = '' ) {
+	public function url( $alias = null, $value = null, $route = '', $q = array() ) {
 		$this->init_filter();
 		$this->init_sort();
 		$query = [ 'page' => $this->page ];
+
+		if ( is_array( $q ) ) {
+			$query = array_merge( $query, $q );
+		}
 
 		foreach( $this->filter as $item_alias => $item ) {
 

@@ -1030,6 +1030,37 @@
                   </tfoot>
                 </table>
               </div>
+
+              <div class="table-responsive">
+                <table id="image-preview" class="table table-striped table-bordered table-hover">
+                  <thead>
+                    <tr>
+                      <td class="text-left">Background image for preview page</td>
+                      <td class="text-right">Preview position (left offset)</td>
+                      <td class="text-right">Preview position (top offset)</td>
+                      <td></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  
+                  <tr>
+                    <td class="text-left">
+                    	<a href="" id="prevew-bg" data-toggle="image" class="img-thumbnail">
+                    		<img src="{{ preview_src }}" alt="" title="" data-placeholder="{{ placeholder }}" />
+                    	</a>
+                    	<input type="hidden" name="preview_bg" value="{{ preview_bg }}" id="preview-bg-input" />
+                    </td>
+                    <td class="text-right">
+                    	<input type="text" name="preview_left" value="{{ preview_left }}" placeholder="Left offset" class="form-control" />
+                    </td>
+                    <td class="text-right">
+                    	<input type="text" name="preview_top" value="{{ preview_top }}" placeholder="Top offset" class="form-control" />
+                    </td>
+                  </tr>
+                    </tbody>
+                  
+                </table>
+              </div>
             </div>
             <div class="tab-pane" id="tab-reward">
               <div class="form-group">

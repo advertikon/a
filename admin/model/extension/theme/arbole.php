@@ -27,6 +27,18 @@ class ModelExtensionThemeArbole extends Model {
 			ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
 		);
 
+		$this->db->query(
+			"CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . $this->a->customization . "`
+			(
+				`id`          INT(11)      UNSIGNED AUTO_INCREMENT,
+				`product_id`  INT,
+				`customer_id` INT,
+				`json`        MEDIUMBLOB,
+				`saved`       TINYINT,
+				PRIMARY KEY(`id`)
+			)
+			ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
+		);
 	}
 
 	public function fix_tables() {
@@ -65,6 +77,36 @@ class ModelExtensionThemeArbole extends Model {
 
 			if ( !$render ) {
 				$this->db->query( "alter table " . DB_PREFIX . "category add render varchar(255)" );
+			}
+		}
+
+
+		$preview_bg = $preview_top = $preview_left = false;
+		$q = $this->db->query( "show columns from " . DB_PREFIX . "product" );
+
+		if ( $q && $q->num_rows ) {
+			foreach( $q->rows as $row ) {
+				if ( $row['Field'] === 'preview_bg' ) {
+					$preview_bg = true;
+
+				} else if ( $row['Field'] === 'preview_top' ) {
+					$preview_top = true;
+
+				} else if ( $row['Field'] === 'preview_left' ) {
+					$preview_left = true;
+				}
+			}
+
+			if ( !$preview_bg ) {
+				$this->db->query( "alter table " . DB_PREFIX . "product add preview_bg varchar(255)" );
+			}
+
+			if ( !$preview_top ) {
+				$this->db->query( "alter table " . DB_PREFIX . "product add preview_top smallint" );
+			}
+
+			if ( !$preview_left ) {
+				$this->db->query( "alter table " . DB_PREFIX . "product add preview_left smallint" );
 			}
 		}
 	}

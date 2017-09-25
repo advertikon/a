@@ -14,7 +14,7 @@
 						<img src="{{ popup }}">
 						<canvas id="canvas" class="part-place"></canvas>
 					</div>
-					<div class="final-img model-anklet"><img src=""></div>
+					<div class="final-img model-{{ type|lower }}"><img src=""></div>
 				</div>
 			</div>
 			<div class="zoom-controls">
@@ -100,21 +100,23 @@
 					{{ __( 'My order' ) }}
 				</a>
 				<div class="product-info">
-					<div class="product-name"><label>Description:</label><span>“Silver” Necklace</span></div>
+					<div class="product-name"><label>{{ __( 'Description' ) }}:</label><span>{{ name }}</span></div>
 					<div class="product-options">
-						<div class="option">
-							<label>Your size:</label>
-							<div class="field">
-								<input type="text" value="15" class="decimal"/>
-								<span>mm</span>
-								<a href="#" class="size-guide" data-popup="size-guide">size giude</a>
+						{% for s in size %}
+							<div class="option">
+								<label>{{ s.name }}:</label> 
+								<div class="field">
+									<input class="your-size decimal" type="text" data-id="{{ s.product_option_id }}" value="{{ s.value }}" min="{{ s.min }}" max="{{ s.max }}"/>
+									<span>mm</span>
+									<a href="#" class="size-guide" data-popup="size-guide">{{ __( 'size guide' ) }}</a>
+								</div>
 							</div>
-						</div>
+						{% endfor %}
 						<div class="option">
-							<label>Quantity:</label>
+							<label>{{ __( 'Quantity' ) }}:</label>
 							<div class="field field-counter">
 								<div class="minus">-</div>
-								<input type="text" value="1" maxlength="2" class="decimal"/>
+								<input type="text" value="1" maxlength="2" class="decimal product-quantity"/>
 								<div class="plus">+</div>
 							</div>
 						</div>

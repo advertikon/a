@@ -490,6 +490,7 @@ class ControllerCatalogProduct extends Controller {
 
 	protected function getForm() {
 		$data['text_form'] = !isset($this->request->get['product_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
+		$this->load->model( 'tool/image' );
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -825,6 +826,37 @@ class ControllerCatalogProduct extends Controller {
 			$data['height'] = $product_info['height'];
 		} else {
 			$data['height'] = '';
+		}
+
+		if (isset($this->request->post['preview_bg'])) {
+			$data['preview_bg'] = $this->request->post['preview_bg'];
+		} elseif (!empty($product_info)) {
+			$data['preview_bg'] = $product_info['preview_bg'];
+		} else {
+			$data['preview_bg'] = '';
+		}
+
+		if ( !$data['preview_bg'] ) {
+			$data['preview_src'] = $this->model_tool_image->resize( 'placeholder.png', 100, 100 );
+			
+		} else {
+			$data['preview_src'] = $this->model_tool_image->resize( $data['preview_bg'], 100, 100 );;
+		}
+
+		if (isset($this->request->post['preview_top'])) {
+			$data['preview_top'] = $this->request->post['preview_top'];
+		} elseif (!empty($product_info)) {
+			$data['preview_top'] = $product_info['preview_top'];
+		} else {
+			$data['preview_top'] = 0;
+		}
+
+		if (isset($this->request->post['preview_left'])) {
+			$data['preview_left'] = $this->request->post['preview_left'];
+		} elseif (!empty($product_info)) {
+			$data['preview_left'] = $product_info['preview_left'];
+		} else {
+			$data['preview_left'] = 0;
 		}
 
 		$this->load->model('localisation/length_class');
