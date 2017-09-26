@@ -95,6 +95,13 @@ jQuery(document).ready( function($) {
     
   });
 
+
+  $(document).on('click', '.constructor-total-wrapper .error-text .close', function(e){
+    e.preventDefault();
+    $(this).closest('.error-text').remove();
+    
+  });
+
   $(document).on('click', '.eye', function(){
     var $input = $(this).closest('.field').find('input');
 
@@ -216,10 +223,10 @@ jQuery(document).ready( function($) {
     $('.constructor-wrapper button').removeAttr('disabled');
   });
 
-  $(document).on('click', '.to-favorites:not(.active)', function(e){
+  /*$(document).on('click', '.to-favorites:not(.active)', function(e){
     e.preventDefault();
     $(this).addClass('active');
-  });
+  });*/
 
   $(document).on('click', '.part-list img', function(e){
     e.preventDefault();
@@ -558,8 +565,8 @@ function initFabric(){
     checkBounds(e.target);
   });
   canvas.on("object:added", function(e){
-    e.target.price = dragPrice;
-    e.target.weight = dragWeight;
+    dragPrice = e.target.price;
+    dragWeight = e.target.weight;
     updateProductOptions(1);
     checkPartsNumber();
   });
@@ -641,6 +648,15 @@ function customizeControls(){
   };
 }
 
+function getProp(obj, name) {
+  return obj[name] || '';
+};
+
+function setProp(obj, name, value) {
+  obj.set(name, value).setCoords();
+  canvas.renderAll();
+};
+
 
 function checkBounds(obj){
   obj.setCoords();
@@ -676,6 +692,8 @@ function addImage( data, top, left) {
       mtr: false
     }) 
     .setCoords();
+    setProp(image,'weight', dragWeight);
+    setProp(image,'price', dragPrice);
     canvas.add(image);
 
     if(typeof canvas.fixedFilled != 'undefined'){
@@ -703,10 +721,10 @@ function addImage( data, top, left) {
             left: x,
             top: y,
             lockMovementX: true,
-            lockMovementY: true,
-            fixed: true
+            lockMovementY: true
           })
           .setCoords();
+          setProp(image,'fixed', true);
           //boundRect.opacity = 0;
           canvas.renderAll();
         /*}else{
@@ -714,6 +732,36 @@ function addImage( data, top, left) {
         }*/
       }
     }
+  });
+};
+
+function saveJSON(){
+  return JSON.stringify(canvas.toJSON(['weight','price', 'fixed']));
+}
+
+function loadJSON(json){
+  canvas.loadFromJSON(json, function(){
+    var objects = canvas.getObjects();
+    for (var i = 0; i < objects.length; i++) {
+      objects[i].setControlsVisibility({
+        mt: false, 
+        mb: false, 
+        ml: false, 
+        mr: false, 
+        bl: false,
+        br: false,
+        mtr: false
+      }) 
+      .setCoords();
+      if(objects[i].fixed){
+
+        objects[i].lockMovementX = true;
+        objects[i].lockMovementY = true;
+        canvas.fixedFilled = true; 
+        checkPartsNumber();
+      }
+    };
+    canvas.renderAll();
   });
 };
 
@@ -806,7 +854,7 @@ function updateProductOptions(remove){
 
     $price.text(newPrice);
 
- var $weight = $('.constructor-total-weight i'),
+  var $weight = $('.constructor-total-weight i'),
     oldWeight = $weight.text(),
     newWeight = parseFloat(oldWeight) + remove*parseFloat(dragWeight);
 

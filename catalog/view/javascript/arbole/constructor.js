@@ -15,6 +15,7 @@ var C = function() {
 		step3ProductName = ".product-list",
 		step3FilterName = ".filter-page",
 		step3FilterWrapperName = ".filters-wrapper",
+		addToCartName = ".add-to-cart",
 
 		step1ButtonName = ".go-to-step1",
 		step2ButtonName = ".go-to-step2",
@@ -23,7 +24,8 @@ var C = function() {
 		step5ButtonName = ".go-to-step5",
 
 		isEditMode = false,
-		clickDelay = 200;
+		clickDelay = 200,
+		maxWeight = 0;
 
 	$( document ).ready( function() {
 		if ( category ) {
@@ -52,6 +54,12 @@ var C = function() {
 
 		if ( product_name ) {
 			$( productName ).val( product_name );
+			isEditMode = true;
+
+		} else if ( $( productName ).length && $( productName ).attr( "data-material" ) ) {
+			$( productName ).val( $( productName ).attr( "data-material" ) + " " + $( productName ).attr( "data-name" ) + " My Unique Design" )
+			.trigger( "change" );
+
 			isEditMode = true;
 		}
 
@@ -88,6 +96,7 @@ var C = function() {
 	$( document ).delegate( step5ButtonName, "click", goToStep5 );
 
 	$( document ).delegate( step3FilterName, "change", filter );
+	// $( document ).delegate( addToCartName, "click"m addToCart );
 
 	function initProduct() {
 		$( productInputName ).each( function(){
@@ -100,9 +109,10 @@ var C = function() {
 	}
 
 	function initJSON() {
-		return; // ADIs are missing
+		// return; // ADIs are missing
 		if ( json && window.canvas ) {
-			canvas.loadFromJSON( json );
+			// canvas.loadFromJSON( json );
+			loadJSON( json )
 		}
 	}
 
@@ -184,7 +194,7 @@ var C = function() {
 		var t = null;
 
 		if ( typeof this !== "undefined" ) {
-			t = JSON.stringify( this.toJSON() );
+			t = saveJSON();
 
 			if ( t === json ) return;
 
@@ -348,6 +358,27 @@ var C = function() {
 			if ( v ) {
 				$( ".go-to-step" + i ).find( ".sidebar-number" ).hide().end().find( ".sidebar-bullet" ).show();
 			}
+		} );
+	}
+
+	function addToCart( e ) {
+		var
+			me = $( this ),
+			parent = me.closest( ".product-data" ),
+			opt = {};
+
+		e.preventDefault();
+
+		parent.find( ".your-size" ).each( function() {
+			opt[ $( this ).attr( "data-id" ) ] = $( this ).val();
+		} );
+
+		cart.add( {
+			product_id: parent.attr( "data-id" ),
+			quantity:    parent.find( ".product-quantity" ).val(),
+			option:    opt
+		}, function(){
+			hidePopup( me.closest( ".popup" ).attr( "id" ) );
 		} );
 	}
 }

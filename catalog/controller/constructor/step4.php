@@ -139,6 +139,22 @@ class ControllerConstructorStep4 extends Controller {
 				}
 			}
 
+			$data['max_weight'] = PHP_INT_MAX;
+			$data['max_length'] = PHP_INT_MAX;
+
+			foreach( $size as $s ) {
+				if ( $s['max'] < $data['max_length'] ) {
+					$data['max_length'] = $s['max'];
+				}
+
+				if ( $s['weight'] < $data['max_weight'] ) {
+					$data['max_weight'] = $s['weight'];
+				}
+			}
+
+			$data['max_weight'] = PHP_INT_MAX === $data['max_weight'] ? 0 : $data['max_weight'];
+			$data['max_length'] = PHP_INT_MAX === $data['max_length'] ? 0 : $data['max_length'];
+
 			$data['size'] = $size;
 
 			if ($product_info['minimum']) {
@@ -163,6 +179,10 @@ class ControllerConstructorStep4 extends Controller {
 		}
 
 		$data['type'] = $a->get_product_type( $product_id );
+		$data['material'] = $a->get_product_material( $product_id );
+		$data['preview_bg'] = $product_info['preview_bg'];
+		$data['preview_top'] = $product_info['preview_top'];
+		$data['preview_left'] = $product_info['preview_left'];
 
 		
 		$data['collections'] = $this->get_collections();
@@ -232,7 +252,7 @@ class ControllerConstructorStep4 extends Controller {
 		}
 
 		$data['collections'] = [
-			[ 'name' => 'All', 'href' => $pagination->url( 'collection', null, 'constructor/step4', [ 'product' => $product_id ] ) ],
+			[ 'name' => 'All', 'href' => $pagination->url( 'collection', null, 'constructor/step4/collection', [ 'product' => $product_id ] ) ],
 		];
 
 		$results = $a->get_collections();

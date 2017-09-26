@@ -261,6 +261,7 @@ class ControllerCheckoutCart extends Controller {
 
 	public function add() {
 		$this->load->language('checkout/cart');
+		$a = \Advertikon\Arbole\Advertikon::instance();
 
 		$json = array();
 
@@ -316,9 +317,82 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			if (!$json) {
+				if ( isset( $this->request->post['json'] ) ) {
+					$jsonn = htmlspecialchars_decode( $this->request->post['json'] );
+
+					if ( NULL === json_decode( $jsonn ) ) {
+						throw new Exception( 'Malformed JSON' );
+					}
+
+					if ( !isset( $this->request->post['price'] ) ) {
+						throw new Exception( 'Price is missing' );
+					}
+
+					if ( !isset( $this->request->post['name'] ) ) {
+						throw new Exception( 'Name is missing' );
+					}
+
+					if ( !isset( $this->request->post['image'] ) ) {
+						throw new Exception( 'Image is missing' );
+					}
+
+					$price = $this->request->post['price'];
+					$name = $this->request->post['name'];
+					$image = $this->request->post['image'];
+					$weight = !empty( $this->request->post['weight'] ) ? $this->request->post['weight'] : 0;
+
+					preg_match( '~^data:image/(\w+);base64,~', $image, $m );
+
+					if ( isset( $m[ 1] ) ) {
+						$ext = $m[ 1 ];
+
+					} else {
+						throw new Exception( 'Undefined image type' );
+					}
+
+					$image = base64_decode( substr( $image, strpos( $image, ',' ) + 1 ) );
+
+					if ( false === $image ) {
+						throw new Exception( 'Failed to decode image' );
+					}
+
+					$dir = DIR_IMAGE . 'catalog/designs/';
+
+					if ( !is_dir( $dir ) ) {
+						mkdir( $dir, 0777, true );
+					} 
+
+					$i_name = $dir . str_replace( [ ' ', '/', '.', '?', '#', ':' ], '', $name );
+					$index = 1;
+
+					while( file_exists( $i_name . '.' . $ext ) ) {
+						$i_name .= $index++;
+					}
+
+					if ( false === file_put_contents( $i_name . '.' . $ext, $image ) ) {
+						throw new Exception( 'Failed to save image' );
+					}
+
+					// 1. save JSON if hash is different md5( pid . json ) or update  
+					$this->request->post['product_id'] = $a->get_product_id( [
+						'json'        => $jsonn,
+						'price'       => $price,
+						'name'        => $name,
+						'weight'      => $weight,
+						'image'       => substr( $i_name . '.' . $ext, strlen( DIR_IMAGE ) ),
+						'product_id'  => $product_id,
+						'customer_id' => (int)$this->customer->getId(),
+					] );
+
+					if ( $this->request->post['product_id'] === false ) {
+						throw new Exception( 'Failed to save customization' );
+					} 
+				}
+
 				$this->cart->add($this->request->post['product_id'], $quantity, $option, $recurring_id);
 
 				$json['success'] = sprintf($this->language->get('text_success'), $this->url->link('product/product', 'product_id=' . $this->request->post['product_id']), $product_info['name'], $this->url->link('checkout/cart'));
+				$json['product_id'] = $this->request->post['product_id'];
 
 				// Unset all shipping and payment methods
 				unset($this->session->data['shipping_method']);

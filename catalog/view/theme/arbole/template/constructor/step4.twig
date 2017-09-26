@@ -1,20 +1,20 @@
 {{ header }}
 
 <div class="container-inner">
-	<div class="constructor-wrapper">
+	<div class="constructor-wrapper" data-max-weight="{{ max_weight }}" data-max-length="{{ max_length }}">
 		{{ include( 'arbole/template/common/rotate.twig' ) }}
 		<div class="step-wrapper">
-			<div class="title">
-				<input type="text" placeholder="My Jewelery"/>
+			<div class="title jewelery-name">
+				<input id="product-name" type="text" placeholder="My Jewelery" data-material="{{ material }}" data-name="{{ name }}"/>
 				<p>{{ __( 'You can add the name of your future jewelry' ) }}</p>
 			</div>
-			<div class="canvas canvas-{{ type|lower }}">
+			<div class="canvas canvas-{{ type|lower }}" data-place="{{ preview_left }}, {{ preview_top }}">
 				<div class="scrollbar-outer">
 					<div class="basement">
 						<img src="{{ popup }}">
 						<canvas id="canvas" class="part-place"></canvas>
 					</div>
-					<div class="final-img model-{{ type|lower }}"><img src=""></div>
+					<div class="final-img model-{{ type|lower }}" style="background-image: url('{{ image( preview_bg ) }}')"><img src=""></div>
 				</div>
 			</div>
 			<div class="zoom-controls">
@@ -99,7 +99,7 @@
 					<span>5</span>
 					{{ __( 'My order' ) }}
 				</a>
-				<div class="product-info">
+				<div class="product-info product-data" data-id="{{ product_id }}">
 					<div class="product-name"><label>{{ __( 'Description' ) }}:</label><span>{{ name }}</span></div>
 					<div class="product-options">
 						{% for s in size %}

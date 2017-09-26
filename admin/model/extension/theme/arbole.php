@@ -35,7 +35,9 @@ class ModelExtensionThemeArbole extends Model {
 				`customer_id` INT,
 				`json`        MEDIUMBLOB,
 				`saved`       TINYINT,
-				PRIMARY KEY(`id`)
+				`hash`        VARCHAR(255),
+				PRIMARY KEY(`id`),
+				INDEX(hash,customer_id)
 			)
 			ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin"
 		);

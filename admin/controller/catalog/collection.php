@@ -85,6 +85,7 @@ class ControllerCatalogCollection extends Controller {
 				}
 
 				$this->response->redirect($this->url->link('catalog/collection', 'user_token=' . $this->session->data['user_token'] . $url, true));
+
 			} else {
 				$this->error['warning'] = 'Failed to edit item';
 			}
@@ -127,6 +128,8 @@ class ControllerCatalogCollection extends Controller {
 	}
 
 	protected function getList() {
+		$this->load->model( 'tool/image' );
+
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
@@ -197,7 +200,7 @@ class ControllerCatalogCollection extends Controller {
 				'collection' => $result['collection'],
 				'edit'       => $a->u( 'catalog/collection/edit', [ 'id' => $result['id'] ] ),
 				'delete'     => $a->u( 'catalog/collection/delete' ),
-				'image'      => $result['image'],
+				'image'      => $this->model_tool_image->resize( $result['image'], 100, 100 ),
 			);
 		}
 

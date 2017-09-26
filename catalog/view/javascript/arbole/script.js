@@ -95,14 +95,25 @@ $( document ).delegate( ".product-data .add-to-cart", "click", function( e ) {
 
 	e.preventDefault();
 
-	opt[ parent.find( ".your-size" ).attr( "data-id" ) ] = parent.find( ".your-size" ).val();
+	parent.find( ".your-size" ).each( function() {
+		opt[ $( this ).attr( "data-id" ) ] = $( this ).val();
+	} );
 
 	cart.add( {
 		product_id: parent.attr( "data-id" ),
-		quantity:    parent.find( ".product-quantity" ).val(),
-		option:    opt
-	}, function(){
+		quantity:   parent.find( ".product-quantity" ).val(),
+		option:     opt,
+		price:      $( ".constructor-total-price i" ).text(),
+		weight:     $( ".constructor-total-weight i" ).text(),
+		json:       typeof canvas === "object" ? saveJSON() : "",
+		image:      typeof canvas === "object" ? canvas.toDataURL() : "",
+		name:       $( "#product-name" ).val()
+	}, function( ret ){
 		hidePopup( me.closest( ".popup" ).attr( "id" ) );
+
+		if ( ret.product_id ) {
+			// parent.attr( "data-id", ret.product_id );
+		} 
 	} );
 } );
 
@@ -128,7 +139,7 @@ cart = {
 				if (json['success']) {
 					// alert( json["success"].replace(/<[^>]*?>/g, "") );
 					refreshCart();
-					if ( typeof cb === "function" ) cb();
+					if ( typeof cb === "function" ) cb( json );
 				}
 			},
 			error: function(xhr, ajaxOptions, thrownError) {

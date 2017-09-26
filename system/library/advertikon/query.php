@@ -325,7 +325,7 @@ class Query {
 	 * @return string
 	 * @throws Advertikon\Exception on error
 	 */
-	public function create_query( $data ) {
+	public function create_query( $data ) { ADK()->log->write( $data );
 		if ( function_exists( 'is_log_query' ) && is_log_query() && function_exists( 'console_log' ) ) {
 			console_log( $data ); 
 		}
