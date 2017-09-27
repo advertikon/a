@@ -303,4 +303,20 @@ class ControllerConstructorStep4 extends Controller {
 	public function collection() {
 		$this->response->setOutput( $this->get_collections() );
 	}
+
+	public function get_design() {
+		$ret = '';
+
+		$id = isset( $this->request->request['id'] ) ? (int)$this->request->request['id'] : 0;
+
+		if ( $id > 0 ) {
+			$q = $this->db->query( "SELECT json from " . DB_PREFIX . "arbole_customization where product_id = $id and customer_id = " . (int)$this->customer->getId() );
+		
+			if ( $q->num_rows ) {
+				$ret =  $q->row['json'];
+			}
+		}
+
+		$this->response->setOutput( $ret );
+	}
 }

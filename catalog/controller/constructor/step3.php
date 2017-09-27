@@ -245,17 +245,6 @@ class ControllerConstructorStep3 extends Controller {
 				$rating = false;
 			}
 
-			$your_size = [];
-
-			$product_options = $this->model_catalog_product->getProductOptions( $result['product_id'] );
-
-			foreach( $product_options as $option ) {
-				if ( $option_your_size == $option['option_id'] ) {
-					$your_size = $option;
-					break;
-				}
-			}
-
 			$data['products'][] = array(
 				'product_id'  => $result['product_id'],
 				'thumb'       => $image,
@@ -268,7 +257,6 @@ class ControllerConstructorStep3 extends Controller {
 				'rating'      => $result['rating'],
 				'href'        => $this->url->link('product/product', '&product_id=' . $result['product_id'] ),
 				'images'      => $this->model_catalog_product->getProductImages( $result['product_id' ] ),
-				'your_size'   => $your_size,
 			);
 		}
 
