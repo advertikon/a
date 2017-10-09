@@ -14,7 +14,7 @@
 						<img src="{{ popup }}">
 						<canvas id="canvas" class="part-place"></canvas>
 					</div>
-					<div class="final-img model-{{ type|lower }}" style="background-image: url('{{ image( preview_bg ) }}')"><img src=""></div>
+					<div class="final-img model-{{ type|lower }}" style="background: url('{{ image( preview_bg ) }}') no-repeat center/auto 100%;"><img src=""></div>
 				</div>
 			</div>
 			<div class="zoom-controls">
@@ -124,7 +124,7 @@
 					<div class="product-price"><label>Price:</label><span><i>100</i> $</span></div>
 					<div class="btns">
 						<a href="#" class="add-to-cart">{{ __( 'add to cart' ) }}</a>
-						<a href="#" class="save">+ {{ __( 'save to my designs' ) }}</a>
+						<a href="#" class="save save-design">+ {{ __( 'save to my designs' ) }}</a>
 					</div>
 				</div>
 			</div>

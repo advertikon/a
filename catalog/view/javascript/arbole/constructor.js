@@ -16,6 +16,7 @@ var C = function() {
 		step3FilterName = ".filter-page",
 		step3FilterWrapperName = ".filters-wrapper",
 		addToCartName = ".add-to-cart",
+		saveDesignName = ".save-design",
 
 		step1ButtonName = ".go-to-step1",
 		step2ButtonName = ".go-to-step2",
@@ -27,7 +28,21 @@ var C = function() {
 		clickDelay = 200,
 		maxWeight = 0;
 
+	window.isSaveDesign = '0';
+
 	$( document ).ready( function() {
+		var q = parseQuery();
+
+		if ( q.saved ) {
+			if ( q.product ) {
+				$.post( '/?route=constructor/step4/get_design', { id: q.product }, function( resp ) {
+					if ( resp ) {
+						loadJSON( resp );
+					}
+				} );
+			}
+		}
+
 		if ( category ) {
 			$( categoryInputName ).each( function(){
 				var el = this;
@@ -94,9 +109,10 @@ var C = function() {
 	$( document ).delegate( step3ButtonName, "click", goToStep3 );
 	$( document ).delegate( step4ButtonName, "click", goToStep4 );
 	$( document ).delegate( step5ButtonName, "click", goToStep5 );
+	$( document ).delegate( saveDesignName, "click", saveDesign );
 
 	$( document ).delegate( step3FilterName, "change", filter );
-	// $( document ).delegate( addToCartName, "click"m addToCart );
+	$( document ).delegate( addToCartName, "click", addToCart );
 
 	function initProduct() {
 		$( productInputName ).each( function(){
@@ -309,6 +325,8 @@ var C = function() {
 			}
 		} );
 
+		delete o.saved;
+
 		return o;
 	}
 
@@ -362,23 +380,16 @@ var C = function() {
 	}
 
 	function addToCart( e ) {
-		var
-			me = $( this ),
-			parent = me.closest( ".product-data" ),
-			opt = {};
+		//setCategory();
+	}
 
+	function saveDesign( e ) {
 		e.preventDefault();
 
-		parent.find( ".your-size" ).each( function() {
-			opt[ $( this ).attr( "data-id" ) ] = $( this ).val();
-		} );
+		window.isSaveDesign = '1';
 
-		cart.add( {
-			product_id: parent.attr( "data-id" ),
-			quantity:    parent.find( ".product-quantity" ).val(),
-			option:    opt
-		}, function(){
-			hidePopup( me.closest( ".popup" ).attr( "id" ) );
+		$.post( '/?route=checkout/cart/save_design&id=' + $( this ).closest( ".product-data" ).attr( "data-id" ), "json", function( resp ) {
+			console.log( resp );
 		} );
 	}
 }

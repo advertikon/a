@@ -1,0 +1,71 @@
+{{ header }}
+
+<div class="container-inner">
+  <div class="section wide flex-column">
+    <div class="max-width breadcrumbs-wrapper">
+      <div class="breadcrumbs">
+        <ol itemscope="" itemtype="http://schema.org/BreadcrumbList">
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <a href="/" itemprop="item"><span itemprop="name">{{ __( 'Home' ) }}</span></a>
+            <meta itemprop="position" content="1" />
+          </li>
+          <li itemscope="" itemprop="itemListElement" itemtype="http://schema.org/ListItem">
+            <link href="" itemprop="item" />
+            <span itemprop="name">{{ __( 'My designs' ) }}</span>
+            <meta itemprop="position" content="2" />
+          </li>
+        </ol>
+      </div>
+      <div class="pagename"><h1>{{ __( 'My designs' ) }}</h1></div>
+    </div>
+    <div class="account">
+      {{ include( 'arbole/template/account/sidebar.twig' ) }}
+      <div class="account-main">
+        <div class="my-designs">
+        	{% if products is not empty %}
+        	{% for product in products %}
+          <div class="product-list">
+            <div class="product-item product-data" data-id="{{ product.product_id }}">
+              <div class="remove saved-remove"></div>
+              <div class="img">
+                <img src="{{ product.thumb }}">
+                <div class="img-action"><a href="{{ u( 'constructor/step4', { product: product.product_id, saved: 1 }) }}">{{ __( 'Edit' ) }}</a></div>
+              </div>
+              <a href="{{ u( 'catalog/product', { product_id: product.product_id }) }}" class="product-name">{{ __( 'Model name' ) }}</a>
+              <div class="product-price"><span>{{ product.special ? product.price }}</span></div>
+              <div class="product-options">
+                {% for s in product.size %}
+				<div class="option">
+					<label>{{ s.name }}:</label> 
+					<div class="field">
+						<input class="your-size decimal" type="text" data-id="{{ s.product_option_id }}" value="{{ s.value }}" min="{{ s.min }}" max="{{ s.max }}"/>
+						<span>mm</span>
+					</div>
+				</div>
+				{% endfor %}
+                <div class="option">
+                  <label class="mobile-hide">{{ __( 'Quantity' ) }}:</label>
+                  <div class="field field-counter">
+                    <div class="minus">-</div>
+                    <input type="text" value="1" maxlength="2" class="decimal product-quantity"/>
+                    <div class="plus">+</div>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="add-to-cart">{{ __( 'add to cart' ) }}</a>
+            </div>
+          </div>
+      		{% endfor %}
+      		{% else %}
+      		<div class="empty">
+            <img src="{{ image('arbole/designs-empty.png' ) }}">
+            <p><strong>YOU HAVE NO DESIGNS YET :(</strong></p>
+            <p>Start creating your first jewerly design. Easy.  </p>
+            <a href="{{ u( 'constructor/step1' ) }}" class="mobile-hide"><span></span>go to my jewelery design</a>
+          </div>
+      		{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

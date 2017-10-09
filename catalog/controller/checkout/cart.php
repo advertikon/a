@@ -317,7 +317,7 @@ class ControllerCheckoutCart extends Controller {
 			}
 
 			if (!$json) {
-				if ( isset( $this->request->post['json'] ) ) {
+				if ( !empty( $this->request->post['json'] ) ) {
 					$jsonn = htmlspecialchars_decode( $this->request->post['json'] );
 
 					if ( NULL === json_decode( $jsonn ) ) {
@@ -340,6 +340,7 @@ class ControllerCheckoutCart extends Controller {
 					$name = $this->request->post['name'];
 					$image = $this->request->post['image'];
 					$weight = !empty( $this->request->post['weight'] ) ? $this->request->post['weight'] : 0;
+					$save = !empty( $this->request->post['save'] ) ? '1' : 0;
 
 					preg_match( '~^data:image/(\w+);base64,~', $image, $m );
 
@@ -382,6 +383,7 @@ class ControllerCheckoutCart extends Controller {
 						'image'       => substr( $i_name . '.' . $ext, strlen( DIR_IMAGE ) ),
 						'product_id'  => $product_id,
 						'customer_id' => (int)$this->customer->getId(),
+						'save'        => $save,
 					] );
 
 					if ( $this->request->post['product_id'] === false ) {
@@ -548,5 +550,45 @@ class ControllerCheckoutCart extends Controller {
 
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
+	}
+
+	public function save_design() {
+		$ret = [];
+		$product_id = !empty( $this->request->request['id'] ) ? $this->request->request['id'] : 0;
+		$a = \Advertikon\Arbole\Advertikon::instance();
+
+		try {
+			if ( empty( $product_id ) ) {
+				throw new Exception( 'Product ID is missing' );
+			}
+
+			if ( $a->q( [
+				'table' => $a->customization,
+				'query' => 'update',
+				'set'   => [ 'saved' => '1', ],
+				'where' => [
+					[
+						'field'     => 'customer_id',
+						'operation' => '=',
+						'value'     => (int)$this->customer->getId(),
+					],
+					[
+						'field'     => 'product_id',
+						'operation' => '=',
+						'value'     => $product_id,
+					],
+				],
+			] ) ) {
+				$ret['success'] = '1';
+
+			} else {
+				$ret['error'] = 'Failed to save customization';
+			}
+
+		} catch ( \Exception $e ) {
+			$ret['error'] = $e->getMessage();
+		}
+
+		$this->response->setOutput( json_encode( $ret ) );
 	}
 }

@@ -107,15 +107,31 @@ $( document ).delegate( ".product-data .add-to-cart", "click", function( e ) {
 		weight:     $( ".constructor-total-weight i" ).text(),
 		json:       typeof canvas === "object" ? saveJSON() : "",
 		image:      typeof canvas === "object" ? canvas.toDataURL() : "",
-		name:       $( "#product-name" ).val()
+		name:       $( "#product-name" ).val(),
+		save:       typeof window.isSaveDesign === "undefined" ? '0' : window.isSaveDesign
 	}, function( ret ){
 		hidePopup( me.closest( ".popup" ).attr( "id" ) );
 
 		if ( ret.product_id ) {
-			// parent.attr( "data-id", ret.product_id );
+			parent.attr( "data-id", ret.product_id );
 		} 
 	} );
 } );
+
+$( document ).delegate( ".saved-remove", "click", function( e ) {
+	var
+		me = $( this ),
+		parent = me.closest( ".product-data" ),
+		opt = {};
+
+	e.preventDefault();
+
+	$.post( '/?route=account/designs/remove', {
+		product_id: parent.attr( "data-id" )
+	}, function( ret ){
+		me.closest( ".product-item" ).remove();
+	} );
+} )
 
 $( document ).delegate( ".price-influence", "change", updatePrice );
 

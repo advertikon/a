@@ -26,6 +26,8 @@ class Cart {
 
 				// The advantage of using $this->add is that it will check if the products already exist and increaser the quantity if necessary.
 				$this->add($cart['product_id'], $cart['quantity'], json_decode($cart['option']), $cart['recurring_id']);
+
+				$this->db->query( "UPDATE " . DB_PREFIX . "arbole_customization set customer_id = " . (int)$this->customer->getId() . " WHERE customer_id = 0 AND product_id = " . (int)$cart['product_id'] );
 			}
 		}
 	}
@@ -38,7 +40,7 @@ class Cart {
 		foreach ($cart_query->rows as $cart) {
 			$stock = true;
 
-			$product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_to_store p2s LEFT JOIN " . DB_PREFIX . "product p ON (p2s.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) left join " . DB_PREFIX . "arbole_customization ac on(p.product_id = ac.product_id and ac.customer_id = " . $this->customer->getId()  . ") WHERE p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND p2s.product_id = '" . (int)$cart['product_id'] . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.date_available <= NOW() AND (p.status = '1' or ac.customer_id = " . (int)$this->customer->getId() . ")");
+			$product_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "product_to_store p2s LEFT JOIN " . DB_PREFIX . "product p ON (p2s.product_id = p.product_id) LEFT JOIN " . DB_PREFIX . "product_description pd ON (p.product_id = pd.product_id) left join " . DB_PREFIX . "arbole_customization ac on(p.product_id = ac.product_id and ac.customer_id = '" . (int)$this->customer->getId()  . "') WHERE p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND p2s.product_id = '" . (int)$cart['product_id'] . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.date_available <= NOW() AND (p.status = '1' or ac.customer_id = '" . (int)$this->customer->getId() . "')");
 
 			if ($product_query->num_rows && ($cart['quantity'] > 0)) {
 				$option_price = 0;
