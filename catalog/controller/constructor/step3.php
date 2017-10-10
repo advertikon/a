@@ -82,7 +82,7 @@ class ControllerConstructorStep3 extends Controller {
 
 		$pagination = new \Advertikon\Pagination( [
 			'filter' => [
-				'id' => [
+				'sid' => [
 					'name'    => 'p2c.category_id',
 					'default' => false,
 				],
