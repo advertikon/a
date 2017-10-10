@@ -86,6 +86,10 @@ class ControllerConstructorStep3 extends Controller {
 					'name'    => 'p2c.category_id',
 					'default' => false,
 				],
+				'id' => [
+					'name'    => 'c.parent_id',
+					'default' => false,
+				],
 				'language' => [
 					'name'    => 'pd.language_id',
 					'default' => (int)$this->config->get('config_language_id'),
@@ -139,6 +143,8 @@ class ControllerConstructorStep3 extends Controller {
 				(SELECT price FROM " . DB_PREFIX . "product_discount pd2 WHERE pd2.product_id = p.product_id AND pd2.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND pd2.quantity = '1' AND ((pd2.date_start = '0000-00-00' OR pd2.date_start < NOW()) AND (pd2.date_end = '0000-00-00' OR pd2.date_end > NOW())) ORDER BY pd2.priority ASC, pd2.price ASC LIMIT 1) AS discount,
 				(SELECT price FROM " . DB_PREFIX . "product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special
 			FROM " . DB_PREFIX . "product_to_category p2c
+			LEFT JOIN " . DB_PREFIX . "category c
+				ON(p2c.category_id = c.category_id)
 			LEFT JOIN " . DB_PREFIX . "product p
 				ON (p2c.product_id = p.product_id)
 			LEFT JOIN " . DB_PREFIX . "product_description pd
@@ -160,7 +166,7 @@ class ControllerConstructorStep3 extends Controller {
 		$data['compare'] = $this->url->link('product/compare');
 
 		$data['categories'] = [
-			[ 'name' => 'All', 'href' => $pagination->url( 'id', null ) ],
+			[ 'name' => 'All', 'href' => $pagination->url( [ 'id', 'sid', ], null ) ],
 		];
 
 		$results = $this->model_catalog_category->get_top_level();
@@ -168,7 +174,7 @@ class ControllerConstructorStep3 extends Controller {
 		foreach ($results as $result) {
 			$data['categories'][] = array(
 				'name'   => $result['name'],
-				'href'   => $pagination->url( 'id', $result['category_id'] ),
+				'href'   => $pagination->url( [ 'id', 'sid', ], [ $result['category_id'], null, ] ),
 				'active' => $result['category_id'] == $category_id,
 			);
 		}

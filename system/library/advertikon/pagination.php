@@ -372,11 +372,22 @@ class Pagination extends \Model {
 		}
 
 		if ( !is_null( $alias ) ) {
-			if ( !is_null( $value ) ) {
-				$query[ $alias ] = $value;
+			$value = (array)$value;
 
-			} else {
-				unset( $query[ $alias ] );
+			foreach( (array)$alias as $i => $a ) {
+				if ( isset( $value[ $i ] ) ) {
+					$v = $value[ $i ];
+
+				} else {
+					$v = null;
+				}
+
+				if ( !is_null( $v ) ) {
+					$query[ $a ] = $v;
+
+				} else {
+					unset( $query[ $a ] );
+				}
 			}
 		}
 
